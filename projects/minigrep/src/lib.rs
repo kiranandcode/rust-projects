@@ -2,6 +2,9 @@ use std::error::Error;
 use std::fs::File;
 use std::io::prelude::*;
 
+#[cfg(test)]
+mod tests;
+
 pub struct Config {
     query: String,
     filename: String
@@ -29,9 +32,22 @@ pub fn run(config: Config) -> Result<(), Box<Error>> {
     let mut contents = String::new();
 
     f.read_to_string(&mut contents)?;
+    
+    for line in search(&config.query, &contents) {
+        println!("{}", line);
+    }
 
-
-    println!("With text:\n{}", contents);
 
     Ok({})
+}
+
+pub fn search<'a>(query: &str, contents : &'a str) -> Vec<&'a str> {
+    let mut results = Vec::new();
+    for line in contents.lines() {
+        if line.contains(query) {
+            results.push(line);
+        }
+    }
+
+    results
 }
