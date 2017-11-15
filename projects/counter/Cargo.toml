@@ -1,0 +1,7 @@
+[package]
+name = "counter"
+version = "0.1.0"
+authors = ["Kiran Gopinathan <zcabkgo@ucl.ac.uk>"]
+doc = true
+
+[dependencies]

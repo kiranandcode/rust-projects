@@ -14,12 +14,12 @@ fn main() {
 
     let case_sensitive = env::var("CASE_INSENSITIVE").is_err();
     let config: Config = Config::new(&args, case_sensitive).unwrap_or_else(|err| {
-        println!("Problem parsing arguments: {}", err);
+        eprintln!("Problem parsing arguments: {}", err);
                  process::exit(1);
     });
             
    if let Err(e) = run(config) {
-       println!("Application error: {}", e);
+       eprintln!("Application error: {}", e);
        process::exit(1);
    }
 }
