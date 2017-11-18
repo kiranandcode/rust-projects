@@ -20,7 +20,10 @@ pub fn get_corpus() -> Result<String, std::io::Error> {
             Ok(result)
         },
         Err(e) => {
-            Ok("".to_string())
+//            Ok("".to_string())
+            let string = make_request()?;
+            save_local_copy(&string)?;
+            Ok(string)
         }
     }
 }
@@ -29,8 +32,30 @@ fn open_local_copy() -> Result<std::fs::File, std::io::Error> {
     std::fs::File::open("corpus.txt")
 }
 
+fn save_local_copy(text : &String) -> Result<(), std::io::Error> {
+    match open_local_copy() {
+        Ok(mut file) => {
+          write_local_copy(file, text)
+        },
+        Err(e) => {
+            match e.kind() {
+                NotFound => {
+                  let mut file = std::fs::File::create("corpus.txt")?;
+                  write_local_copy(file, text)
+                },
+                _ => Err(e.into())
+            }
+        }
+    }
+}
+
+
+fn write_local_copy(mut local_file : std::fs::File, text : &String) -> Result<(), std::io::Error> {
+    local_file.write_all(text.as_bytes())
+}
+
 pub fn make_request() -> Result<String,std::io::Error> {
-    println!("Making a request");
+    println!("Downloading Alice in Wonderland From Internet");
     let mut core = Core::new()?;
     let client = Client::new(&core.handle());
     let mut buf = String::new();
@@ -49,5 +74,4 @@ pub fn make_request() -> Result<String,std::io::Error> {
     let result = core.run(work).expect("Error while running the task");
 
     Ok(result)
-
 }

@@ -4,8 +4,5 @@ use genetic_algorithm_cipher::{
     make_request
 };
 fn main() {
-   println!("{}", make_request().expect("Error while making a request"));
     println!("{}", get_corpus().unwrap());
-    println!("Hello, world!");
-
 }
