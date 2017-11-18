@@ -1,9 +1,10 @@
 extern crate genetic_algorithm_cipher;
 use genetic_algorithm_cipher::{
-    get_corpus
+    get_corpus,
+    make_request
 };
 fn main() {
-//    make_request().expect("Error while making a request");
+   println!("{}", make_request().expect("Error while making a request"));
     println!("{}", get_corpus().unwrap());
     println!("Hello, world!");
 
