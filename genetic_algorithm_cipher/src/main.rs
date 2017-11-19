@@ -1,6 +1,6 @@
 extern crate genetic_algorithm_cipher;
 use genetic_algorithm_cipher::corpus::{
-    get_corpus
+   get_corpus
 };
 use genetic_algorithm_cipher::alphabet::{
     SubstitutionCipher
@@ -21,4 +21,5 @@ fn main() {
     println!("cipherB: {}", cipherB.apply(&text));
     println!("cipherC: {}", cipherC.apply(&text));
     
+    println!("formatted corpus: {}", get_corpus().unwrap());
 }

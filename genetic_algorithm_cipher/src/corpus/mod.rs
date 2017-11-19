@@ -17,14 +17,31 @@ pub fn get_corpus() -> Result<String, Error> {
 
             file.read_to_string(&mut result)?;
 
-            Ok(result)
+            Ok(format_text(&result))
         },
         Err(_e) => {
             let string = make_request()?;
             save_local_copy(&string)?;
-            Ok(string)
+            Ok(format_text(&string))
         }
     }
+}
+
+
+fn format_text(text: &String) -> String {
+    text.chars().map(|mut character| {
+     let mut char_u8 : u8 = character as u8;   
+     if char_u8 >= b'A' && char_u8 - b'A' < 26 {
+        char_u8 = char_u8 - b'A' + b'a';
+        character = char_u8 as char;
+     } 
+
+     character
+    }).filter(|character| {
+        let char_u8 : u8 = *character as u8;
+        
+        char_u8 >= b'a' && char_u8 - b'a' < 26
+    }).collect::<String>()
 }
 
 fn open_local_copy() -> Result<File, Error> {

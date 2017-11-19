@@ -61,6 +61,15 @@ impl SubstitutionCipher {
         }
     }
 
+    pub fn mutate(&mut self) {
+        let positonA : usize = rand::thread_rng().gen::<usize>() % 26;
+        let characterA_old = self.mapping[positonA];
+        let characterA_new = self.mapping[(characterA_old - b'a') as usize];
+       
+        self.mapping[positonA] = characterA_new;
+        self.mapping[(characterA_old - b'a') as usize] = characterA_old;
+    }
+
 
     pub fn apply(&self, text : &String) -> String {
         let mut result : String = String::new();
