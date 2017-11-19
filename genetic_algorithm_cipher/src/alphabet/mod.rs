@@ -21,12 +21,51 @@ impl SubstitutionCipher {
         mapping: chars
        }
     }
+
+    pub fn crossover(parent_a : &SubstitutionCipher, parent_b : &SubstitutionCipher) -> SubstitutionCipher {
+        let mut chars : [u8; 26] = [0; 26];
+        let mut copied : [bool; 26] = [false; 26];
+        let mut not_moved : Vec<usize> = vec!();
+
+        let mut rng = rand::thread_rng();
+        let crossover : usize = rng.gen::<usize>() % 26usize;
+        println!("Crossing over at {}", crossover);
+
+        for i in 0..26 {
+            if i < crossover {
+                chars[i] = parent_a.mapping[i];
+                copied[(parent_a.mapping[i] - b'a') as usize] = true;
+            } 
+        }
+
+        for i in crossover..26 {
+            let b_char = parent_b.mapping[i];
+            if !copied[(b_char - b'a') as usize] {
+                chars[i] = b_char;
+                copied[(b_char - b'a') as usize]  = true;
+            } else {
+                not_moved.push(i);
+            }
+        }
+
+        for i in 0..26 {
+            if !copied[i] {
+                let index = not_moved.pop().unwrap();
+
+                chars[index] = b'a' + i as u8;
+            }
+        }
+
+        SubstitutionCipher {
+            mapping: chars
+        }
+    }
 }
 
 impl Display for SubstitutionCipher {
     fn fmt(&self, f: &mut Formatter) -> fmt::Result {
         for (index, character) in (0..26).zip((b'a'..b'z'+1)) {
-           write!(f, "{}: {}\n", character as char, self.mapping[index] as char);
+           write!(f, "{}: {}, ", character as char, self.mapping[index] as char);
         }
         write!(f, "\n")
     }
