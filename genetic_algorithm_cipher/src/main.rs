@@ -13,5 +13,12 @@ fn main() {
     println!("{}", cipherA);
     println!("{}", cipherB);
     println!("{}", cipherC);
+    let mut text = "kiran has written a simple substitution cipher!".to_string();
+
+    println!("stringI: {}", text);
+
+    println!("cipherA: {}", cipherA.apply(&text));
+    println!("cipherB: {}", cipherB.apply(&text));
+    println!("cipherC: {}", cipherC.apply(&text));
     
 }

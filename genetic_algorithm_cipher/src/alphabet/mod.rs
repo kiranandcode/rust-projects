@@ -60,6 +60,22 @@ impl SubstitutionCipher {
             mapping: chars
         }
     }
+
+
+    pub fn apply(&self, text : &String) -> String {
+        let mut result : String = String::new();
+
+        for character in text.chars() {
+            let char_value = character as u8;
+            if char_value  >=  b'a' && char_value - b'a'  < 26 {
+                result.push(self.mapping[(char_value - b'a') as usize] as char);
+            } else {
+                result.push(character);
+            }
+        }
+
+        result
+    }
 }
 
 impl Display for SubstitutionCipher {
