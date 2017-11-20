@@ -1,3 +1,3 @@
 pub mod alphabet;
 pub mod corpus;
-pub mod quadgram;
+pub mod ngram;

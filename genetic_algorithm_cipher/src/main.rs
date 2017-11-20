@@ -5,6 +5,9 @@ use genetic_algorithm_cipher::corpus::{
 use genetic_algorithm_cipher::alphabet::{
     SubstitutionCipher
 };
+use genetic_algorithm_cipher::ngram::{
+    NgramFrequency
+};
 fn main() {
 //    println!("{}", get_corpus().unwrap());
     let cipherA: SubstitutionCipher = SubstitutionCipher::new();    
@@ -21,5 +24,9 @@ fn main() {
     println!("cipherB: {}", cipherB.apply(&text));
     println!("cipherC: {}", cipherC.apply(&text));
     
-    println!("formatted corpus: {}", get_corpus().unwrap());
+    let corpus = get_corpus().unwrap();
+    println!("formatted corpus: {}", corpus);
+
+    let frequency = NgramFrequency::generate_from(&corpus, 4);
+    println!("frequency analysis: {}", frequency);
 }
