@@ -20,6 +20,7 @@ fn main() {
 
     println!("stringI: {}", text);
 
+    let mut text_A = cipherA.apply(&text);
     println!("cipherA: {}", cipherA.apply(&text));
     println!("cipherB: {}", cipherB.apply(&text));
     println!("cipherC: {}", cipherC.apply(&text));
@@ -29,4 +30,7 @@ fn main() {
 
     let frequency = NgramFrequency::generate_from(&corpus, 4);
     println!("frequency analysis: {}", frequency);
+    println!("corpus score: {}", frequency.score_text(&corpus));
+    println!("text score: {}", frequency.score_text(&text));
+    println!("cipherA score: {}", frequency.score_text(&text_A));
 }
