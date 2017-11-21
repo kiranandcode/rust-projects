@@ -1,23 +1,25 @@
+pub mod interface;
 
-pub trait GeneticAlgorithm {
-    type Genome : Genome;
-    type Evaluator : Evaluator<Genome=Self::Genome>;
-    type Generator : Generator<Genome=Self::Genome>;
+pub use self::interface::{
+    Genome,
+    Generator,
+    Evaluator
+};
 
-    fn new(generator : Self::Generator, evaluator : Self::Evaluator) -> Self;
+pub struct GeneticAlgorithm<T,G,E>
+    where T : Genome,
+          G : Generator<Genome=T>,
+          E : Evaluator<Genome=T>
+{
+    generator : G,
+    evaluator : E,
+    population : Vec<T>
 }
 
-pub trait Genome {
-    fn mutate(&mut self);
-    fn crossover(parent_a : &Self, parent_b : &Self);
+
+impl <T,G,E> GeneticAlgorithm<T,G,E> {
+    pub fn new(population_size : usize) {
+
+    }
 }
 
-pub trait Generator {
-    type Genome : Genome;
-    fn create_new(&self) -> Self::Genome;
-}
-
-pub trait Evaluator {
-    type Genome;
-    fn fitness(&self, genome : &Self::Genome) -> f64;
-}
