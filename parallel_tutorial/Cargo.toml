@@ -1,0 +1,6 @@
+[package]
+name = "parallel_tutorial"
+version = "0.1.0"
+authors = ["Kiran Gopinathan <zcabkgo@ucl.ac.uk>"]
+
+[dependencies]
