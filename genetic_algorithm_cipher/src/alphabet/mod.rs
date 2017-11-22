@@ -61,6 +61,19 @@ impl SubstitutionCipher {
         }
     }
 
+    pub fn clone(&self) -> Self {
+       let mut chars = [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ];
+
+       for i in 0..self.mapping.len() {
+            chars[i] = self.mapping[i];
+       }
+
+       SubstitutionCipher {
+        mapping: chars
+       }
+ 
+    }
+
     pub fn mutate(&mut self) {
         let positonA : usize = rand::thread_rng().gen::<usize>() % 26;
         let characterA_old = self.mapping[positonA];

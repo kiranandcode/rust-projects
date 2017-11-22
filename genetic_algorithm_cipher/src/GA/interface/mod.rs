@@ -1,7 +1,7 @@
 
 pub trait Genome {
     fn mutate(&mut self);
-    fn crossover(parent_a : &Self, parent_b : &Self);
+    fn crossover(parent_a : &Self, parent_b : &Self) -> Self;
     fn clone(&self) -> Self;
 }
 
