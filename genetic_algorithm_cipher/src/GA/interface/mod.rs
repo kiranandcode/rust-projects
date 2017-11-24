@@ -19,5 +19,5 @@ pub trait EvolutionaryAlgorithmStrategy {
     type Genome : Genome;
     type Generator : Generator<Genome=Self::Genome>;
     type Evaluator : Evaluator<Genome=Self::Genome>;
-    fn execute(&mut self, population : &mut Vec<Self::Genome>,  generator : &mut Self::Generator, evaluator : &mut Self::Evaluator) -> Self::Genome;
+    fn execute(&mut self, generator : &mut Self::Generator, evaluator : &mut Self::Evaluator) -> Self::Genome;
 }

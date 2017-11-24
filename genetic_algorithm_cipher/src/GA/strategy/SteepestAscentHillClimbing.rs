@@ -43,7 +43,7 @@ impl <T,G,E> EvolutionaryAlgorithmStrategy for SteepestAscentHillClimbingStrateg
         type Generator = G;
         type Evaluator = E;
 
-        fn execute(&mut self, population : &mut Vec<Self::Genome>,  generator : &mut Self::Generator, evaluator : &mut Self::Evaluator) -> T {
+        fn execute(&mut self,  generator : &mut Self::Generator, evaluator : &mut Self::Evaluator) -> T {
             let mut s = generator.create_new();
             let mut best_fitness = evaluator.fitness(&s);
             for i in (0..self.iterations) {

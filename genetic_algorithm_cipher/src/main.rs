@@ -101,15 +101,15 @@ fn main() {
     let mut text = "ljsboibtxsjuufobtjnqmftvctujuvujpodjqifs".to_string();
     let mut copy = text.clone();
     let encryption = SubstitutionCipher::new();
-    let alternate = encryption.apply(&corpus);
+//    let alternate = encryption.apply(&corpus);
     
     let generator = CipherGenerator {};
     let evaluator = CipherEvaluator {
         frequency_table: frequency,
-        encrypted_text: alternate
+        encrypted_text: text 
     };
 
-    let mut genetic_algorithm = GeneticAlgorithm::new(1, generator, evaluator);
+    let mut genetic_algorithm = GeneticAlgorithm::new(generator, evaluator);
     let mut hill_climbing = SteepestAscentHillClimbingStrategy::new(200, 10);
     let best = genetic_algorithm.execute_strategy(&mut hill_climbing);
     println!("Original: {}", copy);
