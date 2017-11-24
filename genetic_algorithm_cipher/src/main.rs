@@ -17,9 +17,8 @@ use genetic_algorithm_cipher::GA::{
     GeneticAlgorithm
 };
 
-use genetic_algorithm_cipher::GA::strategy::HillClimbing::{
-    HillClimbingStrategy
-};
+use genetic_algorithm_cipher::GA::strategy::HillClimbing::{ HillClimbingStrategy};
+use genetic_algorithm_cipher::GA::strategy::SteepestAscentHillClimbing::{ SteepestAscentHillClimbingStrategy };
 
 pub struct CipherGenome {
     cipher : SubstitutionCipher
@@ -101,15 +100,19 @@ fn main() {
     let frequency = NgramFrequency::generate_from(&corpus, 4);
     let mut text = "ljsboibtxsjuufobtjnqmftvctujuvujpodjqifs".to_string();
     let mut copy = text.clone();
+    let encryption = SubstitutionCipher::new();
+    let alternate = encryption.apply(&corpus);
     
     let generator = CipherGenerator {};
     let evaluator = CipherEvaluator {
         frequency_table: frequency,
-        encrypted_text: text
+        encrypted_text: alternate
     };
 
     let mut genetic_algorithm = GeneticAlgorithm::new(1, generator, evaluator);
-    let mut hill_climbing = HillClimbingStrategy::new(10000);
+    let mut hill_climbing = SteepestAscentHillClimbingStrategy::new(200, 10);
     let best = genetic_algorithm.execute_strategy(&mut hill_climbing);
+    println!("Original: {}", copy);
     println!("Decrypted: {}", best.cipher.apply(&copy));
+
 }
