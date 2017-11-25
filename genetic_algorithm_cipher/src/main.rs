@@ -19,6 +19,7 @@ use genetic_algorithm_cipher::GA::{
 
 use genetic_algorithm_cipher::GA::strategy::HillClimbing::{ HillClimbingStrategy};
 use genetic_algorithm_cipher::GA::strategy::SteepestAscentHillClimbing::{ SteepestAscentHillClimbingStrategy };
+use genetic_algorithm_cipher::GA::strategy::SteepestAscentReplacementHillClimbing::{ SteepestAscentReplacementHillClimbingStrategy};
 
 pub struct CipherGenome {
     cipher : SubstitutionCipher
@@ -97,22 +98,22 @@ fn main() {
 //    println!("text score: {}", frequency.score_text(&text));
 //    println!("cipherA score: {}", frequency.score_text(&text_A));
     let corpus = get_corpus().unwrap(); 
-    let frequency = NgramFrequency::generate_from(&corpus, 4);
+    let frequency = NgramFrequency::generate_from(&corpus, 3);
     let mut text = "ljsboibtxsjuufobtjnqmftvctujuvujpodjqifs".to_string();
     let mut copy = text.clone();
     let encryption = SubstitutionCipher::new();
-//    let alternate = encryption.apply(&corpus);
+    let alternate = encryption.apply(&corpus);
     
+    println!("Original: {}", alternate);
     let generator = CipherGenerator {};
     let evaluator = CipherEvaluator {
         frequency_table: frequency,
-        encrypted_text: text 
+        encrypted_text: alternate.clone()
     };
 
     let mut genetic_algorithm = GeneticAlgorithm::new(generator, evaluator);
-    let mut hill_climbing = SteepestAscentHillClimbingStrategy::new(200, 10);
+    let mut hill_climbing = SteepestAscentReplacementHillClimbingStrategy::new(20, 10);
     let best = genetic_algorithm.execute_strategy(&mut hill_climbing);
-    println!("Original: {}", copy);
-    println!("Decrypted: {}", best.cipher.apply(&copy));
+    println!("Decrypted: {}", best.cipher.apply(&alternate));
 
 }
