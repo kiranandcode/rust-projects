@@ -124,6 +124,93 @@ impl<T> Iterator for IntoIter<T> {
     }
 }
 
+/*
+ This is essentially the same as
+ struct L_iterator {
+     void *next;
+ };
+*/
+pub struct Iter<'a, T: 'a> {
+    next: Option<&'a Node<T>>
+}
+
+impl<T> List<T> {
+//    pub fn iter<'a>(&'a self) -> Iter<'a, T> {
+    // we can remove lifetimes as lifetime ellission allows
+    // the compiler to assume the iter will live for as long as the only
+    // input referecnes
+    pub fn iter(&self) -> Iter<T> {
+        /*
+            same as
+            struct L_iterator list_iterator(struct list *list) {
+                // done by map
+                struct L_iterator result;
+                if(list->head != NULL) {
+                    result.next = list->head;
+                } else {
+                   result.next = NULL;
+                }
+                return result;
+            }
+
+        */
+        Iter {
+            next: self.head.as_ref().map(|node| &**node)
+        }
+    }
+}
+
+impl<'a, T> Iterator for Iter<'a, T> {
+    type Item = &'a T;
+    fn next(&mut self) -> Option<Self::Item> {
+        /*
+        same as
+        void *list_iteratornext(struct L_iterator *iter) {
+            if(iter->next != NULL) {
+                void *result = iter->next;
+                iter->next = iter->next->next;
+                return result;
+            }
+            return NULL;
+        } 
+        */
+        // if (iter->next != NULL) {
+        self.next.map(|node| {
+            // struct elem *node = iter->next;
+            // if (node->next != null)
+            //     iter->next = node->nextnext;
+            // else
+            //     iter->next = NULL;
+            self.next = node.next.as_ref().map(|node| &**node);
+            // return node->elem
+            &node.elem
+        })
+        // } else return NULL;
+    }
+}
+
+
+pub struct IterMut<'a, T: 'a> {
+    next: Option<&'a mut Node<T>>
+}
+
+impl<T> List<T> {
+    pub fn iter_mut(&mut self) -> IterMut<T> {
+        IterMut {
+            next: self.head.as_mut().map(|node| &mut **node)
+        }
+    }
+}
+
+impl<'a, T> Iterator for IterMut<'a, T> {
+    type Item = &'a mut T;
+    fn next(&mut self) -> Option<Self::Item> {
+        self.next.take().map(|node| {
+            self.next = node.next.as_mut().map(|node| &mut **node);
+            &mut node.elem
+        })
+    }
+}
 
 #[cfg(test)]
 mod test {
@@ -171,5 +258,27 @@ mod test {
         assert_eq!(iter.next(), Some(3));
         assert_eq!(iter.next(), Some(2));
         assert_eq!(iter.next(), Some(1));
+    }
+
+    #[test]
+    fn iter() {
+        let mut list = List::new();
+        list.push(1); list.push(2); list.push(3);
+        let mut iter = list.iter();
+
+        assert_eq!(iter.next(), Some(&3));
+        assert_eq!(iter.next(), Some(&2));
+        assert_eq!(iter.next(), Some(&1));
+    }
+
+    #[test]
+    fn iter_mut() {
+        let mut list = List::new();
+        list.push(1); list.push(2); list.push(3);
+
+        let mut iter = list.iter_mut();
+        assert_eq!(iter.next(), Some(&mut 3));
+        assert_eq!(iter.next(), Some(&mut 2));
+        assert_eq!(iter.next(), Some(&mut 1));
     }
 }
