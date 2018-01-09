@@ -179,16 +179,18 @@ impl<T> List<T> {
     }
 }
 
-impl<'a, T> Iterator for Iter<'a, T> {
-    type Item = Ref<'a, T>;
-    fn next(&mut self) -> Option<Self::Item> {
-        self.0.take().map(|node_ref| {
-            self.0 = node_ref.next.as_ref().map(|head| head.borrow());
+// Doesn't work
+// impl<'a, T> Iterator for Iter<'a, T> {
+//     type Item = Ref<'a, T>;
+//     fn next(&mut self) -> Option<Self::Item> {
+//         self.0.take().map(|node_ref| {
+//             // head.borrow() has to live as long as node_ref, but this does not happen
+//             self.0 = node_ref.next.as_ref().map(|head| head.borrow());
 
-            Ref::map(node_ref, |node| &node.elem)
-        })
-    }
-}
+//             Ref::map(node_ref, |node| &node.elem)
+//         })
+//     }
+// }
 
 #[cfg(test)]
 mod test {
