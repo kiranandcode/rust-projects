@@ -1,5 +1,6 @@
 use std::collections::HashMap;
 mod extra;
+mod UnsafeCustomCollection;
 use extra::BinaryTree;
 
 type Table = HashMap<String, Vec<String>>;
