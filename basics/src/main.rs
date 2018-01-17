@@ -1,6 +1,8 @@
+#![feature(unique, alloc, heap_api)]
 use std::collections::HashMap;
 mod extra;
 mod UnsafeCustomCollection;
+mod CustomVec;
 use extra::BinaryTree;
 
 type Table = HashMap<String, Vec<String>>;
