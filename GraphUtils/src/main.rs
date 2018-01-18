@@ -22,5 +22,5 @@ fn main() {
 
     println!("Hello world");
 
-    println!("{:?}", Graph::<i32>::from_file("./graph.grp").unwrap());
+    println!("{}", Graph::<i32>::from_file("./graph.grp").unwrap());
 }

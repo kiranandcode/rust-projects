@@ -7,7 +7,7 @@ use std::path::Path;
 use std::io::{BufReader, BufRead};
 use std::str::FromStr;
 use std::error::Error;
-use std::fmt::Debug;
+use std::fmt::{Debug, Display, Formatter, Write, self};
 
 #[derive(Debug)]
 pub struct Graph<T> {
@@ -76,3 +76,11 @@ impl<T> Graph<T>
                     Ok(graph)
         }
 } 
+
+impl<T : Display + Debug> Display for Graph<T> {
+    fn fmt(&self, f: &mut Formatter) -> fmt::Result {
+        let mut buffer =  format!("Graph({}): ", self.nodes);
+        write!(buffer, "{}", self.graph);
+        write!(f, "{}", buffer)
+    }
+}
