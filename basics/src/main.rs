@@ -2,7 +2,7 @@
 use std::collections::HashMap;
 mod extra;
 mod UnsafeCustomCollection;
-mod CustomVec;
+mod array;
 use extra::BinaryTree;
 
 type Table = HashMap<String, Vec<String>>;
