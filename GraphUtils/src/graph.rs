@@ -15,9 +15,16 @@ pub struct Graph<T> {
     nodes: usize
 }
 
+#[derive(Debug)]
+pub struct PathMatrix {
+    root: usize,
+    nodes: usize,
+    nearest: Vec<Option<usize>>,
+    costs: Vec<i32>
+}
 
 impl<T> Graph<T>
-    where T : Default + FromStr {
+    where T : Default + FromStr + PartialEq {
 
         pub fn new(n: usize) -> Self {
             Graph {
@@ -74,6 +81,45 @@ impl<T> Graph<T>
 
 
                     Ok(graph)
+        }
+
+        pub fn dfs(&self, start : usize) -> PathMatrix {
+            if(start > self.nodes) {
+                panic!("graph error - start node {} is greater than no of nodes {}", start, self.nodes);
+            }
+
+            let mut parent = vec![None; self.nodes];
+            let mut cost = vec![0; self.nodes];
+            let mut onstack = vec![false; self.nodes];
+
+            let mut stack = Vec::new();
+
+            stack.push(start);
+            onstack[start] = true;
+
+            while let Some(mut node) = stack.pop() {
+                onstack[node] = true;
+
+                for i in 0..self.nodes {
+                    let connectedNode;
+                    unsafe {
+                       connectedNode = *self.graph.get_unchecked(node, i) != T::default() && !onstack[i];
+                    }
+                        if connectedNode {
+                            parent[i] = Some(node);
+                            cost[i] = 1 + cost[node];
+                            stack.push(i);
+                            onstack[i] = true;
+                        }
+                }
+            }
+
+            PathMatrix {
+                root: start,
+                nodes: self.nodes,
+                nearest: parent,
+                costs: cost
+            }
         }
 } 
 
