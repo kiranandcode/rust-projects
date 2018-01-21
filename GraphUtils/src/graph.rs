@@ -24,7 +24,7 @@ pub struct PathMatrix {
 }
 
 impl<T> Graph<T>
-    where T : Default + FromStr + PartialEq {
+    where T : Default + FromStr + PartialEq + PartialOrd + Clone {
 
         pub fn new(n: usize) -> Self {
             Graph {
@@ -120,6 +120,46 @@ impl<T> Graph<T>
                 nearest: parent,
                 costs: cost
             }
+        }
+
+
+        pub fn generateFlowTo(&self, matrix : PathMatrix, end : usize) -> Option<Graph<T>> {
+            if(matrix.nearest[end] == None)  {
+                return None; 
+            }
+
+            let mut end  = end;
+            let mut graph : Graph<T> = Graph::new(self.nodes);
+            let mut min : Option<&T> = None;
+            let mut current = end;
+
+            // working from the end of the graph, work backwards finding the minimum cost end on the path
+            while(end != matrix.root) {
+               unsafe {
+                    if(min == None || min.unwrap() > self.graph.get_unchecked(matrix.nearest[end].unwrap(), end)) {
+                        min = Some(self.graph.get_unchecked(matrix.nearest[end].unwrap(), end));
+                    }
+                }
+                end = matrix.nearest[end].unwrap();
+                if(matrix.nearest[end].is_none()) {
+                    return None;
+                }
+            }
+
+            if(min.is_none()) {return None;}
+
+            let min = min.unwrap();
+
+            end = current;
+
+            while(end != matrix.root) {
+                unsafe {
+                    *(graph.graph.get_mut_unchecked(matrix.nearest[end].unwrap(), end)) = min.clone();
+                    end = matrix.nearest[end].unwrap();
+                }
+            }
+
+            return Some(graph);
         }
 } 
 
