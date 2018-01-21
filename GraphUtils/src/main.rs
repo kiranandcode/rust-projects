@@ -1,8 +1,10 @@
 extern crate regex;
 mod matrix;
 mod graph;
+mod graphviz;
 use matrix::Matrix;
 use graph::Graph;
+
 
 fn main() {
     let mut vec = vec![0,1];
