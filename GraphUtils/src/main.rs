@@ -26,6 +26,9 @@ fn main() {
     println!("Hello world");
 
     let graph = Graph::<i32>::from_file("./graph.grp").unwrap();
+    let dfs   = graph.dfs(0);
     println!("{}", graph);
-    println!("{:?}", graph.dfs(0));
+    println!("{:?}", dfs);
+    println!("{}", graph.get_path(&dfs));
+
 }

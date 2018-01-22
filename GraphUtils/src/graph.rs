@@ -9,6 +9,7 @@ use std::io::{BufReader, BufRead};
 use std::str::FromStr;
 use std::error::Error;
 use std::fmt::{Debug, Display, Formatter, Write, self};
+use std::collections::HashSet;
 
 #[derive(Debug)]
 pub struct Graph<T> {
@@ -24,6 +25,8 @@ pub struct PathMatrix {
     costs: Vec<i32>
 }
 
+pub struct GraphPath<'a, 'b, T : 'a>(&'a Graph<T>, &'b PathMatrix);
+
 impl<T> Graph<T>
     where T : Default + FromStr + PartialEq + PartialOrd + Clone {
 
@@ -33,6 +36,11 @@ impl<T> Graph<T>
                 nodes: n
             }
         }
+        
+        pub fn get_path<'a,'b>(&'a self, path : &'b PathMatrix) -> GraphPath<'a, 'b, T> {
+            GraphPath(&self, path)
+        }
+
 
         pub fn add_edge(&mut self, from_edge : usize, to_edge: usize, weight: T) {
             let edge = self.graph.get_mut(from_edge, to_edge).unwrap();
@@ -163,6 +171,59 @@ impl<T> Graph<T>
             return Some(graph);
         }
 } 
+
+impl<'a, 'b, T: Display + Debug + PartialOrd + Default> Display for GraphPath<'a, 'b, T> {
+
+    fn fmt(&self, f: &mut Formatter) -> fmt::Result {
+        let mut renderer = GraphVizDiGraph::new("rendered_graph".to_owned());
+            for i in 0..self.0.nodes {
+                let node = renderer.with_node(format!("{}", i));
+                if self.1.root == i {
+                    node.with_attribute("peripheries".to_owned(), "2".to_owned());
+                }
+            }
+
+            let mut hashSet : HashSet<(usize, usize)> = HashSet::new();
+           for node in 0..self.0.nodes {
+                if node != self.1.root && self.1.nearest[node].is_some() {
+                    let mut node = node;
+                    while node != self.1.root {
+                        let edge_being_considered = (self.1.nearest[node].unwrap(), node);
+                        if !hashSet.contains(&edge_being_considered) {
+                            let mut edge = renderer.add_labelled_edge(format!("{}", self.1.nearest[node].unwrap()), format!("{}", node), format!("{}", self.1.costs[node]));
+                            edge.with_attribute("color".to_owned(), "red".to_owned());
+                            hashSet.insert(edge_being_considered);
+                        }
+                        match self.1.nearest[node] {
+                            Some(value) => node = value,
+                            None        => {
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+
+            for node in 0..self.0.nodes {
+                for other in 0..self.0.nodes {
+                    let edge_being_considered = (node, other);
+                    if !hashSet.contains(&edge_being_considered) {
+                        unsafe {
+                            let value = self.0.graph.get_unchecked(node, other);
+                            if *value > T::default() {
+                                renderer.add_labelled_edge(format!("{}", node), format!("{}", other), format!("{}", *value));
+                            }
+                        }
+                            hashSet.insert(edge_being_considered);
+                    }
+                }
+            }
+ 
+
+            write!(f, "{}", renderer)
+ 
+    }
+}
 
 impl<T : Display + Debug + PartialOrd + Default> Display for Graph<T> {
     fn fmt(&self, f: &mut Formatter) -> fmt::Result {
