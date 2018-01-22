@@ -1,4 +1,5 @@
 use matrix::Matrix;
+use graphviz::GraphVizDiGraph;
 
 use regex::Regex;
 
@@ -163,10 +164,23 @@ impl<T> Graph<T>
         }
 } 
 
-impl<T : Display + Debug> Display for Graph<T> {
+impl<T : Display + Debug + PartialOrd + Default> Display for Graph<T> {
     fn fmt(&self, f: &mut Formatter) -> fmt::Result {
-        let mut buffer =  format!("Graph({}): ", self.nodes);
-        write!(buffer, "{}", self.graph);
-        write!(f, "{}", buffer)
+        let mut renderer = GraphVizDiGraph::new("rendered_graph".to_owned());
+        for i in 0..self.nodes {
+            renderer.with_node(format!("{}", i));
+        }
+
+        for node in 0..self.nodes {
+            for other in 0..self.nodes {
+                unsafe {
+                    let value = self.graph.get_unchecked(node, other);
+                    if *value > T::default() {
+                        renderer.add_labelled_edge(format!("{}", node), format!("{}", other), format!("{}", *value));
+                    }
+                }
+            }
+        }
+        write!(f, "{}", renderer)
     }
 }

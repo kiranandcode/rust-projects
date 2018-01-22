@@ -38,6 +38,11 @@ impl<T> Matrix<T>
        } 
     }
 
+
+}
+
+impl<T> Matrix<T> {
+
     pub fn get(&self, row : usize, col: usize) -> Option<&T> {
         if row < self.rows && col < self.cols {
            Some(& self.buffer[row * self.cols + col])
@@ -61,7 +66,6 @@ impl<T> Matrix<T>
     pub fn get_mut_unchecked(&mut self, row : usize, col: usize) -> &mut T {
            &mut self.buffer[row * self.cols + col]
     }
-
 
 
 }

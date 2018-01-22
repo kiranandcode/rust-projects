@@ -24,6 +24,37 @@ impl GraphVizDiGraph {
             nodes: HashMap::new()
         }
     }
+
+    pub fn with_node(&mut self, node_id : String) {
+        self.nodes.entry(node_id).or_insert(None);
+    }
+
+    pub fn with_labeled_node(&mut self, node_id : String, label : String) {
+        self.nodes.insert(node_id, Some(label));
+    }
+
+    pub fn add_edge(&mut self, node_id : String, to_id : String) {
+            if !self.nodes.contains_key(&node_id) || !self.nodes.contains_key(&to_id) {
+                panic!("Attempted to add edge between unknown edges");
+            }
+            self.edges.push(GraphVizEdge {
+                label: None,
+                fromNode: node_id,
+                toNode: to_id
+            });
+    }
+
+    pub fn add_labelled_edge(&mut self, node_id : String, to_id : String, label : String) {
+            if !self.nodes.contains_key(&node_id) || !self.nodes.contains_key(&to_id) {
+                panic!("Attempted to add edge between unknown edges");
+            }
+            self.edges.push(GraphVizEdge {
+                label: Some(label),
+                fromNode: node_id,
+                toNode: to_id
+            });
+ 
+    }
 }
 
 impl Display for GraphVizEdge {

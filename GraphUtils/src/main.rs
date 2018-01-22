@@ -4,6 +4,7 @@ mod graph;
 mod graphviz;
 use matrix::Matrix;
 use graph::Graph;
+use graphviz::GraphVizDiGraph;
 
 
 fn main() {
