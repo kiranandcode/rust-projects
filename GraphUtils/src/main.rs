@@ -5,6 +5,8 @@ mod graphviz;
 use matrix::Matrix;
 use graph::Graph;
 use graphviz::GraphVizDiGraph;
+use std::fs::File;
+use std::io::Write;
 
 
 fn main() {
@@ -25,10 +27,13 @@ fn main() {
 
     println!("Hello world");
 
-    let graph = Graph::<i32>::from_file("./graph.grp").unwrap();
+    let graph = Graph::<i32>::from_file("./graphs/test.grp").unwrap();
     let dfs   = graph.dfs(0);
     println!("{}", graph);
     println!("{:?}", dfs);
     println!("{}", graph.get_path(&dfs));
+
+    let mut output = File::create("./graphs/test.dot").expect("Could not create output dot file");
+    write!(output, "{}",  graph.get_path(&dfs));
 
 }
