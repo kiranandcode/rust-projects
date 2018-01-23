@@ -27,13 +27,13 @@ fn main() {
 
     println!("Hello world");
 
-    let graph = Graph::<i32>::from_file("./graphs/test.grp").unwrap();
-    let dfs   = graph.dfs(0);
+    let graph = Graph::<i32>::from_file("./graphs/graph.grp").unwrap();
+    let dfs   = graph.bfs(0);
     println!("{}", graph);
     println!("{:?}", dfs);
     println!("{}", graph.get_path(&dfs));
 
-    let mut output = File::create("./graphs/test.dot").expect("Could not create output dot file");
+    let mut output = File::create("./graphs/graph_bfs.dot").expect("Could not create output dot file");
     write!(output, "{}",  graph.get_path(&dfs));
 
 }

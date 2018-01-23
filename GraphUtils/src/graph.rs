@@ -9,7 +9,7 @@ use std::io::{BufReader, BufRead};
 use std::str::FromStr;
 use std::error::Error;
 use std::fmt::{Debug, Display, Formatter, Write, self};
-use std::collections::HashSet;
+use std::collections::{HashSet, VecDeque};
 
 #[derive(Debug)]
 pub struct Graph<T> {
@@ -120,6 +120,42 @@ impl<T> Graph<T>
                             stack.push(i);
                             onstack[i] = true;
                         }
+                }
+            }
+
+            PathMatrix {
+                root: start,
+                nodes: self.nodes,
+                nearest: parent,
+                costs: cost
+            }
+        }
+
+        pub fn bfs(&self, start: usize) -> PathMatrix {
+            if(start > self.nodes) {
+                panic!("graph error - start node {} is greater than no of nodes {}", start, self.nodes);
+            }
+
+            let mut parent = vec![None; self.nodes];
+            let mut cost   = vec![0   ; self.nodes];
+            let mut onstack = vec![false; self.nodes];
+            let mut visited = vec![false; self.nodes];
+            let mut queue = VecDeque::new();
+            queue.push_back(start);
+
+            while let Some(node) = queue.pop_front() {
+                visited[node] = true;
+                for i in 0..self.nodes {
+                    let mut shouldAdd;
+                    unsafe {
+                        shouldAdd = *self.graph.get_unchecked(node, i) != T::default() && !visited[i] && !onstack[i];
+                    }
+                    if shouldAdd {
+                        parent[i] = Some(node);
+                        cost[i] = 1 + cost[i];
+                        onstack[i] = true;
+                        queue.push_back(i);
+                    }
                 }
             }
 
