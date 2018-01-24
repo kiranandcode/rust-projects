@@ -28,12 +28,12 @@ fn main() {
     println!("Hello world");
 
     let graph = Graph::<i32>::from_file("./graphs/test.grp").unwrap();
-    let dfs   = graph.djikstra(0);
+    let dfs   = graph.prims(0);
     println!("{}", graph);
     println!("{:?}", dfs);
     println!("{}", graph.overlay_path(&dfs));
 
-    let mut output = File::create("./graphs/test_djikstra.dot").expect("Could not create output dot file");
+    let mut output = File::create("./graphs/test_prims.dot").expect("Could not create output dot file");
     write!(output, "{}",  graph.overlay_path(&dfs));
 
 }
