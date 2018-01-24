@@ -37,7 +37,7 @@ impl<T> Graph<T>
             }
         }
         
-        pub fn get_path<'a,'b>(&'a self, path : &'b PathMatrix) -> GraphPath<'a, 'b, T> {
+        pub fn overlay_path<'a,'b>(&'a self, path : &'b PathMatrix) -> GraphPath<'a, 'b, T> {
             GraphPath(&self, path)
         }
 
@@ -167,7 +167,6 @@ impl<T> Graph<T>
             }
         }
 
-
         pub fn generateFlowTo(&self, matrix : PathMatrix, end : usize) -> Option<Graph<T>> {
             if(matrix.nearest[end] == None)  {
                 return None; 
@@ -207,6 +206,80 @@ impl<T> Graph<T>
             return Some(graph);
         }
 } 
+
+
+impl<T> Graph<T> 
+    where T : Default + FromStr + PartialEq + PartialOrd + Clone + Into<i32> {
+        pub fn djikstra(&self, start : usize) -> PathMatrix {
+            if(start > self.nodes) {
+                panic!("graph error - start node {} is greater than no of nodes {}", start, self.nodes);
+            }
+
+
+            let mut nearest = vec![Some(start); self.nodes];
+            let mut cost = vec![-1; self.nodes];
+            let mut added = vec![false; self.nodes];
+
+            cost[start] = 0;
+            let mut added_nodes = 0;
+
+            while(added_nodes != self.nodes) {
+
+                let mut min = None;
+                let mut u = None;
+
+                // find the lowest cost unseen node
+                for i in 0..self.nodes {
+                    if !added[i] && cost[i] != -1 {
+                        if min.is_none() || min.unwrap() > cost[i] {
+                            min = Some(cost[i].clone());
+                            u = Some(i);
+                        }
+                    }
+                }
+
+                let u = u.unwrap();
+                match(min) {
+                    Some(minimum) => {
+                        added[u] = true;
+                        added_nodes = added_nodes + 1;
+                    }
+                    None => {break;}
+                }
+
+
+                // given the new node, update all other nodes
+                for i in 0..self.nodes {
+                    if !added[i] {
+                        let graph_value : i32;
+                        unsafe {
+                            graph_value = self.graph.get_unchecked(u, i).clone().into();
+                        }
+
+                        if cost[i] == -1 && graph_value != 0 {
+                            nearest[i] = Some(u);
+                            cost[i] = cost[u] + graph_value;
+                        } else if cost[i] != 0 && graph_value + cost[u] < cost[i]  {
+                            cost[i] = graph_value + cost[u];
+                            nearest[i] = Some(u);
+                        }
+                    }
+                }
+
+            }
+            
+
+
+            PathMatrix {
+                root: start,
+                nodes: self.nodes,
+                nearest: nearest,
+                costs: cost
+            }
+        }
+
+
+}
 
 impl<'a, 'b, T: Display + Debug + PartialOrd + Default> Display for GraphPath<'a, 'b, T> {
 
