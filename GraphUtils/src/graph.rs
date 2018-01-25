@@ -47,13 +47,9 @@ impl<T> Graph<T>
 
 }
 
+
 impl<T> Graph<T>
     where T : Default + FromStr + PartialEq + PartialOrd + Clone {
-
-       
-        pub fn overlay_path<'a,'b>(&'a self, path : &'b PathMatrix) -> GraphPath<'a, 'b, T> {
-            GraphPath(&self, path)
-        }
 
         pub fn from_file<P>(filename: P) -> Result<Self,String> 
             where P : AsRef<Path>{
@@ -100,6 +96,16 @@ impl<T> Graph<T>
                     Ok(graph)
         }
 
+
+}
+
+impl<T> Graph<T>
+    where T : Default +  PartialEq + PartialOrd + Clone {
+
+       
+        pub fn overlay_path<'a,'b>(&'a self, path : &'b PathMatrix) -> GraphPath<'a, 'b, T> {
+            GraphPath(&self, path)
+        }
         pub fn dfs(&self, start : usize) -> PathMatrix {
             if(start > self.nodes) {
                 panic!("graph error - start node {} is greater than no of nodes {}", start, self.nodes);
@@ -175,7 +181,7 @@ impl<T> Graph<T>
             }
         }
 
-        pub fn create_graph_with_path(&self, matrix : PathMatrix) -> Graph<T> {
+        pub fn create_graph_with_path(&self, matrix : &PathMatrix) -> Graph<T> {
             let mut graph = Graph::new(self.nodes);
             for i in 0..self.nodes {
                 if matrix.nearest[i].is_some() {
@@ -188,7 +194,7 @@ impl<T> Graph<T>
             graph
         }
 
-        pub fn generateFlowTo(&self, matrix : PathMatrix, end : usize) -> Option<Graph<T>> {
+        pub fn generate_flow_to(&self, matrix : &PathMatrix, end : usize) -> Option<Graph<T>> {
             if(matrix.nearest[end] == None)  {
                 return None; 
             }
@@ -271,6 +277,26 @@ impl<T> Graph<T>
             }
 
             residual
+        }
+
+
+        pub fn ford_fulkerson(capacity_graph : &Graph<T>, source : usize, sink : usize) -> Graph<T>  {
+                let mut dfs_path = capacity_graph.dfs(source);
+                let mut best_flow : Graph<T> = capacity_graph.generate_flow_to(&dfs_path, sink).expect("Could not form path from source to sink");
+                let mut residual = Graph::generate_residual_flow_graph(&capacity_graph, &best_flow);
+
+                dfs_path = residual.dfs(source);
+                let mut new_flow = capacity_graph.generate_flow_to(&dfs_path, sink);
+
+                while let Some(new_flow_graph) = new_flow {
+                    let better_flow = Graph::augment_graph(&capacity_graph, &best_flow, &new_flow_graph);
+                    residual = Graph::generate_residual_flow_graph(&capacity_graph, &better_flow);
+                    best_flow = better_flow;
+                    dfs_path = residual.dfs(source);
+                    new_flow = capacity_graph.generate_flow_to(&dfs_path, sink);
+                }
+
+                best_flow
         }
 
 }
