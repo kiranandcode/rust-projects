@@ -232,7 +232,7 @@ impl<T> Graph<T>
 impl<T> Graph<T>
     where T : Default + PartialEq + PartialOrd + Add<Output = T> + Sub<Output = T> + Clone,
     {
-        pub fn augment_graph(capacity_graph : Graph<T>, f: Graph<T>, fstar: Graph<T>) -> Graph<T> {
+        pub fn augment_graph(capacity_graph : &Graph<T>, f: &Graph<T>, fstar: &Graph<T>) -> Graph<T> {
             let mut augmented = Graph::new(f.nodes);
             
             for i in 0..f.nodes {
@@ -249,6 +249,28 @@ impl<T> Graph<T>
             }
 
             augmented
+        }
+
+        pub fn generate_residual_flow_graph(capacity_graph : &Graph<T>, flow_graph: &Graph<T>) -> Graph<T> {
+            let mut residual = Graph::new(capacity_graph.nodes);
+            for i in 0..capacity_graph.nodes {
+                for j in 0..capacity_graph.nodes {
+                    let val;
+                    unsafe {
+
+                        if *capacity_graph.graph.get_unchecked(i,j) != T::default() {
+                            val = capacity_graph.graph.get_unchecked(i,j).clone() - flow_graph.graph.get_unchecked(i,j).clone() ;
+                        } else if *capacity_graph.graph.get_unchecked(j,i) != T::default() {
+                            val = flow_graph.graph.get_unchecked(j,i).clone() ;
+                        } else {
+                            val = T::default();
+                        }
+                        *residual.graph.get_mut_unchecked(i,j) = val;
+                    }
+                }
+            }
+
+            residual
         }
 
 }
