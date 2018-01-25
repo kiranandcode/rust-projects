@@ -10,6 +10,8 @@ use std::str::FromStr;
 use std::error::Error;
 use std::fmt::{Debug, Display, Formatter, Write, self};
 use std::collections::{HashSet, VecDeque};
+use std::ops::{Add, Sub};
+
 
 #[derive(Debug)]
 pub struct Graph<T> {
@@ -28,23 +30,29 @@ pub struct PathMatrix {
 pub struct GraphPath<'a, 'b, T : 'a>(&'a Graph<T>, &'b PathMatrix);
 
 impl<T> Graph<T>
-    where T : Default + FromStr + PartialEq + PartialOrd + Clone {
-
+    where T : Default {
         pub fn new(n: usize) -> Self {
             Graph {
                 graph: Matrix::new(n,n),
                 nodes: n
             }
         }
-        
-        pub fn overlay_path<'a,'b>(&'a self, path : &'b PathMatrix) -> GraphPath<'a, 'b, T> {
-            GraphPath(&self, path)
-        }
 
 
         pub fn add_edge(&mut self, from_edge : usize, to_edge: usize, weight: T) {
             let edge = self.graph.get_mut(from_edge, to_edge).unwrap();
             *edge = weight;
+        }
+
+
+}
+
+impl<T> Graph<T>
+    where T : Default + FromStr + PartialEq + PartialOrd + Clone {
+
+       
+        pub fn overlay_path<'a,'b>(&'a self, path : &'b PathMatrix) -> GraphPath<'a, 'b, T> {
+            GraphPath(&self, path)
         }
 
         pub fn from_file<P>(filename: P) -> Result<Self,String> 
@@ -167,6 +175,19 @@ impl<T> Graph<T>
             }
         }
 
+        pub fn create_graph_with_path(&self, matrix : PathMatrix) -> Graph<T> {
+            let mut graph = Graph::new(self.nodes);
+            for i in 0..self.nodes {
+                if matrix.nearest[i].is_some() {
+                    unsafe {
+                        *graph.graph.get_mut_unchecked(i,i) =  self.graph.get_unchecked(i,i).clone();
+                    }
+                }
+            }
+
+            graph
+        }
+
         pub fn generateFlowTo(&self, matrix : PathMatrix, end : usize) -> Option<Graph<T>> {
             if(matrix.nearest[end] == None)  {
                 return None; 
@@ -205,8 +226,32 @@ impl<T> Graph<T>
 
             return Some(graph);
         }
+
 } 
 
+impl<T> Graph<T>
+    where T : Default + PartialEq + PartialOrd + Add<Output = T> + Sub<Output = T> + Clone,
+    {
+        pub fn augment_graph(capacity_graph : Graph<T>, f: Graph<T>, fstar: Graph<T>) -> Graph<T> {
+            let mut augmented = Graph::new(f.nodes);
+            
+            for i in 0..f.nodes {
+                for j in 0..f.nodes {
+                    let mut val = T::default();
+                    unsafe {
+                        if *capacity_graph.graph.get_unchecked(i,j) != T::default() {
+                            val = f.graph.get_unchecked(i,j).clone() + fstar.graph.get_unchecked(i,j).clone()  - fstar.graph.get_unchecked(j,i).clone();
+                        }
+
+                        *augmented.graph.get_mut_unchecked(i,j) = val;
+                    }
+                }
+            }
+
+            augmented
+        }
+
+}
 
 impl<T> Graph<T> 
     where T : Default + FromStr + PartialEq + PartialOrd + Clone + Into<i32> {
