@@ -1,0 +1,9 @@
+digraph rendered_graph {
+0 [peripheries=2];
+2 -> 1 [color=red,label="5"];
+0 -> 2 [color=red,label="2"];
+2 -> 3 [color=red,label="3"];
+3 -> 4 [color=red,label="4"];
+0 -> 1 [label="4"];
+1 -> 4 [label="3"];
+}
