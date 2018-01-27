@@ -28,12 +28,12 @@ fn main() {
     println!("Hello world");
 
     let graph = Graph::<i32>::from_file("./graphs/test.grp").unwrap();
-    let dfs   = graph.prenum_ordering(0);
+    let dfs   = graph.postnum_ordering(0);
     println!("{}", graph);
     println!("{:?}", dfs);
     println!("{}", graph.overlay_path(&dfs));
 
-    let mut output = File::create("./graphs/test_prenum.dot").expect("Could not create output dot file");
+    let mut output = File::create("./graphs/test_postnum.dot").expect("Could not create output dot file");
     write!(output, "{}",  graph.overlay_path(&dfs));
 
 }

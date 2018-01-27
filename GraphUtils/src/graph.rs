@@ -275,7 +275,6 @@ impl<T> Graph<T>
             while visit_count != self.nodes {
                while let Some(&node) = stack.last() {
                    if !visited[node] {
-                       visited[node] = true;
                        visit_count += 1;
                        let mut added = 0;
 
@@ -292,6 +291,7 @@ impl<T> Graph<T>
                        }
 
                        if added == 0 {
+                            visited[node] = true;
                            num += 1;
                            postnum[node] = num;
                        }
