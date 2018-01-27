@@ -255,6 +255,81 @@ impl<T> Graph<T>
             }
         }
 
+
+        pub fn postnum_ordering(&self, root : usize) -> PathMatrix {
+            if(root > self.nodes) {
+                panic!("graph error - root node {} is greater than no of nodes {}", root, self.nodes);
+            }
+            
+            let mut postnum = vec![0; self.nodes];
+            let mut nearest = vec![None; self.nodes];
+
+            let mut visited = vec![false; self.nodes];
+            let mut stack = Vec::new();
+
+            stack.push(root);
+
+            let mut visit_count = 0;
+            let mut num = 0;
+
+            while visit_count != self.nodes {
+               while let Some(&node) = stack.last() {
+                   if !visited[node] {
+                       visited[node] = true;
+                       visit_count += 1;
+                       let mut added = 0;
+
+                       for i in 0..self.nodes {
+                           unsafe {
+                           if *self.graph.get_unchecked(node, i) != T::default() && !visited[i] {
+                               added += 1;
+                                stack.push(i);
+                                if nearest[i].is_none() {
+                                    nearest[i] = Some(node); 
+                                }
+                           }
+                        }
+                       }
+
+                       if added == 0 {
+                           num += 1;
+                           postnum[node] = num;
+                       }
+                   } else {
+                       stack.pop();
+                   }
+               }
+
+
+               let mut notvisit = None;
+
+               for i in 0..self.nodes {
+                   if !visited[i] {
+                       notvisit = Some(i);
+                       break;
+                   }
+               }
+
+               match(notvisit) {
+                   Some(value) => {
+                       stack.push(value);
+                   }
+                   None => {
+                       break;
+                   }
+               }
+            }
+
+            PathMatrix {
+                root: root,
+                costs: postnum,
+                nearest: nearest,
+                nodes: self.nodes,
+            }
+        }
+
+
+
         pub fn generate_flow_to(&self, matrix : &PathMatrix, end : usize) -> Option<Graph<T>> {
             if(matrix.nearest[end] == None)  {
                 return None; 
