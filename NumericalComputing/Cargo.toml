@@ -1,0 +1,7 @@
+[package]
+name = "NumericalComputing"
+version = "0.1.0"
+authors = ["Gopiandcode(Kiran Gopinathan) <zcabkgo@ucl.ac.uk>"]
+
+[dependencies]
+regex = "0.2.5"
