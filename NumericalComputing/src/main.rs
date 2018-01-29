@@ -1,13 +1,14 @@
 extern crate regex;
 use parsing::Scanner;
 mod parsing;
+use parsing::ast::parse_expression;
 
 fn main() {
     println!("Hello, world!");
-    let mut parser = Scanner::new("3.1pipi+kiran-joe".to_owned());
+    let mut parser = Scanner::new("3.1*(pi+10.0)".to_owned());
     let mut i = 0;
 
-    while let Some(tok) = parser.next() {
-        println!("{:?}", tok);
+    if let Some(tok) = parse_expression(&mut parser) {
+        println!("final output {:?}", tok);
     }
 }

@@ -5,6 +5,8 @@ pi
 e
 
 ### Operators
+(
+)
 *
 ^
 /
@@ -22,9 +24,9 @@ expresesion = factor_expression
             | expression - factor_expression
 
 factor_expression = primary_expression
-                  | factor_expression * primary_expression 
-                  | factor_expression / primary_expression
-                  | factor_expression ^ primary_expression
+                  | primary_expression * factor_expression 
+                  | primary_expression / factor_expression
+                  | primary_expression ^ factor_expression
 
 
 primary_expression = identifier
