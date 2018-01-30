@@ -3,6 +3,19 @@ use std::fmt::{Debug, Display};
 use parsing::ast::{Expression, PrimaryExpression, FactorExpression};
 use parsing::ast::parse_expression;
 use parsing::Scanner;
+use std::f64::consts;
+
+#[macro_export]
+macro_rules! valuation {
+    (
+        $( $key:expr => $value:expr),*
+    ) => {{
+        use std::collections::HashMap;
+        let mut hashmap : HashMap<String, f64> = HashMap::new();
+        $( hashmap.insert($key.to_owned(), $value); )*
+        hashmap 
+    }}
+}
 
 #[derive(Debug, Clone)]
 pub enum Expr {
@@ -35,8 +48,45 @@ impl Formula {
        })
    }
 
-    pub fn eval(valuation : &HashMap<String, f64>) -> f64 {
-       0.0
+    pub fn eval(&self, valuation : &HashMap<String, f64>) -> f64 {
+        eval_expr(&self.expression, &self.symbol_list, valuation)
+    }
+}
+
+fn eval_expr(expr: &Expr, symbols : &Vec<String>, valuation : &HashMap<String, f64>) -> f64 {
+    match expr {
+        &Expr::Identifier(id) => *valuation.get(&symbols[id]).expect("Valuation not provided"),
+        &Expr::E              => consts::E,
+        &Expr::Numeric(val)   => val,
+        &Expr::Add(ref exprA, ref exprB) => {
+            let valexprA = eval_expr(&**exprA, symbols, valuation);
+            let valexprB = eval_expr(&**exprB, symbols, valuation);
+            valexprA + valexprB
+        }
+        &Expr::Sub(ref exprA, ref exprB) => {
+            let valexprA = eval_expr(&**exprA, symbols, valuation);
+            let valexprB = eval_expr(&**exprB, symbols, valuation);
+            valexprA - valexprB
+        }
+        &Expr::Pow(ref exprA, ref exprB) => {
+            let valexprA = eval_expr(&**exprA, symbols, valuation);
+            let valexprB = eval_expr(&**exprB, symbols, valuation);
+            valexprA.powf(valexprB)
+        }
+        &Expr::Mult(ref exprA, ref exprB) => {
+            let valexprA = eval_expr(&**exprA, symbols, valuation);
+            let valexprB = eval_expr(&**exprB, symbols, valuation);
+            valexprA * valexprB
+        }
+        &Expr::Div(ref exprA, ref exprB) => {
+            let valexprA = eval_expr(&**exprA, symbols, valuation);
+            let valexprB = eval_expr(&**exprB, symbols, valuation);
+            valexprA / valexprB
+        }
+        &Expr::Ln(ref exprA) => {
+            let valexprA = eval_expr(&**exprA, symbols, valuation);
+            valexprA.ln()
+        }
     }
 }
 
