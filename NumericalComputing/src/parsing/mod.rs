@@ -21,8 +21,8 @@ pub enum Token {
 pub struct Scanner {
     buf: String,
     pos: usize,
-    symbols: Vec<String>,
-    symbol_table: HashMap<String, usize>,
+    pub symbols: Vec<String>,
+    pub symbol_table: HashMap<String, usize>,
     last_tok: Option<Token>,
 }
 
