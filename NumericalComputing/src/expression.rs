@@ -30,7 +30,7 @@ pub enum Expr {
     E
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Formula {
     symbol_list : Vec<String>,
     symbol_table: HashMap<String, usize>,
@@ -50,6 +50,166 @@ impl Formula {
 
     pub fn eval(&self, valuation : &HashMap<String, f64>) -> f64 {
         eval_expr(&self.expression, &self.symbol_list, valuation)
+    }
+
+    pub fn derive(&self, wrt : &str) -> Self {
+        let wrt = self.symbol_table.get(wrt).expect("deriving with respect to unknown value");
+        Formula{
+            symbol_list: self.symbol_list.clone(),
+            symbol_table: self.symbol_table.clone(),
+            expression: derive_expr(&self.expression, *wrt)
+        }
+    }
+}
+
+fn derive_expr(expr : &Expr, wrt : usize) -> Expr {
+    match expr {
+        &Expr::Add(ref exprA, ref exprB) => {
+            Expr::Add(
+                Box::new(derive_expr(&**exprA, wrt)),
+                Box::new(derive_expr(&**exprB, wrt))
+            )
+        }
+        &Expr::Sub(ref exprA, ref exprB) => {
+            Expr::Sub(
+                Box::new(derive_expr(&**exprA, wrt)),
+                Box::new(derive_expr(&**exprA, wrt))
+            )
+        }
+        &Expr::Identifier(id) => {
+            // d/dx(x) = 1, d/dx(y) = 0
+            if id == wrt {
+                Expr::Numeric(1.0)
+            } else {
+                Expr::Numeric(0.0)
+            }
+        }
+        &Expr::Numeric(_) => {
+            Expr::Numeric(0.0)
+       }
+       &Expr::E => {
+           Expr::Numeric(0.0)
+       }
+       &Expr::Mult(ref exprA, ref exprB) => {
+           // d/dx(f(x)g(x)) = d/dx(f(x))g(x) + d/dx(g(x))f(x)
+            Expr::Add(
+                Box::new(
+                    Expr::Mult(
+                        Box::new(derive_expr(&**exprA, wrt)),
+                        exprB.clone()
+                    )
+                ),
+                Box::new(
+                    Expr::Mult(
+                        Box::new(derive_expr(&**exprB, wrt)),
+                        exprA.clone()
+                    )
+ 
+                )
+            )
+        }
+        &Expr::Pow(ref exprA, ref exprB) => {
+            match &**exprA {
+                &Expr::E => Expr::Mult(
+                    Box::new(derive_expr(&**exprB, wrt)),
+                    Box::new(Expr::Pow(Box::new(Expr::E), exprB.clone()))
+                ),
+                expr => {
+                    match &**exprB {
+                        &Expr::Numeric(val) => Expr::Mult(
+                            Box::new(
+                                Expr::Numeric(val)
+                            ),
+                            Box::new(Expr::Mult(
+                                Box::new(derive_expr(expr,wrt)),
+                                Box::new(Expr::Pow(
+                                    Box::new(expr.clone()),
+                                    Box::new(Expr::Numeric(val-1.0))
+                                ))
+                            ))
+                        ),
+                        &Expr::Identifier(id) => Expr::Mult(
+                            Box::new(
+                                Expr::Identifier(id)
+                            ),
+                            Box::new(Expr::Mult(
+                                Box::new(derive_expr(expr, wrt)),
+                                Box::new(Expr::Pow(
+                                    Box::new(expr.clone()),
+                                    Box::new(Expr::Sub(
+                                        Box::new(Expr::Identifier(id)),
+                                        Box::new(Expr::Numeric(1.0))
+                                    ))
+                                ))
+                            ))
+                        ),
+                        &Expr::E => Expr::Mult(
+                            Box::new(
+                                Expr::E
+                            ),
+                            Box::new(Expr::Mult(
+                                Box::new(derive_expr(expr, wrt)),
+                                Box::new(Expr::Pow(
+                                    Box::new(expr.clone()),
+                                    Box::new(Expr::Sub(
+                                        Box::new(Expr::E),
+                                        Box::new(Expr::Numeric(1.0))
+                                    ))
+                                ))
+                            ))
+                        ),
+                        exponent => {
+                            let reformatted = Expr::Pow(Box::new(Expr::E), Box::new(
+                                Expr::Mult(
+                                    Box::new(Expr::Ln(Box::new(expr.clone()))),
+                                    Box::new(exponent.clone())
+                                )
+                            ));
+                            derive_expr(&reformatted, wrt)
+                        }
+                    }
+                }
+            }
+        }
+        &Expr::Ln(ref exprA) => {
+            Expr::Mult(
+                Box::new(derive_expr(&**exprA, wrt)),
+                Box::new(Expr::Pow(
+                    exprA.clone(),
+                    Box::new(Expr::Numeric(-1.0))
+                ))
+            )
+        }
+        &Expr::Div(ref exprA, ref exprB) => {
+           // d/dx(f(x)/g(x)) = d/dx(f(x))g(x) - d/dx(g(x))f(x) / g(x) ^ 2
+           Expr::Div(
+            Box::new(Expr::Sub(
+                Box::new(
+                    Expr::Mult(
+                        Box::new(derive_expr(&**exprB, wrt)),
+                        exprA.clone()
+                    )
+                ),
+                Box::new(
+                    Expr::Mult(
+                        Box::new(derive_expr(&**exprA, wrt)),
+                        exprB.clone()
+                    )
+ 
+                )
+            )),
+            Box::new(
+                Expr::Pow(
+                    exprB.clone(),
+                    Box::new(
+                        Expr::Numeric(2.0)
+                    )
+                )
+            )
+           )
+        }
+ 
+
     }
 }
 

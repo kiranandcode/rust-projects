@@ -17,6 +17,7 @@ fn main() {
     if let Some(tok) = Formula::from_scanner(parser) /*parse_expression(&mut parser)*/ {
         println!("final output {:?}", tok);
         println!("Evaluate: {:?}", tok.eval(&valuation));
+        println!("Derived: {:?}", tok.derive("x"));
 //        println!("Parsed: {:?}", Expr::from_ast_expression(tok));
     }
 }
