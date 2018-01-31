@@ -1,5 +1,6 @@
 extern crate regex;
 mod secant;
+mod newton_raphson;
 mod parsing;
 #[macro_use]
 mod expression;
@@ -9,6 +10,7 @@ use parsing::Scanner;
 use expression::Expr;
 use expression::Formula;
 use secant::secant_find_root;
+use newton_raphson::newton_raphson_find_root;
 
 
 fn main() {
@@ -23,6 +25,8 @@ fn main() {
         println!("Derived eval: {:?}", tok.derive("x").eval(&valuation!("x" => 3.0)));
 //        println!("Parsed: {:?}", Expr::from_ast_expression(tok));
         let root = secant_find_root(&tok, -5.0, 0.1, 100);
+        let nr_root = newton_raphson_find_root(&tok, -5.0, 1000);
         println!("Secant root: {}, {}", root, tok.single_variable_eval(root));
+        println!("newton root: {}, {}", nr_root, tok.single_variable_eval(nr_root));
     }
 }

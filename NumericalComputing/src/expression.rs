@@ -67,6 +67,18 @@ impl Formula {
             expression: derive_expr(&self.expression, *wrt)
         }
     }
+
+    pub fn single_variable_derive(&self) -> Self {
+        if self.symbol_list.len() != 1 {
+            panic!("running single variable eval on function with more than single variable");
+        }
+ 
+        Formula{
+            symbol_list: self.symbol_list.clone(),
+            symbol_table: self.symbol_table.clone(),
+            expression: derive_expr(&self.expression, 0)
+        }
+    }
 }
 
 fn derive_expr(expr : &Expr, wrt : usize) -> Expr {
