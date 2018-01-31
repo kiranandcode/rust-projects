@@ -55,7 +55,8 @@ impl Scanner {
     }
 
     pub fn lex_numeric(&mut self) -> Option<Token> {
-        if let Some(mtch) = (Regex::new(r"^((?:(?:-[1-9][0-9]*|[1-9][0-9]*)(?:\.[0-9][0-9]*)))").unwrap()).find(&self.buf[self.pos..]) {
+        // println!("parsing numeric");
+        if let Some(mtch) = (Regex::new(r"^((?:(?:-[1-9][0-9]*|[1-9][0-9]*|0)(?:\.[0-9][0-9]*)))").unwrap()).find(&self.buf[self.pos..]) {
 
             let start = self.pos + mtch.start();
             let end = self.pos + mtch.end();
@@ -156,8 +157,11 @@ impl Scanner {
 impl Iterator for Scanner {
     type Item = Token;
     fn next(&mut self) -> Option<Token> {
+        // println!("Next called with remaining string {:?}", &self.buf[self.pos..]);
+        // println!("last token is {:?}", self.last_tok);
         if self.last_tok.is_none() {
             self.last_tok = self.internal_next();
+            // println!("retrieving next token to be {:?}", self.last_tok);
         } 
         return self.last_tok.clone();
    }
