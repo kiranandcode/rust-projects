@@ -15,7 +15,7 @@ use newton_raphson::newton_raphson_find_root;
 
 fn main() {
     println!("Hello, world!");
-    let mut parser = Scanner::new("x^2.0+x-4.0".to_owned());
+    let mut parser = Scanner::new("x^2.0+(x-4.0)-e^x".to_owned());
     let mut i = 0;
 
     if let Some(tok) = Formula::from_scanner(parser) /*parse_expression(&mut parser)*/ {

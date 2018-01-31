@@ -92,7 +92,7 @@ fn derive_expr(expr : &Expr, wrt : usize) -> Expr {
         &Expr::Sub(ref exprA, ref exprB) => {
             Expr::Sub(
                 Box::new(derive_expr(&**exprA, wrt)),
-                Box::new(derive_expr(&**exprA, wrt))
+                Box::new(derive_expr(&**exprB, wrt))
             )
         }
         &Expr::Identifier(id) => {
