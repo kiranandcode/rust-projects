@@ -52,6 +52,13 @@ impl Formula {
         eval_expr(&self.expression, &self.symbol_list, valuation)
     }
 
+    pub fn single_variable_eval(&self, valuation : f64) -> f64 {
+        if self.symbol_list.len() != 1 {
+            panic!("running single variable eval on function with more than single variable");
+        }
+        eval_expr_single(&self.expression, valuation)
+    }
+
     pub fn derive(&self, wrt : &str) -> Self {
         let wrt = self.symbol_table.get(wrt).expect("deriving with respect to unknown value");
         Formula{
@@ -212,6 +219,44 @@ fn derive_expr(expr : &Expr, wrt : usize) -> Expr {
 
     }
 }
+
+fn eval_expr_single(expr: &Expr, x : f64) -> f64 {
+    match expr {
+        &Expr::Identifier(id) => x,
+        &Expr::E              => consts::E,
+        &Expr::Numeric(val)   => val,
+        &Expr::Add(ref exprA, ref exprB) => {
+            let valexprA = eval_expr_single(&**exprA, x);
+            let valexprB = eval_expr_single(&**exprB, x);
+            valexprA + valexprB
+        }
+        &Expr::Sub(ref exprA, ref exprB) => {
+            let valexprA = eval_expr_single(&**exprA, x);
+            let valexprB = eval_expr_single(&**exprB, x);
+            valexprA - valexprB
+        }
+        &Expr::Pow(ref exprA, ref exprB) => {
+            let valexprA = eval_expr_single(&**exprA, x);
+            let valexprB = eval_expr_single(&**exprB, x);
+            valexprA.powf(valexprB)
+        }
+        &Expr::Mult(ref exprA, ref exprB) => {
+            let valexprA = eval_expr_single(&**exprA, x);
+            let valexprB = eval_expr_single(&**exprB, x);
+            valexprA * valexprB
+        }
+        &Expr::Div(ref exprA, ref exprB) => {
+            let valexprA = eval_expr_single(&**exprA, x);
+            let valexprB = eval_expr_single(&**exprB, x);
+            valexprA / valexprB
+        }
+        &Expr::Ln(ref exprA) => {
+            let valexprA = eval_expr_single(&**exprA, x);
+            valexprA.ln()
+        }
+    }
+}
+
 
 fn eval_expr(expr: &Expr, symbols : &Vec<String>, valuation : &HashMap<String, f64>) -> f64 {
     match expr {

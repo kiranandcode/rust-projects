@@ -27,19 +27,24 @@ pub enum Expression {
 }
 
 pub fn parse_expression(scanner : &mut Scanner) -> Option<Expression> {
+//    println!("Parsing expression - trying to parse factor");
     parse_factor_expression(scanner).and_then(|factor| {
+//        println!("Parsing expression - starting with factor {:?}", factor);
         match scanner.next() {
             Some(tok) => {
                 match tok {
                     Token::OpPlus => {
+//                        println!("Parsing expression - plus found");
                         scanner.consume(tok);
                         parse_expression(scanner).map(|expression| {
                             Expression::Add(factor, Box::new(expression))
                         })
                     }
                     Token::OpSub => {
+//                        println!("Parsing expression - minus found");
                         scanner.consume(tok);
                         parse_expression(scanner).map(|expression| {
+//                            println!("Parsing expression - got factor {:?} minus expression {:?}", factor, expression);
                             Expression::Sub(factor, Box::new(expression))
                         })
                     }
@@ -52,23 +57,28 @@ pub fn parse_expression(scanner : &mut Scanner) -> Option<Expression> {
 }
 
 pub fn parse_factor_expression(scanner : &mut Scanner) -> Option<FactorExpression> {
+//    println!("Parsing factor - trying to parse primary");
     parse_primary_expression(scanner).and_then(|primary| {
+//        println!("Parsing factor - starting with primary expression {:?}", primary);
         match scanner.next() {
             Some(tok) => {
                 match(tok) {
                     Token::OpMul => {
+//                        println!("Parsing factor - mul found");
                         scanner.consume(tok);
                         parse_factor_expression(scanner).map(|factor| {
                            FactorExpression::Mult(primary, Box::new(factor)) 
                         })
                     }
                     Token::OpDiv => {
+//                        println!("Parsing factor - div found");
                         scanner.consume(tok);
                         parse_factor_expression(scanner).map(|factor| {
                            FactorExpression::Div(primary, Box::new(factor)) 
                         })
                     }
                     Token::OpExp => {
+//                        println!("Parsing factor - exponent found");
                         scanner.consume(tok);
                         parse_factor_expression(scanner).map(|factor| {
                            FactorExpression::Exp(primary, Box::new(factor)) 
@@ -85,7 +95,9 @@ pub fn parse_factor_expression(scanner : &mut Scanner) -> Option<FactorExpressio
 }
 
 pub fn parse_primary_expression(scanner : &mut Scanner) -> Option<PrimaryExpression> {
+//    println!("Parsing primary");
     scanner.next().and_then(|token| {
+//        println!("Parsing primary - got token {:?}", token);
         match token {
             Token::Identifier(pos) => {
                scanner.consume(token.clone());
