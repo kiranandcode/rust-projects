@@ -4,3 +4,4 @@ version = "0.1.0"
 authors = ["Kiran Gopinathan <zcabkgo@ucl.ac.uk>"]
 
 [dependencies]
+rand="0.3"

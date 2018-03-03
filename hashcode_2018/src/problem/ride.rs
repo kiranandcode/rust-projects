@@ -1,4 +1,5 @@
 
+#[derive(Debug,Clone)]
 pub struct Ride {
     start_X : i32,
     start_Y : i32,
@@ -9,12 +10,14 @@ pub struct Ride {
     duration : i32,
     
     latest_start : i32,
-    earliest_end : i32
+    earliest_end : i32,
+    i : i32
 }
 
 
 impl Ride {
     pub fn new(
+        i:i32,
         start_X : i32,
         start_Y : i32,
         end_X : i32,
@@ -32,8 +35,13 @@ impl Ride {
             latest_end,
             duration,
             latest_start: latest_end - duration,
-            earliest_end: earliest_start + duration
+            earliest_end: earliest_start + duration,
+            i : i
         }
+    }
+
+    pub fn getId(&self) -> i32 {
+        self.i
     }
 
 }
