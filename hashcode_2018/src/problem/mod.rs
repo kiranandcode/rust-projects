@@ -47,6 +47,26 @@ impl Problem {
         }
 
         let mut rng = rand::thread_rng();
+        let mut weights : Matrix<i32> =  Matrix::new((self.no_rides + 1) as usize, (self.no_rides + 1) as usize);
+        for i in 0..self.no_rides {
+            for j in 0..self.no_rides {
+                if Ride::are_connected(&self.rides[i as usize], &self.rides[j as usize]) {
+                    unsafe{
+                        *weights.get_mut_unchecked((i+1) as usize,(j+1) as usize) = Ride::get_weight(&self.rides[i as usize], &self.rides[j as usize]);
+                    }
+                }
+            }
+        }
+
+        let null = Ride::new(0,0,0,0,0,0,0);
+
+        for i in 0..self.no_rides {
+            if Ride::are_connected(&null, &self.rides[i as usize]) {
+                    unsafe{
+                        *weights.get_mut_unchecked(0,(i+1) as usize) = Ride::get_weight(&null, &self.rides[i as usize]);
+                    }
+            }
+        }
 
         for i in 0..self.no_rides {
             let bucket = (rng.gen::<i32>() % self.vehicles).abs();

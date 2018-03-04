@@ -83,10 +83,10 @@ impl Ride {
     }
 
     pub fn get_weight(ride_a : &Ride, ride_b : &Ride) -> i32 {
-        return invert(distance(ride_a, ride_b)) + time_difference(ride_a, ride_b);
+        return invert(distance(ride_a, ride_b)) + time_difference(ride_a, ride_b) + ride_b.duration;
     }
 
     pub fn get_weight_given_time(current_time : i32, ride_a : &Ride, ride_b : &Ride) -> i32 {
-        return invert(distance(ride_a, ride_b)) + time_difference_given_time(current_time, ride_a, ride_b);
+        return invert(distance(ride_a, ride_b)) + time_difference_given_time(current_time, ride_a, ride_b) + ride_b.duration;
     }
 }
