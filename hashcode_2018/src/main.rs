@@ -3,6 +3,7 @@ extern crate rand;
 
 mod parser;
 mod problem;
+mod matrix;
 
 use std::fs::File;
 use std::io::{Write,self};
