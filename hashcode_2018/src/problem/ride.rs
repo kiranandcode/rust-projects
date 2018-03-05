@@ -66,10 +66,17 @@ impl Ride {
         }
     }
 
+    pub fn get_duration(&self) -> i32 {
+        self.duration
+    }
+
     pub fn getId(&self) -> i32 {
         self.i
     }
 
+    pub fn distance_between(ride_a : &Ride, ride_b : &Ride) -> i32 {
+        return distance(ride_a, ride_b);
+    }
     pub fn are_connected(ride_a : &Ride, ride_b : &Ride) -> bool {
         return ride_a.earliest_end + distance(ride_a, ride_b) < ride_b.latest_start; 
     }
