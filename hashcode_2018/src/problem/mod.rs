@@ -26,54 +26,110 @@ struct DFSResult {
 fn dfs(no_rides : i32, edge_matrix : &Matrix<i32>, rides : &Vec<Ride>, seen : &mut Vec<bool>) -> DFSResult {
         let null = Ride::new(0,0,0,0,0,-100,0);
 
-        let mut nearest = vec![None; no_rides];
-        let mut cost = vec![None; no_rides];
-        let mut added = vec![false; no_rides];
+        let mut parent: Vec<Option<i32>> = vec![None; no_rides as usize];
+        let mut cost : Vec<Option<i32>>= vec![None; no_rides as usize];
+        let mut added : Vec<bool>= vec![false; no_rides as usize];
 
-        cost[start] = 0;
+        cost[0] = Some(0);
         let mut added_nodes = 0;
-        while(added_nodes != self.nodes) {
+        let mut leaves = Vec::new();
+        // while all nodes haven't been considered
+        while(added_nodes != no_rides) {
             let mut max= None;
-            let mut u = None;
+            let mut max_index = None;
 
+            // find the maximum unadded node we can add
             for i in 0..no_rides {
-                if !added[i] && cost[i].is_present() {
-                    if min.is_none() || max.unwrap() < cost[i] {
-                            max = Some(cost[i].clone()); 
-                            u = Some(i);
+                if !added[i as usize] && cost[i as usize].is_some() {
+                    if max.is_none() || max.unwrap() < cost[i as usize] {
+                            max = Some(cost[i as usize].clone()); 
+                            max_index = Some(i);
                     }
                 }
             }
 
-            let u = u.unwrap();
+            // if there is a node that we haven't added 
             match max{
                 Some(maximum) => {
-                    added[u] = true;
+                    added[max_index.unwrap() as usize] = true;
                     added_nodes = added_nodes + 1;
                 }
-                None => { break; }
+                None => { break; /* else break */ }
             }
 
+
+            let max_index = max_index.unwrap();
+            // now update all unseen costs
+            // for each node
+            let mut child_found = false;
             for i in 0..no_rides {
-                if !added[i] {
+                // if we haven't added it
+                if !added[i as usize] {
+                    // find out the cost from the added node to it
                     let graph_value: i32;
                     unsafe {
-                        graph_value = self.graph.get_unchecked(u,i).clone().into();
+                        graph_value = edge_matrix.get_unchecked(max_index as usize,i as usize).clone().into();
                     }
-                    if cost[i].is_none() && graph_value != 0 {
-                        nearest[i] = Some(u);
-                        cost[i] = cost[u] + graph_value;
-                    } else if !cost[i].is_none() && cost[i].unwrap() != 0 && graph_value + cost[u].unwrap() < cost[i].unwrap() {
-                        cost[i] = graph_value + cost[u];
-                        nearest[i] = Some(u);
+                    // if there was no edge to it before, but with this node there is
+                    if cost[i as usize].is_none() && graph_value != 0 {
+                        // update our records to list this node as being the accessible from the
+                        // added node
+                        parent[i as usize] = Some(max_index);
+                        // the cost of this node should be edge weight + weights to get to
+                        // max_index node
+                        cost[i as usize] = Some(cost[max_index as usize].unwrap() + graph_value);
+                        child_found = true;
+                    }
+                    
+                    // else if we have seen the node, but the cost is now greater
+                    else if !cost[i as usize].is_none() && cost[i as usize].unwrap() != 0 && graph_value + cost[max_index as usize].unwrap() > cost[i as usize].unwrap() {
+                        // update the parent of this node to be the ones
+                        cost[i as usize] = Some(graph_value + cost[max_index as usize].unwrap());
+                        parent[i as usize] = Some(max_index);
+                        child_found = true;
                     }
                 }
+            }
+
+            if !child_found {
+                leaves.push(max_index);
             }
 
         }
+
+        // at this point djikstra has completed and we have a list of leaves
+        // go through and find the leaves with the highest cost
+       let mut highest = leaves[0]; 
+       let mut highest_cost = cost[leaves[0] as usize];
+
+       // find the highest_cost_leaf
+       for i in 0..leaves.len() {
+            let node = leaves[i];
+            if let Some(score) = cost[node as usize] {
+                if let Some(highest_score) = highest_cost {
+                   if highest_score < score {
+                        highest = node;
+                        highest_cost= cost[node as usize].clone();
+                   }
+                } else {
+                    highest = node;
+                    highest_cost= cost[node as usize].clone();
+                }
+            }
+       }
+
+       // now just ascend from the leaf to the start
+       let mut current_node = highest;
+       let mut result = Vec::new();
+       while current_node != 0 {
+           result.push(current_node); 
+           current_node = parent[current_node as usize].unwrap();
+       }
+
+       result.reverse();
+
        let result = DFSResult {
-            children,
-            parents
+           path: result
         };
 
         println!("Result: {:?}", result);
