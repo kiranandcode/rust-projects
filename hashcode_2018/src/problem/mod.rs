@@ -23,17 +23,21 @@ struct DFSResult {
     path: Vec<i32>
 }
 
-fn dfs(no_rides : i32, edge_matrix : &Matrix<i32>, rides : &Vec<Ride>, seen : &mut Vec<bool>) -> DFSResult {
+fn dfs(no_rides : i32, edge_matrix : &Matrix<i32>, rides : &Vec<Ride>, seen : &mut Vec<bool>, seen_count : &mut i32) -> Option<DFSResult> {
         let null = Ride::new(0,0,0,0,0,-100,0);
 
+        // initialize temporary variables
+            // parent : mapping of nodes -> parents
         let mut parent: Vec<Option<i32>> = vec![None; no_rides as usize];
+            // cost : mapping of node -> cost to get to node
         let mut cost : Vec<Option<i32>>= vec![None; no_rides as usize];
-        let mut added : Vec<bool>= vec![false; no_rides as usize];
+            // added : whether a node has been added to the dfs tree (seen nodes are already added)
+        let mut added : Vec<bool>= seen.clone();
 
         cost[0] = Some(0);
-        let mut added_nodes = 0;
+        let mut added_nodes = 0 + *seen_count;
         let mut leaves = Vec::new();
-        // while all nodes haven't been considered
+        // while all nodes haven't been considered (there is early termination built in)
         while(added_nodes != no_rides) {
             let mut max= None;
             let mut max_index = None;
@@ -91,6 +95,7 @@ fn dfs(no_rides : i32, edge_matrix : &Matrix<i32>, rides : &Vec<Ride>, seen : &m
                 }
             }
 
+            // if the node had no children push it
             if !child_found {
                 leaves.push(max_index);
             }
@@ -99,6 +104,12 @@ fn dfs(no_rides : i32, edge_matrix : &Matrix<i32>, rides : &Vec<Ride>, seen : &m
 
         // at this point djikstra has completed and we have a list of leaves
         // go through and find the leaves with the highest cost
+        //
+        if leaves.len() == 0 {
+            return None;
+        }
+
+
        let mut highest = leaves[0]; 
        let mut highest_cost = cost[leaves[0] as usize];
 
@@ -123,6 +134,8 @@ fn dfs(no_rides : i32, edge_matrix : &Matrix<i32>, rides : &Vec<Ride>, seen : &m
        let mut result = Vec::new();
        while current_node != 0 {
            result.push(current_node); 
+           seen[current_node as usize] = true;
+           *seen_count = *seen_count + 1;
            current_node = parent[current_node as usize].unwrap();
        }
 
@@ -133,7 +146,7 @@ fn dfs(no_rides : i32, edge_matrix : &Matrix<i32>, rides : &Vec<Ride>, seen : &m
         };
 
         println!("Result: {:?}", result);
-        result
+        Some(result)
 }
 
 impl Problem {
@@ -159,10 +172,7 @@ impl Problem {
     pub fn solve(&self) -> Solution {
         let mut assignment : Vec<Vec<Ride>>= Vec::new();
 
-        for i in 0..self.vehicles {
-            assignment.push(Vec::new());
-        }
-
+        // set  up the weights matrix for later in the problem
         let mut rng = rand::thread_rng();
         let mut weights : Matrix<i32> =  Matrix::new((self.no_rides + 1) as usize, (self.no_rides + 1) as usize);
         for i in 0..self.no_rides {
@@ -177,8 +187,8 @@ impl Problem {
             }
         }
 
+        // also add weights from special null node at (0,0) to all connected nodes
         let null = Ride::new(0,0,0,0,0,-100,0);
-
         for i in 0..self.no_rides {
             if Ride::are_connected(&null, &self.rides[i as usize]) {
                     unsafe{
@@ -189,11 +199,21 @@ impl Problem {
 
 
         // Do DFS method to find leaves
-        let result = dfs(self.no_rides + 1, &weights, &self.rides);
+        let mut seen = vec![false; ((self.no_rides + 1) as usize)];
+        let mut seen_count = 0;
 
         for i in 0..self.no_rides {
-            let bucket = (rng.gen::<i32>() % self.vehicles).abs();
-            assignment[bucket as usize].push(self.rides[i as usize].clone());
+            let path = match dfs((self.no_rides + 1), &weights, &self.rides, &mut seen, &mut seen_count) {
+                Some(result) => {
+                    result.path.into_iter().map(|x| self.rides[(x - 1) as usize].clone()).collect()
+                }
+                None => {
+                    Vec::new()
+                }
+            };
+            assignment.push(path);
+            // let bucket = (rng.gen::<i32>() % self.vehicles).abs();
+            // assignment[bucket as usize].push(self.rides[i as usize].clone());
 
         }
 
