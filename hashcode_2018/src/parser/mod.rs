@@ -5,8 +5,8 @@ use ::std::io::{Write, Read, Error, ErrorKind, BufReader, BufRead};
 pub use hashcode_2018::problem::ride::Ride;
 pub use hashcode_2018::problem::Problem;
 
-pub fn read_input() -> Problem {
-    let mut input = File::open("input.in").expect("Could not open input file");
+pub fn read_input(name : &str) -> Problem {
+    let mut input = File::open(format!("problems/{}.in", name)).expect("Could not open input file");
     let mut reader = BufReader::new(input);
 
     

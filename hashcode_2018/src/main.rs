@@ -13,7 +13,7 @@ use parser::read_input;
 
 fn main() {
     println!("Hello, world!");
-    let problem = read_input();
+    let problem = read_input("b_should_be_easy");
     println!("problem is {:?}", problem);
 
     let solution = problem.solve();
