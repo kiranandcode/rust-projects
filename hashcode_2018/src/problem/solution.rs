@@ -21,12 +21,12 @@ impl  Display for Solution {
 
 
        for (i, rides) in self.assignment.iter().enumerate() {
-            write!(buffer, "{}", i);
+                write!(buffer, "{}", rides.len());
 
-           for ride in rides.iter() {
-                write!(buffer, " {}", ride.getId());    
-           }
-           write!(buffer, "\n");
+               for ride in rides.iter() {
+                    write!(buffer, " {}", ride.getId());    
+               }
+               write!(buffer, "\n");
        }
 
        write!(f, "{}", buffer)

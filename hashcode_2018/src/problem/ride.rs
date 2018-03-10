@@ -1,16 +1,16 @@
 
 #[derive(Debug,Clone)]
 pub struct Ride {
-    start_X : i32,
-    start_Y : i32,
-    end_X : i32,
-    end_Y : i32,
-    earliest_start : i32,
-    latest_end : i32,
-    duration : i32,
+    pub start_X : i32,
+    pub start_Y : i32,
+    pub end_X : i32,
+    pub end_Y : i32,
+    pub earliest_start : i32,
+    pub latest_end : i32,
+    pub duration : i32,
     
-    latest_start : i32,
-    earliest_end : i32, i : i32
+    pub latest_start : i32,
+    pub earliest_end : i32, i : i32
 }
 
 fn distance(ride_a : &Ride, ride_b : &Ride) -> i32 {
@@ -34,11 +34,14 @@ fn time_difference_given_time(current_time : i32, ride_a : &Ride, ride_b : &Ride
 }
 
 fn invert(inp : i32) -> i32 {
-    if inp ==  0 {
-        101
+
+    let result = if inp ==  0 {
+        1000001
     } else {
-        ((1 as f64 /inp as f64) * 100 as f64) as i32
-    }
+        ((1 as f64 /inp as f64) * 100000 as f64) as i32
+    };
+
+    result
 }
 
 impl Ride {
@@ -89,11 +92,23 @@ impl Ride {
         }
     }
 
+    pub fn get_time_after_completion(&self, current_time : i32, start_ride : &Ride) -> i32 {
+        if current_time > self.latest_start {
+            panic!("Current time exceeds latest start time - means bad calculation");
+        }
+        let result_time = current_time + distance(start_ride, self) + self.duration;
+        if result_time > self.latest_end {
+            panic!("Finish time exceeds latest end time - means bad calculation");
+        }
+
+        result_time
+    }
+
     pub fn get_weight(ride_a : &Ride, ride_b : &Ride) -> i32 {
         return invert(distance(ride_a, ride_b)) +  invert(time_difference(ride_a, ride_b)) + ride_b.duration;
     }
 
     pub fn get_weight_given_time(current_time : i32, ride_a : &Ride, ride_b : &Ride) -> i32 {
-        return invert(distance(ride_a, ride_b)) + time_difference_given_time(current_time, ride_a, ride_b) + ride_b.duration;
+        return invert(distance(ride_a, ride_b)) + invert(time_difference_given_time(current_time, ride_a, ride_b)) + ride_b.duration;
     }
 }

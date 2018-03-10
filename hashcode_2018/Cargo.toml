@@ -5,3 +5,4 @@ authors = ["Kiran Gopinathan <zcabkgo@ucl.ac.uk>"]
 
 [dependencies]
 rand="0.3"
+chan-signal="0.3.1"

@@ -1,5 +1,6 @@
 extern crate hashcode_2018;
 extern crate rand;
+extern crate chan_signal;
 
 mod parser;
 mod problem;
@@ -12,12 +13,12 @@ use problem::Problem;
 use parser::read_input;
 
 fn main() {
-    println!("Hello, world!");
-    let problem = read_input("b_should_be_easy");
+    let problem_name = "c_no_hurry";
+    let problem = read_input(problem_name);
     println!("problem is {:?}", problem);
 
     let solution = problem.solve();
-    let mut output = File::create("output.txt").expect("Could not open output file");
+    let mut output = File::create(format!("output/{}.out", problem_name)).expect("Could not open output file");
     write!(output, "{}", solution);
 
 }

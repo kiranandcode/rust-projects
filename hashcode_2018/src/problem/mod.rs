@@ -1,4 +1,6 @@
 extern crate rand;
+
+extern crate chan_signal;
 pub mod ride;
 pub mod solution;
 use self::ride::Ride;
@@ -6,6 +8,9 @@ use self::solution::Solution;
 use std::vec::Vec;
 use self::rand::Rng;
 use super::matrix::Matrix;
+use self::chan_signal::Signal;
+use std::sync::{Mutex,Arc};
+use std::thread;
 
 #[derive(Debug)]
 pub struct Problem {
@@ -23,7 +28,7 @@ struct DFSResult {
     path: Vec<i32>
 }
 
-fn dfs(no_rides : i32, edge_matrix : &Matrix<i32>, rides : &Vec<Ride>, seen : &mut Vec<bool>, seen_count : &mut i32) -> Option<DFSResult> {
+fn dfs(no_rides : i32, edge_matrix : &Matrix<i32>, rides : &Vec<Ride>, seen : &mut Vec<bool>, seen_count : &mut i32, total_time : i32) -> Option<DFSResult> {
         let null = Ride::new(0,0,0,0,0,-100,0);
 
         // initialize temporary variables
@@ -31,14 +36,17 @@ fn dfs(no_rides : i32, edge_matrix : &Matrix<i32>, rides : &Vec<Ride>, seen : &m
         let mut parent: Vec<Option<i32>> = vec![None; no_rides as usize];
             // cost : mapping of node -> cost to get to node
         let mut cost : Vec<Option<i32>>= vec![None; no_rides as usize];
+        let mut current_time : Vec<i32>= vec![0; no_rides as usize];
             // added : whether a node has been added to the dfs tree (seen nodes are already added)
         let mut added : Vec<bool>= seen.clone();
+        added[0] = false;
 
         cost[0] = Some(0);
         let mut added_nodes = 0 + *seen_count;
         let mut leaves = Vec::new();
         // while all nodes haven't been considered (there is early termination built in)
-        while(added_nodes != no_rides) {
+        //while(added_nodes != no_rides) {
+        loop {
             let mut max= None;
             let mut max_index = None;
 
@@ -66,31 +74,51 @@ fn dfs(no_rides : i32, edge_matrix : &Matrix<i32>, rides : &Vec<Ride>, seen : &m
             // now update all unseen costs
             // for each node
             let mut child_found = false;
+            let max_index_time = current_time[max_index as usize];
             for i in 0..no_rides {
                 // if we haven't added it
                 if !added[i as usize] {
                     // find out the cost from the added node to it
-                    let graph_value: i32;
+                    let mut graph_value: i32;
                     unsafe {
                         graph_value = edge_matrix.get_unchecked(max_index as usize,i as usize).clone().into();
                     }
+                    let is_connected; 
+                    if i > 0  && max_index > 0{
+                        is_connected = Ride::are_connected_given_time(max_index_time, &rides[(max_index - 1) as usize], &rides[(i-1) as usize]);
+                        if is_connected {
+                            graph_value = Ride::get_weight_given_time(max_index_time, &rides[(max_index - 1) as usize], &rides[(i-1) as usize]);
+                        }
+                    } else {
+                        is_connected = true;
+                    }
+
                     // if there was no edge to it before, but with this node there is
-                    if cost[i as usize].is_none() && graph_value != 0 {
+                    if cost[i as usize].is_none() && graph_value != 0 && is_connected {
                         // update our records to list this node as being the accessible from the
                         // added node
                         parent[i as usize] = Some(max_index);
                         // the cost of this node should be edge weight + weights to get to
                         // max_index node
                         cost[i as usize] = Some(cost[max_index as usize].unwrap() + graph_value);
+                        if i > 0 && max_index > 0 {
+                            current_time[i as usize] = rides[(i - 1) as usize].get_time_after_completion(current_time[max_index as usize], &rides[(max_index -1) as usize]);
+                        }
                         child_found = true;
                     }
                     
                     // else if we have seen the node, but the cost is now greater
-                    else if !cost[i as usize].is_none() && cost[i as usize].unwrap() != 0 && graph_value + cost[max_index as usize].unwrap() > cost[i as usize].unwrap() {
+                    else if !cost[i as usize].is_none() && cost[i as usize].unwrap() != 0 && graph_value + cost[max_index as usize].unwrap() > cost[i as usize].unwrap() && is_connected {
                         // update the parent of this node to be the ones
+                        //
                         cost[i as usize] = Some(graph_value + cost[max_index as usize].unwrap());
+                        if i > 0 && max_index > 0 {
+                            current_time[i as usize] = rides[(i - 1) as usize].get_time_after_completion(current_time[max_index as usize], &rides[(max_index -1) as usize]);
+                        }
+ 
                         parent[i as usize] = Some(max_index);
                         child_found = true;
+
                     }
                 }
             }
@@ -145,7 +173,6 @@ fn dfs(no_rides : i32, edge_matrix : &Matrix<i32>, rides : &Vec<Ride>, seen : &m
            path: result
         };
 
-        println!("Result: {:?}", result);
         Some(result)
 }
 
@@ -202,20 +229,56 @@ impl Problem {
         let mut seen = vec![false; ((self.no_rides + 1) as usize)];
         let mut seen_count = 0;
 
-        for i in 0..self.no_rides {
-            let path = match dfs((self.no_rides + 1), &weights, &self.rides, &mut seen, &mut seen_count) {
-                Some(result) => {
-                    result.path.into_iter().map(|x| self.rides[(x - 1) as usize].clone()).collect()
-                }
-                None => {
-                    Vec::new()
-                }
-            };
-            assignment.push(path);
-            // let bucket = (rng.gen::<i32>() % self.vehicles).abs();
-            // assignment[bucket as usize].push(self.rides[i as usize].clone());
+        // shared flag to track user requested early termination
+        let should_break_early = Arc::new(Mutex::new(false));
+        // set up channel to listen for sigint signals from terminal
+        let signal = chan_signal::notify(&[Signal::INT, Signal::TERM, Signal::IO]);
 
-        }
+        // create new binding (so that move will move it) for the thread to use to access the
+        // shared variable
+        let thread_should_break_early = should_break_early.clone();
+        // use thread to handle sigint calls
+        thread::spawn(move || {
+            // loop forever
+            loop {
+                // retrieve inputs from signal listener
+                let result = signal.recv();
+                if let Some(signal) = result {
+                    println!("Early Termination Requested. Will terminate as soon as current DFS loop ends");
+                    // if input recieved, update internal variable
+                    let mut data = thread_should_break_early.lock().unwrap();
+                    *data = true;
+                    break;
+                }
+            }
+        });
+
+            for i in 0..self.no_rides {
+                // at the beginning, check value of shared variable - if set break
+                {
+                    let mut data = should_break_early.lock().unwrap();
+                    if *data {
+                        break;
+                    }
+                }
+                
+                println!("Iteration[{}]: allocated {}", i, seen_count);
+                let path = match dfs((self.no_rides + 1), &weights, &self.rides, &mut seen, &mut seen_count, self.total_time) {
+                    Some(result) => {
+                        result.path.into_iter().map(|x| self.rides[(x - 1) as usize].clone()).collect()
+                    }
+                    None => {
+                        Vec::new()
+                    }
+                };
+                assignment.push(path);
+                // let bucket = (rng.gen::<i32>() % self.vehicles).abs();
+                // assignment[bucket as usize].push(self.rides[i as usize].clone());
+
+            }
+
+        println!("Main Loop Terminated, Writing solution to file");
+
 
         Solution::new(assignment)
     }
