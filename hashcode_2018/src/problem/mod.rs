@@ -1,4 +1,5 @@
 extern crate rand;
+use self::rand::Rng;
 
 extern crate chan_signal;
 pub mod ride;
@@ -6,7 +7,6 @@ pub mod solution;
 use self::ride::Ride;
 use self::solution::Solution;
 use std::vec::Vec;
-use self::rand::Rng;
 use super::matrix::Matrix;
 use self::chan_signal::Signal;
 use std::sync::{Mutex,Arc};
@@ -28,7 +28,7 @@ struct DFSResult {
     path: Vec<i32>
 }
 
-fn dfs(no_rides : i32, edge_matrix : &Matrix<i32>, rides : &Vec<Ride>, seen : &mut Vec<bool>, seen_count : &mut i32, total_time : i32) -> Option<DFSResult> {
+fn dfs(no_rides : i32, edge_matrix : &Matrix<i32>, rides : &Vec<Ride>, seen : &mut Vec<bool>, seen_count : &mut i32, total_time : i32, bonus : i32) -> Option<DFSResult> {
         let null = Ride::new(0,0,0,0,0,-100,0);
 
         // initialize temporary variables
@@ -75,59 +75,76 @@ fn dfs(no_rides : i32, edge_matrix : &Matrix<i32>, rides : &Vec<Ride>, seen : &m
             // for each node
             let mut child_found = false;
             let max_index_time = current_time[max_index as usize];
-            for i in 0..no_rides {
-                // if we haven't added it
-                if !added[i as usize] {
-                    // find out the cost from the added node to it
-                    let mut graph_value: i32;
-                    unsafe {
-                        graph_value = edge_matrix.get_unchecked(max_index as usize,i as usize).clone().into();
-                    }
-                    let is_connected; 
-                    if i > 0  && max_index > 0{
-                        is_connected = Ride::are_connected_given_time(max_index_time, &rides[(max_index - 1) as usize], &rides[(i-1) as usize]);
-                        if is_connected {
-                            graph_value = Ride::get_weight_given_time(max_index_time, &rides[(max_index - 1) as usize], &rides[(i-1) as usize]);
-                        }
-                    } else {
-                        is_connected = true;
-                    }
+                for i in 0..no_rides {
 
-                    // if there was no edge to it before, but with this node there is
-                    if cost[i as usize].is_none() && graph_value != 0 && is_connected {
-                        // update our records to list this node as being the accessible from the
-                        // added node
-                        parent[i as usize] = Some(max_index);
-                        // the cost of this node should be edge weight + weights to get to
-                        // max_index node
-                        cost[i as usize] = Some(cost[max_index as usize].unwrap() + graph_value);
-                        if i > 0 && max_index > 0 {
-                            current_time[i as usize] = rides[(i - 1) as usize].get_time_after_completion(current_time[max_index as usize], &rides[(max_index -1) as usize]);
-                        }
-                        child_found = true;
-                    }
-                    
-                    // else if we have seen the node, but the cost is now greater
-                    else if !cost[i as usize].is_none() && cost[i as usize].unwrap() != 0 && graph_value + cost[max_index as usize].unwrap() > cost[i as usize].unwrap() && is_connected {
-                        // update the parent of this node to be the ones
-                        //
-                        cost[i as usize] = Some(graph_value + cost[max_index as usize].unwrap());
-                        if i > 0 && max_index > 0 {
-                            current_time[i as usize] = rides[(i - 1) as usize].get_time_after_completion(current_time[max_index as usize], &rides[(max_index -1) as usize]);
-                        }
- 
-                        parent[i as usize] = Some(max_index);
-                        child_found = true;
+                    // if we haven't added it
+                    if !added[i as usize] {
+                        let mut completed_time =  max_index_time;
+                        // find out the cost from the added node to it
+                        let mut graph_value: i32 = 0;
+                       let mut is_connected; 
+                       let start_ride = if max_index > 0 {
+                            &rides[(max_index - 1) as usize]
+                       } else {
+                            &null
+                       };
+                       let end_ride = if i > 0 {
+                            &rides[(i-1) as usize]
+                       } else {
+                            &null
+                       };
 
+//                        if i > 0  && max_index > 0 {
+                            is_connected = Ride::are_connected_given_time(max_index_time, start_ride, end_ride);
+                            if is_connected {
+                                graph_value = Ride::get_weight_given_time(max_index_time, start_ride, end_ride, bonus);
+                                completed_time = end_ride.get_time_after_completion(current_time[max_index as usize], start_ride);
+                                if completed_time + end_ride.duration  >= total_time {
+                                    is_connected = false;
+                                }
+                            }
+                       /* } else {
+                            is_connected = true;
+                            unsafe {
+                                graph_value = edge_matrix.get_unchecked(max_index as usize,i as usize).clone().into();
+                            }
+                        }*/
+
+
+                        // if there was no edge to it before, but with this node there is
+                        if cost[i as usize].is_none() && graph_value != 0 && is_connected {
+                            // update our records to list this node as being the accessible from the
+                            // added node
+                            parent[i as usize] = Some(max_index);
+                            // the cost of this node should be edge weight + weights to get to
+                            // max_index node
+                            cost[i as usize] = Some(cost[max_index as usize].unwrap() + graph_value);
+                            //if i > 0 && max_index > 0 {
+                                current_time[i as usize] = completed_time;
+                            //}
+                            child_found = true;
+                        }
+                        
+                        // else if we have seen the node, but the cost is now greater
+                        else if !cost[i as usize].is_none() && cost[i as usize].unwrap() != 0 && graph_value + cost[max_index as usize].unwrap() > cost[i as usize].unwrap() && is_connected {
+                            // update the parent of this node to be the ones
+                            //
+                            cost[i as usize] = Some(graph_value + cost[max_index as usize].unwrap());
+                            if i > 0 && max_index > 0 {
+                                current_time[i as usize] = rides[(i - 1) as usize].get_time_after_completion(current_time[max_index as usize], &rides[(max_index -1) as usize]);
+                            }
+     
+                            parent[i as usize] = Some(max_index);
+                            child_found = true;
+
+                        }
                     }
                 }
-            }
 
-            // if the node had no children push it
-            if !child_found {
-                leaves.push(max_index);
-            }
-
+                // if the node had no children push it
+                if !child_found {
+                    leaves.push(max_index);
+                }
         }
 
         // at this point djikstra has completed and we have a list of leaves
@@ -196,7 +213,7 @@ impl Problem {
         }
     }
 
-    pub fn solve(&self) -> Solution {
+    pub fn solve(&self, low_expt_max : i32, high_expt_max : i32) -> Solution {
         let mut assignment : Vec<Vec<Ride>>= Vec::new();
 
         // set  up the weights matrix for later in the problem
@@ -207,7 +224,7 @@ impl Problem {
                 if i != j {
                     if Ride::are_connected(&self.rides[i as usize], &self.rides[j as usize]) {
                         unsafe{
-                            *weights.get_mut_unchecked((i+1) as usize,(j+1) as usize) = Ride::get_weight(&self.rides[i as usize], &self.rides[j as usize]);
+                            *weights.get_mut_unchecked((i+1) as usize,(j+1) as usize) = Ride::get_weight(&self.rides[i as usize], &self.rides[j as usize], self.per_ride_bonus);
                         }
                     }
                 }
@@ -219,7 +236,7 @@ impl Problem {
         for i in 0..self.no_rides {
             if Ride::are_connected(&null, &self.rides[i as usize]) {
                     unsafe{
-                        *weights.get_mut_unchecked(0,(i+1) as usize) = Ride::get_weight(&null, &self.rides[i as usize]);
+                        *weights.get_mut_unchecked(0,(i+1) as usize) = Ride::get_weight(&null, &self.rides[i as usize], self.per_ride_bonus);
                     }
             }
         }
@@ -253,6 +270,7 @@ impl Problem {
             }
         });
 
+        let mut last_seen_count = 0;
             for i in 0..self.no_rides {
                 // at the beginning, check value of shared variable - if set break
                 {
@@ -262,8 +280,9 @@ impl Problem {
                     }
                 }
                 
-                println!("Iteration[{}]: allocated {}", i, seen_count);
-                let path = match dfs((self.no_rides + 1), &weights, &self.rides, &mut seen, &mut seen_count, self.total_time) {
+                println!("Iteration[{}]: allocated {} (+{})", i, seen_count, seen_count-last_seen_count);
+                last_seen_count = seen_count;
+                let path = match dfs((self.no_rides + 1), &weights, &self.rides, &mut seen, &mut seen_count, self.total_time, self.per_ride_bonus) {
                     Some(result) => {
                         result.path.into_iter().map(|x| self.rides[(x - 1) as usize].clone()).collect()
                     }
