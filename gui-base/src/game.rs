@@ -12,7 +12,9 @@ struct Game {
 }
 
 impl Game {
-    pub fn new() -> Self { }
+    pub fn new() -> Self {
+        Game {state: GameState::GAME_MENU, keys: [true; 1024], width: 1024u32, height: 720u32} 
+    }
     pub fn init() { }
     pub fn processInput(dt : f32) {}
     pub fn update(dt: f32) {}

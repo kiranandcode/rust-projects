@@ -1,5 +1,7 @@
+extern crate gl;
+extern crate sdl2;
 use sdl2::event::Event;
-use gl::{GLuint, GLfloat, GLboolean, GLchar, GLsizei};
+use gl::types::{GLuint, GLfloat, GLboolean, GLchar, GLsizei};
 
 pub struct Shader {
     id : GLuint
@@ -22,12 +24,14 @@ impl Shader {
     pub fn compile(&mut self,
                    vertexSource : &[GLchar],
                    fragmentSource : &[GLchar]) {
-        sVertex: GLuint;
-        sFragment : GLuint;
-        gShader : GLuint;
+        let sVertex: GLuint;
+        let sFragment : GLuint;
+        let gShader : GLuint;
 
-        sVertex = gl::glCreateShader(gl::VERTEX_SHADER);
-        glShaderSource(sVertex, 1 as GLsizei, &vertexSource)
+        unsafe {
+            sVertex = gl::CreateShader(gl::VERTEX_SHADER);
+            gl::ShaderSource(sVertex, 1 as GLsizei, &vertexSource.as_ptr(), &1)
+        }
 
     }
 
