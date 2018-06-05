@@ -30,6 +30,12 @@ impl Classroom {
         Classroom(self.0.clone())
     }
 
+    pub fn get_state(&self) -> (i16, u32) {
+       let &(ref lock, ref monitor) = &*self.0;
+       let mut classroom = lock.lock().unwrap();
+       (classroom.waiting_spaces, classroom.free_computers)
+    }
+
     pub fn enter(&self) -> bool {
        let &(ref lock, ref monitor) = &*self.0;
        let mut classroom = lock.lock().unwrap();
@@ -54,4 +60,36 @@ impl Classroom {
 }
 
 
+pub fn classroom_controller_example() {
+    let classroom = Classroom::new();
+
+    for i in 0..3 {
+        let classroom_ = classroom.clone();
+        thread::spawn(move || {
+            let entrance = classroom_;
+            let id = i;
+            let mut rng = rand::thread_rng();
+            loop {
+                let time_to_wait = (rng.next_f32() * 30.0 * 1000.0) as u64;
+                let time_millis = time::Duration::from_millis(time_to_wait);
+                println!("Thread {}: entering the classroom", id);
+                if !entrance.enter() {
+                   println!("Thread {}: Could not enter the computer room", id); 
+                } else {
+                    thread::sleep(time_millis);
+                    entrance.exit();
+                    println!("Thread {}: exiting the classroom", id);
+                }
+            }
+        });
+    }
+
+
+    let time_millis = time::Duration::from_millis(1000 * 10);
+    loop {
+            thread::sleep(time_millis);
+            let (waiting, free) = classroom.get_state();
+            println!("Classroom-state (waiting: {}, free: {})", waiting, free);
+    }
+}
 
