@@ -1,8 +1,11 @@
 extern crate mio;
 extern crate http_muncher;
+extern crate sha1;
+extern crate rustc_serialize;
 
 pub mod server;
 pub mod client;
+pub mod key;
 
 use server::WebSocketServer;
 
