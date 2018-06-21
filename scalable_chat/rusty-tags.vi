@@ -21,6 +21,7 @@ AsRawFd for UnixListener	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377
 AsRawFd for UnixSocket	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/deprecated/unix.rs	/^impl AsRawFd for UnixSocket {$/;"	i
 AsRawFd for UnixSocket	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/sys/unix/uds.rs	/^impl AsRawFd for UnixSocket {$/;"	i
 AsRawFd for UnixStream	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/deprecated/unix.rs	/^impl AsRawFd for UnixStream {$/;"	i
+AsRef for WebSocketClient	/home/gopiandcode/Documents/Rust/rust-projects/scalable_chat/src/client/mod.rs	/^impl AsRef<TcpStream> for WebSocketClient {$/;"	i
 AtomicState	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/poll.rs	/^impl AtomicState {$/;"	i
 AtomicState	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/poll.rs	/^struct AtomicState {$/;"	s
 Awakener	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/sys/fuchsia/awakener.rs	/^impl Awakener {$/;"	i
@@ -36,7 +37,6 @@ BufferPool	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/s
 BufferPool	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/sys/windows/buffer_pool.rs	/^pub struct BufferPool {$/;"	s
 Builder	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/timer.rs	/^impl Builder {$/;"	i
 Builder	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/timer.rs	/^pub struct Builder {$/;"	s
-CLIENT_TOKEN	/home/gopiandcode/Documents/Rust/rust-projects/scalable_chat/src/server.rs	/^const CLIENT_TOKEN: Token = Token(1);$/;"	c
 Clone for FromRawArc	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/sys/windows/from_raw_arc.rs	/^impl<T> Clone for FromRawArc<T> {$/;"	i
 Clone for RegistrationInner	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/poll.rs	/^impl Clone for RegistrationInner {$/;"	i
 Clone for SelectorId	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/poll.rs	/^impl Clone for SelectorId {$/;"	i
@@ -77,6 +77,8 @@ Drop for SenderCtl	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4
 Drop for TcpListener	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/sys/windows/tcp.rs	/^impl Drop for TcpListener {$/;"	i
 Drop for TcpStream	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/sys/windows/tcp.rs	/^impl Drop for TcpStream {$/;"	i
 Drop for UdpSocket	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/sys/windows/udp.rs	/^impl Drop for UdpSocket {$/;"	i
+DummyHandler	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/http-muncher-0.3.2/src/lib.rs	/^        struct DummyHandler {$/;"	s
+DummyHandler	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/http-muncher-0.3.2/src/lib.rs	/^        struct DummyHandler;$/;"	s
 EMPTY	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/timer.rs	/^const EMPTY: Token = Token(usize::MAX);$/;"	c
 ERROR	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/event_imp.rs	/^const ERROR: usize = 0b00100;$/;"	c
 ERROR	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/sys/unix/ready.rs	/^const ERROR: usize = 0b000100;$/;"	c
@@ -199,6 +201,13 @@ HUP	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/even
 HUP	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/sys/fuchsia/eventedfd.rs	/^    const HUP: usize   = 0b01000;$/;"	c
 HUP	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/sys/unix/ready.rs	/^const HUP: usize   = 0b001000;$/;"	c
 Handler	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/deprecated/handler.rs	/^pub trait Handler: Sized {$/;"	t
+HttpCallback	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/http-muncher-0.3.2/src/ffi.rs	/^pub type HttpCallback = extern fn(*mut HttpParser) -> libc::c_int;$/;"	T
+HttpDataCallback	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/http-muncher-0.3.2/src/ffi.rs	/^pub type HttpDataCallback = extern fn(*mut HttpParser, *const u32, libc::size_t) -> libc::c_int;$/;"	T
+HttpParser	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/http-muncher-0.3.2/src/ffi.rs	/^impl HttpParser {$/;"	i
+HttpParser	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/http-muncher-0.3.2/src/ffi.rs	/^pub struct HttpParser {$/;"	s
+HttpParser	/home/gopiandcode/Documents/Rust/rust-projects/scalable_chat/src/client/mod.rs	/^pub struct HttpParser;$/;"	s
+HttpParserSettings	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/http-muncher-0.3.2/src/ffi.rs	/^pub struct HttpParserSettings {$/;"	s
+HttpParserSettings	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/http-muncher-0.3.2/src/lib.rs	/^impl HttpParserSettings {$/;"	i
 INTEREST_SHIFT	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/poll.rs	/^const INTEREST_SHIFT: usize = 4;$/;"	c
 Imp	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/sys/windows/udp.rs	/^impl Imp {$/;"	i
 Imp	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/sys/windows/udp.rs	/^struct Imp {$/;"	s
@@ -287,6 +296,16 @@ Output	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/s
 Overlapped	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/sys/windows/selector.rs	/^impl Overlapped {$/;"	i
 Overlapped	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/sys/windows/selector.rs	/^pub struct Overlapped {$/;"	s
 POLL_OPT_SHIFT	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/poll.rs	/^const POLL_OPT_SHIFT: usize = 8;$/;"	c
+Parser	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/http-muncher-0.3.2/src/lib.rs	/^impl Parser {$/;"	i
+Parser	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/http-muncher-0.3.2/src/lib.rs	/^pub struct Parser {$/;"	s
+ParserContext	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/http-muncher-0.3.2/src/lib.rs	/^struct ParserContext<'a, H: ParserHandler + 'a> {$/;"	s
+ParserHandler	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/http-muncher-0.3.2/src/lib.rs	/^pub trait ParserHandler: Sized {$/;"	t
+ParserHandler for DummyHandler	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/http-muncher-0.3.2/src/lib.rs	/^        impl ParserHandler for DummyHandler {$/;"	i
+ParserHandler for DummyHandler	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/http-muncher-0.3.2/src/lib.rs	/^        impl ParserHandler for DummyHandler {};$/;"	i
+ParserHandler for HttpParser	/home/gopiandcode/Documents/Rust/rust-projects/scalable_chat/src/client/mod.rs	/^impl ParserHandler for HttpParser {}$/;"	i
+ParserHandler for TestRequestParser	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/http-muncher-0.3.2/src/lib.rs	/^        impl ParserHandler for TestRequestParser {$/;"	i
+ParserHandler for TestResponseParser	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/http-muncher-0.3.2/src/lib.rs	/^        impl ParserHandler for TestResponseParser {$/;"	i
+ParserType	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/http-muncher-0.3.2/src/ffi.rs	/^pub enum ParserType {$/;"	g
 PipeReader	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/deprecated/unix.rs	/^impl PipeReader {$/;"	i
 PipeReader	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/deprecated/unix.rs	/^pub struct PipeReader {$/;"	s
 PipeWriter	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/deprecated/unix.rs	/^impl PipeWriter {$/;"	i
@@ -334,7 +353,7 @@ RegistrationInner	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4f
 RegistrationInner	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/poll.rs	/^struct RegistrationInner {$/;"	s
 Result	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/timer.rs	/^pub type Result<T> = ::std::result::Result<T, TimerError>;$/;"	T
 SCM_RIGHTS	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/sys/unix/uds.rs	/^            const SCM_RIGHTS: libc::c_int = 1;$/;"	c
-SERVER_TOKEN	/home/gopiandcode/Documents/Rust/rust-projects/scalable_chat/src/server.rs	/^const SERVER_TOKEN: Token = Token(0);$/;"	c
+SERVER_TOKEN	/home/gopiandcode/Documents/Rust/rust-projects/scalable_chat/src/server/mod.rs	/^const SERVER_TOKEN: Token = Token(0);$/;"	c
 SOCK_CLOEXEC	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/sys/unix/uds.rs	/^        const SOCK_CLOEXEC: libc::c_int = 0;$/;"	c
 SOCK_NONBLOCK	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/sys/unix/uds.rs	/^        const SOCK_NONBLOCK: libc::c_int = 0;$/;"	c
 Selector	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/sys/fuchsia/selector.rs	/^impl Selector {$/;"	i
@@ -351,8 +370,10 @@ SelectorInner	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05
 SelectorInner	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/sys/windows/selector.rs	/^struct SelectorInner {$/;"	s
 Send for EventedFdInner	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/sys/fuchsia/eventedfd.rs	/^unsafe impl Send for EventedFdInner {}$/;"	i
 Send for FromRawArc	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/sys/windows/from_raw_arc.rs	/^unsafe impl<T: Sync + Send> Send for FromRawArc<T> { }$/;"	i
+Send for HttpParser	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/http-muncher-0.3.2/src/ffi.rs	/^unsafe impl Send for HttpParser { }$/;"	i
 Send for KeventList	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/sys/unix/kqueue.rs	/^unsafe impl Send for KeventList {}$/;"	i
 Send for Overlapped	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/sys/windows/selector.rs	/^unsafe impl Send for Overlapped {}$/;"	i
+Send for Parser	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/http-muncher-0.3.2/src/lib.rs	/^unsafe impl Send for Parser {}$/;"	i
 Send for ReadinessQueue	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/poll.rs	/^unsafe impl Send for ReadinessQueue {}$/;"	i
 Send for Registration	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/poll.rs	/^unsafe impl Send for Registration {}$/;"	i
 Send for SetReadiness	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/poll.rs	/^unsafe impl Send for SetReadiness {}$/;"	i
@@ -407,6 +428,8 @@ TcpStream	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/sr
 TcpStream	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/sys/unix/tcp.rs	/^pub struct TcpStream {$/;"	s
 TcpStream	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/sys/windows/tcp.rs	/^impl TcpStream {$/;"	i
 TcpStream	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/sys/windows/tcp.rs	/^pub struct TcpStream {$/;"	s
+TestRequestParser	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/http-muncher-0.3.2/src/lib.rs	/^        struct TestRequestParser;$/;"	s
+TestResponseParser	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/http-muncher-0.3.2/src/lib.rs	/^        struct TestResponseParser;$/;"	s
 Tick	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/timer.rs	/^type Tick = u64;$/;"	T
 Timeout	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/deprecated/handler.rs	/^    type Timeout;$/;"	T
 Timeout	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/timer.rs	/^pub struct Timeout {$/;"	s
@@ -448,8 +471,10 @@ UnixStream	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/s
 WRITABLE	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/event_imp.rs	/^const WRITABLE: usize = 0b00010;$/;"	c
 WakeupState	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/timer.rs	/^type WakeupState = Arc<AtomicUsize>;$/;"	T
 WasmIoVec	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/iovec-0.1.2/src/sys/unknown.rs	/^pub struct WasmIoVec {$/;"	s
-WebSocketServer	/home/gopiandcode/Documents/Rust/rust-projects/scalable_chat/src/server.rs	/^impl WebSocketServer {$/;"	i
-WebSocketServer	/home/gopiandcode/Documents/Rust/rust-projects/scalable_chat/src/server.rs	/^struct WebSocketServer {$/;"	s
+WebSocketClient	/home/gopiandcode/Documents/Rust/rust-projects/scalable_chat/src/client/mod.rs	/^impl WebSocketClient {$/;"	i
+WebSocketClient	/home/gopiandcode/Documents/Rust/rust-projects/scalable_chat/src/client/mod.rs	/^pub struct WebSocketClient {$/;"	s
+WebSocketServer	/home/gopiandcode/Documents/Rust/rust-projects/scalable_chat/src/server/mod.rs	/^impl WebSocketServer {$/;"	i
+WebSocketServer	/home/gopiandcode/Documents/Rust/rust-projects/scalable_chat/src/server/mod.rs	/^pub struct WebSocketServer {$/;"	s
 WheelEntry	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/timer.rs	/^struct WheelEntry {$/;"	s
 Write	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/deprecated/unix.rs	/^impl<'a> Write for &'a PipeWriter {$/;"	i
 Write	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/net/tcp.rs	/^impl<'a> Write for &'a TcpStream {$/;"	i
@@ -465,6 +490,8 @@ __fdio_fd_to_io	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc
 __fdio_release	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/sys/fuchsia/mod.rs	/^        pub fn __fdio_release(io: *const fdio_t);$/;"	f
 __fdio_wait_begin	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/sys/fuchsia/mod.rs	/^        pub fn __fdio_wait_begin($/;"	f
 __fdio_wait_end	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/sys/fuchsia/mod.rs	/^        pub fn __fdio_wait_end($/;"	f
+_http_errno_description	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/http-muncher-0.3.2/src/lib.rs	/^fn _http_errno_description(errno: u8) -> &'static str {$/;"	f
+_http_errno_name	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/http-muncher-0.3.2/src/lib.rs	/^fn _http_errno_name(errno: u8) -> &'static str {$/;"	f
 accept	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/deprecated/io.rs	/^    fn accept(&self) -> io::Result<Option<Self::Output>>;$/;"	f
 accept	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/deprecated/unix.rs	/^    fn accept(&self) -> io::Result<Option<UnixStream>> {$/;"	f
 accept	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/deprecated/unix.rs	/^    pub fn accept(&self) -> io::Result<UnixStream> {$/;"	f
@@ -504,6 +531,7 @@ as_raw_fd	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/sr
 as_ref	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/iovec-0.1.2/src/sys/unix.rs	/^    pub fn as_ref(&self) -> &[u8] {$/;"	f
 as_ref	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/iovec-0.1.2/src/sys/unknown.rs	/^    pub fn as_ref(&self) -> &[u8] {$/;"	f
 as_ref	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/iovec-0.1.2/src/sys/windows.rs	/^    pub fn as_ref(&self) -> &[u8] {$/;"	f
+as_ref	/home/gopiandcode/Documents/Rust/rust-projects/scalable_chat/src/client/mod.rs	/^    fn as_ref(&self) -> &TcpStream {$/;"	f
 as_usize	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/event_imp.rs	/^    pub fn as_usize(&self) -> usize {$/;"	f
 assert_fuchsia_ready_repr	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/sys/fuchsia/ready.rs	/^pub fn assert_fuchsia_ready_repr() {$/;"	f
 associate_selector	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/poll.rs	/^    pub fn associate_selector(&self, poll: &Poll) -> io::Result<()> {$/;"	f
@@ -567,6 +595,7 @@ clear	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/sy
 clear	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/sys/unix/kqueue.rs	/^    pub fn clear(&mut self) {$/;"	f
 clear	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/sys/windows/selector.rs	/^    pub fn clear(&mut self) {$/;"	f
 clear_timeout	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/deprecated/event_loop.rs	/^    pub fn clear_timeout(&mut self, timeout: &Timeout) -> bool {$/;"	f
+client	/home/gopiandcode/Documents/Rust/rust-projects/scalable_chat/src/main.rs	/^pub mod client;$/;"	m
 clone	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/channel.rs	/^    fn clone(&self) -> Sender<T> {$/;"	f
 clone	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/channel.rs	/^    fn clone(&self) -> SenderCtl {$/;"	f
 clone	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/channel.rs	/^    fn clone(&self) -> SyncSender<T> {$/;"	f
@@ -601,6 +630,7 @@ ctl_pair	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src
 current_tick	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/timer.rs	/^fn current_tick(start: Instant, tick_ms: u64) -> Tick {$/;"	f
 cvt	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/sys/fuchsia/mod.rs	/^fn cvt<T: IsMinusOne>(t: T) -> ::io::Result<T> {$/;"	f
 cvt	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/sys/unix/mod.rs	/^fn cvt<T: IsMinusOne>(t: T) -> ::io::Result<T> {$/;"	f
+data_fn_wrapper	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/http-muncher-0.3.2/src/lib.rs	/^macro_rules! data_fn_wrapper {$/;"	d
 dec	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/channel.rs	/^    pub fn dec(&self) -> io::Result<()> {$/;"	f
 default	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/deprecated/event_loop.rs	/^    fn default() -> Config {$/;"	f
 default	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/timer.rs	/^    fn default() -> Builder {$/;"	f
@@ -685,10 +715,12 @@ epoll	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/sy
 epoll_event_to_ready	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/sys/fuchsia/mod.rs	/^fn epoll_event_to_ready(epoll: u32) -> Ready {$/;"	f
 error	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/event_imp.rs	/^    pub fn error() -> Ready {$/;"	f
 error	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/sys/unix/ready.rs	/^    pub fn error() -> UnixReady {$/;"	f
+error	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/http-muncher-0.3.2/src/lib.rs	/^    pub fn error(&self) -> &'static str {$/;"	f
 error::Error for NotifyError	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/deprecated/notify.rs	/^impl<M: any::Any> error::Error for NotifyError<M> {$/;"	i
 error::Error for SendError	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/channel.rs	/^impl<T: Any> error::Error for SendError<T> {$/;"	i
 error::Error for TimerError	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/timer.rs	/^impl error::Error for TimerError {$/;"	i
 error::Error for TrySendError	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/channel.rs	/^impl<T: Any> error::Error for TrySendError<T> {$/;"	i
+error_description	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/http-muncher-0.3.2/src/lib.rs	/^    pub fn error_description(&self) -> &'static str {$/;"	f
 event	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/lib.rs	/^pub mod event {$/;"	m
 event_imp	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/lib.rs	/^mod event_imp;$/;"	m
 event_loop	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/deprecated/mod.rs	/^mod event_loop;$/;"	m
@@ -698,6 +730,7 @@ fdio	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/sys
 fdio_ops_t	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/sys/fuchsia/mod.rs	/^    pub type fdio_ops_t = [usize; 17];$/;"	T
 fdio_t	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/sys/fuchsia/mod.rs	/^    pub struct fdio_t {$/;"	s
 fetch	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/sys/unix/dlsym.rs	/^unsafe fn fetch(name: &str) -> usize {$/;"	f
+ffi	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/http-muncher-0.3.2/src/lib.rs	/^mod ffi;$/;"	m
 flag_as_dropped	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/poll.rs	/^    fn flag_as_dropped(&self) -> bool {$/;"	f
 flush	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/deprecated/unix.rs	/^    fn flush(&mut self) -> io::Result<()> {$/;"	f
 flush	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/net/tcp.rs	/^    fn flush(&mut self) -> io::Result<()> {$/;"	f
@@ -724,6 +757,7 @@ fmt	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/sys/
 fmt	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/sys/windows/udp.rs	/^    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {$/;"	f
 fmt	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/timer.rs	/^    fn fmt(&self, _: &mut fmt::Formatter) -> fmt::Result {$/;"	f
 fmt	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/timer.rs	/^    fn fmt(&self, fmt: &mut fmt::Formatter) -> fmt::Result {$/;"	f
+fmt	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/http-muncher-0.3.2/src/lib.rs	/^    fn fmt(&self, fmt: &mut std::fmt::Formatter) -> Result<(), std::fmt::Error> {$/;"	f
 fmt::Debug for Binding	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/sys/windows/selector.rs	/^impl fmt::Debug for Binding {$/;"	i
 fmt::Debug for EventLoop	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/deprecated/event_loop.rs	/^impl<H: Handler> fmt::Debug for EventLoop<H> {$/;"	i
 fmt::Debug for Events	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/poll.rs	/^impl fmt::Debug for Events {$/;"	i
@@ -832,6 +866,25 @@ get_handle	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/s
 handle_and_signals_for_events	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/sys/fuchsia/eventedfd.rs	/^    fn handle_and_signals_for_events(&self, interest: Ready, opts: PollOpt)$/;"	f
 handler	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/deprecated/mod.rs	/^mod handler;$/;"	m
 handles	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/sys/fuchsia/mod.rs	/^mod handles;$/;"	m
+has_error	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/http-muncher-0.3.2/src/lib.rs	/^    pub fn has_error(&self) -> bool {$/;"	f
+http_body_is_final	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/http-muncher-0.3.2/src/ffi.rs	/^    pub fn http_body_is_final(&self) -> libc::c_int {$/;"	f
+http_body_is_final	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/http-muncher-0.3.2/src/ffi.rs	/^    pub fn http_body_is_final(parser: *const HttpParser) -> libc::c_int;$/;"	f
+http_errno_description	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/http-muncher-0.3.2/src/ffi.rs	/^    pub fn http_errno_description(http_errno: u8) -> *const libc::c_char;$/;"	f
+http_errno_name	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/http-muncher-0.3.2/src/ffi.rs	/^    pub fn http_errno_name(http_errno: u8) -> *const libc::c_char;$/;"	f
+http_errnum	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/http-muncher-0.3.2/src/lib.rs	/^    fn http_errnum(&self) -> u8 {$/;"	f
+http_get_struct_flags	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/http-muncher-0.3.2/src/ffi.rs	/^    pub fn http_get_struct_flags(parser: *const HttpParser) -> u32;$/;"	f
+http_method	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/http-muncher-0.3.2/src/lib.rs	/^    pub fn http_method(&self) -> &'static str {$/;"	f
+http_method_name	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/http-muncher-0.3.2/src/lib.rs	/^fn http_method_name(method_code: u8) -> &'static str {$/;"	f
+http_method_str	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/http-muncher-0.3.2/src/ffi.rs	/^    pub fn http_method_str(method_code: u8) -> *const libc::c_char;$/;"	f
+http_parser_execute	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/http-muncher-0.3.2/src/ffi.rs	/^    pub fn http_parser_execute(parser: *mut HttpParser, settings: *const HttpParserSettings, data: *const u8, len: libc::size_t) -> libc::size_t;$/;"	f
+http_parser_init	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/http-muncher-0.3.2/src/ffi.rs	/^    pub fn http_parser_init(parser: *mut HttpParser, parser_type: ParserType);$/;"	f
+http_parser_pause	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/http-muncher-0.3.2/src/ffi.rs	/^    pub fn http_parser_pause(&self, paused: libc::c_int) {$/;"	f
+http_parser_pause	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/http-muncher-0.3.2/src/ffi.rs	/^    pub fn http_parser_pause(parser: *const HttpParser, paused: libc::c_int);$/;"	f
+http_parser_settings_init	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/http-muncher-0.3.2/src/ffi.rs	/^    pub fn http_parser_settings_init(settings: *mut HttpParserSettings);$/;"	f
+http_parser_version	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/http-muncher-0.3.2/src/ffi.rs	/^    pub fn http_parser_version() -> u32;$/;"	f
+http_should_keep_alive	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/http-muncher-0.3.2/src/ffi.rs	/^    pub fn http_should_keep_alive(&self) -> libc::c_int {$/;"	f
+http_should_keep_alive	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/http-muncher-0.3.2/src/ffi.rs	/^    pub fn http_should_keep_alive(parser: *const HttpParser) -> libc::c_int;$/;"	f
+http_version	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/http-muncher-0.3.2/src/lib.rs	/^    pub fn http_version(&self) -> (u16, u16) {$/;"	f
 hup	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/event_imp.rs	/^    pub fn hup() -> Ready {$/;"	f
 hup	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/sys/unix/ready.rs	/^    pub fn hup() -> UnixReady {$/;"	f
 id	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/sys/fuchsia/selector.rs	/^    pub fn id(&self) -> usize {$/;"	f
@@ -883,6 +936,7 @@ is_empty	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src
 is_empty	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/sys/windows/selector.rs	/^    pub fn is_empty(&self) -> bool {$/;"	f
 is_error	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/event_imp.rs	/^    pub fn is_error(&self) -> bool {$/;"	f
 is_error	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/sys/unix/ready.rs	/^    pub fn is_error(&self) -> bool {$/;"	f
+is_final_chunk	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/http-muncher-0.3.2/src/lib.rs	/^    pub fn is_final_chunk(&self) -> bool {$/;"	f
 is_hup	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/event_imp.rs	/^    pub fn is_hup(&self) -> bool {$/;"	f
 is_hup	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/sys/unix/ready.rs	/^    pub fn is_hup(&self) -> bool {$/;"	f
 is_level	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/event_imp.rs	/^    pub fn is_level(&self) -> bool {$/;"	f
@@ -898,6 +952,7 @@ is_readable	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/
 is_running	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/deprecated/event_loop.rs	/^    pub fn is_running(&self) -> bool {$/;"	f
 is_send	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/poll.rs	/^fn is_send<T: Send>() {}$/;"	f
 is_sync	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/poll.rs	/^fn is_sync<T: Sync>() {}$/;"	f
+is_upgrade	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/http-muncher-0.3.2/src/lib.rs	/^    pub fn is_upgrade(&self) -> bool {$/;"	f
 is_urgent	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/event_imp.rs	/^    pub fn is_urgent(&self) -> bool {$/;"	f
 is_writable	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/event_imp.rs	/^    pub fn is_writable(&self) -> bool {$/;"	f
 iter	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/poll.rs	/^    pub fn iter(&self) -> Iter {$/;"	f
@@ -1016,7 +1071,10 @@ new	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/sys/
 new	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/sys/windows/udp.rs	/^    pub fn new(socket: net::UdpSocket) -> io::Result<UdpSocket> {$/;"	f
 new	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/timer.rs	/^    fn new(state: T, tick: u64, next: Token) -> Entry<T> {$/;"	f
 new	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/timer.rs	/^    fn new(tick_ms: u64, num_slots: usize, capacity: usize, start: Instant) -> Timer<T> {$/;"	f
-new	/home/gopiandcode/Documents/Rust/rust-projects/scalable_chat/src/server.rs	/^    pub fn new<T : AsRef<str>>(address: T) -> Result<Self,String> {$/;"	f
+new	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/http-muncher-0.3.2/src/ffi.rs	/^    pub fn new(parser_type: ParserType) -> HttpParser {$/;"	f
+new	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/http-muncher-0.3.2/src/lib.rs	/^    fn new<H: ParserHandler>() -> HttpParserSettings {$/;"	f
+new	/home/gopiandcode/Documents/Rust/rust-projects/scalable_chat/src/client/mod.rs	/^    pub fn new(socket: TcpStream) -> Self {$/;"	f
+new	/home/gopiandcode/Documents/Rust/rust-projects/scalable_chat/src/server/mod.rs	/^    pub fn new<T : AsRef<str>>(address: T) -> Result<Self,String> {$/;"	f
 new2	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/poll.rs	/^    pub fn new2() -> (Registration, SetReadiness) {$/;"	f
 new_family	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/sys/windows/tcp.rs	/^    fn new_family(socket: net::TcpListener, family: Family) -> TcpListener {$/;"	f
 new_priv	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/poll.rs	/^    fn new_priv(poll: &Poll, token: Token, interest: Ready, opt: PollOpt)$/;"	f
@@ -1038,8 +1096,26 @@ notify	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/d
 notify	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/deprecated/handler.rs	/^    fn notify(&mut self, event_loop: &mut EventLoop<Self>, msg: Self::Message) {$/;"	f
 notify	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/deprecated/mod.rs	/^mod notify;$/;"	m
 notify_capacity	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/deprecated/event_loop.rs	/^    pub fn notify_capacity(&mut self, capacity: usize) -> &mut Self {$/;"	f
+notify_fn_wrapper	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/http-muncher-0.3.2/src/lib.rs	/^macro_rules! notify_fn_wrapper {$/;"	d
 num_slots	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/timer.rs	/^    pub fn num_slots(mut self, num_slots: usize) -> Builder {$/;"	f
 offset_of	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/sys/windows/selector.rs	/^macro_rules! offset_of {$/;"	d
+on_body	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/http-muncher-0.3.2/src/lib.rs	/^            fn on_body(&mut self, parser: &mut Parser, body: &[u8]) -> bool {$/;"	f
+on_body	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/http-muncher-0.3.2/src/lib.rs	/^    fn on_body(&mut self, &mut Parser, &[u8]) -> bool {$/;"	f
+on_chunk_complete	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/http-muncher-0.3.2/src/lib.rs	/^    fn on_chunk_complete(&mut self, &mut Parser) -> bool {$/;"	f
+on_chunk_header	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/http-muncher-0.3.2/src/lib.rs	/^    fn on_chunk_header(&mut self, &mut Parser) -> bool {$/;"	f
+on_header_field	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/http-muncher-0.3.2/src/lib.rs	/^            fn on_header_field(&mut self, _: &mut Parser, _: &[u8]) -> bool {$/;"	f
+on_header_field	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/http-muncher-0.3.2/src/lib.rs	/^            fn on_header_field(&mut self, _: &mut Parser, hdr: &[u8]) -> bool {$/;"	f
+on_header_field	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/http-muncher-0.3.2/src/lib.rs	/^    fn on_header_field(&mut self, &mut Parser, &[u8]) -> bool {$/;"	f
+on_header_value	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/http-muncher-0.3.2/src/lib.rs	/^            fn on_header_value(&mut self, _: &mut Parser, val: &[u8]) -> bool {$/;"	f
+on_header_value	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/http-muncher-0.3.2/src/lib.rs	/^    fn on_header_value(&mut self, &mut Parser, &[u8]) -> bool {$/;"	f
+on_headers_complete	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/http-muncher-0.3.2/src/lib.rs	/^    fn on_headers_complete(&mut self, &mut Parser) -> bool {$/;"	f
+on_message_begin	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/http-muncher-0.3.2/src/lib.rs	/^    fn on_message_begin(&mut self, &mut Parser) -> bool {$/;"	f
+on_message_complete	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/http-muncher-0.3.2/src/lib.rs	/^    fn on_message_complete(&mut self, &mut Parser) -> bool {$/;"	f
+on_status	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/http-muncher-0.3.2/src/lib.rs	/^            fn on_status(&mut self, _: &mut Parser, status: &[u8]) -> bool {$/;"	f
+on_status	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/http-muncher-0.3.2/src/lib.rs	/^    fn on_status(&mut self, &mut Parser, &[u8]) -> bool {$/;"	f
+on_url	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/http-muncher-0.3.2/src/lib.rs	/^            fn on_url(&mut self, _: &mut Parser, _: &[u8]) -> bool {$/;"	f
+on_url	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/http-muncher-0.3.2/src/lib.rs	/^            fn on_url(&mut self, _: &mut Parser, url: &[u8]) -> bool {$/;"	f
+on_url	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/http-muncher-0.3.2/src/lib.rs	/^    fn on_url(&mut self, &mut Parser, &[u8]) -> bool {$/;"	f
 oneshot	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/event_imp.rs	/^    pub fn oneshot() -> PollOpt {$/;"	f
 only_v6	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/net/tcp.rs	/^    pub fn only_v6(&self) -> io::Result<bool> {$/;"	f
 only_v6	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/net/udp.rs	/^    pub fn only_v6(&self) -> io::Result<bool> {$/;"	f
@@ -1079,6 +1155,8 @@ opt_as_usize	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a
 opt_from_usize	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/event_imp.rs	/^pub fn opt_from_usize(opt: usize) -> PollOpt {$/;"	f
 other	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/sys/windows/selector.rs	/^fn other(s: &str) -> io::Error {$/;"	f
 overlapped2arc	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/sys/windows/selector.rs	/^macro_rules! overlapped2arc {$/;"	d
+parse	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/http-muncher-0.3.2/src/lib.rs	/^    pub fn parse<H: ParserHandler>(&mut self, handler: &mut H, data: &[u8]) -> usize {$/;"	f
+pause	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/http-muncher-0.3.2/src/lib.rs	/^    pub fn pause(&mut self) {$/;"	f
 peek	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/net/tcp.rs	/^    pub fn peek(&self, buf: &mut [u8]) -> io::Result<usize> {$/;"	f
 peek	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/sys/fuchsia/net.rs	/^    pub fn peek(&self, buf: &mut [u8]) -> io::Result<usize> {$/;"	f
 peek	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/sys/unix/tcp.rs	/^    pub fn peek(&self, buf: &mut [u8]) -> io::Result<usize> {$/;"	f
@@ -1118,6 +1196,7 @@ read	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/sys
 read	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/sys/unix/tcp.rs	/^    fn read(&mut self, buf: &mut [u8]) -> io::Result<usize> {$/;"	f
 read	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/sys/unix/uds.rs	/^    fn read(&mut self, buf: &mut [u8]) -> io::Result<usize> {$/;"	f
 read	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/sys/windows/tcp.rs	/^    pub fn read(&self, buf: &mut [u8]) -> io::Result<usize> {$/;"	f
+read	/home/gopiandcode/Documents/Rust/rust-projects/scalable_chat/src/client/mod.rs	/^    pub fn read(&mut self) {$/;"	f
 read_bufs	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/net/tcp.rs	/^    pub fn read_bufs(&self, bufs: &mut [&mut IoVec]) -> io::Result<usize> {$/;"	f
 read_done	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/sys/windows/tcp.rs	/^fn read_done(status: &OVERLAPPED_ENTRY) {$/;"	f
 read_recv_fd	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/deprecated/unix.rs	/^    pub fn read_recv_fd(&mut self, buf: &mut [u8]) -> io::Result<(usize, Option<RawFd>)> {$/;"	f
@@ -1189,6 +1268,8 @@ registration	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a
 release_node	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/poll.rs	/^fn release_node(ptr: *mut ReadinessNode) {$/;"	f
 remove	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/event_imp.rs	/^    pub fn remove(&mut self, other: PollOpt) {$/;"	f
 remove	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/event_imp.rs	/^    pub fn remove<T: Into<Self>>(&mut self, other: T) {$/;"	f
+request	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/http-muncher-0.3.2/src/lib.rs	/^    pub fn request() -> Parser {$/;"	f
+request_and_response	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/http-muncher-0.3.2/src/lib.rs	/^    pub fn request_and_response() -> Parser {$/;"	f
 rereg_for_level	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/sys/fuchsia/eventedfd.rs	/^    pub fn rereg_for_level(&self, port: &zircon::Port) {$/;"	f
 rereg_signals	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/sys/fuchsia/eventedfd.rs	/^    pub fn rereg_signals(&self) -> Option<(zircon::Signals, zircon::WaitAsyncOpts)> {$/;"	f
 reregister	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/channel.rs	/^    fn reregister(&self, poll: &Poll, token: Token, interest: Ready, opts: PollOpt) -> io::Result<()> {$/;"	f
@@ -1221,8 +1302,9 @@ reregister_handle	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4f
 reregister_handles	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/sys/fuchsia/selector.rs	/^    fn reregister_handles(&self) -> io::Result<()> {$/;"	f
 reregister_socket	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/sys/windows/selector.rs	/^    pub fn reregister_socket(&mut self,$/;"	f
 reregister_socket	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/sys/windows/selector.rs	/^    pub unsafe fn reregister_socket(&self,$/;"	f
+response	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/http-muncher-0.3.2/src/lib.rs	/^    pub fn response() -> Parser {$/;"	f
 run	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/deprecated/event_loop.rs	/^    pub fn run(&mut self, handler: &mut H) -> io::Result<()> {$/;"	f
-run	/home/gopiandcode/Documents/Rust/rust-projects/scalable_chat/src/server.rs	/^    pub fn run(&mut self) {$/;"	f
+run	/home/gopiandcode/Documents/Rust/rust-projects/scalable_chat/src/server/mod.rs	/^    pub fn run(&mut self) {$/;"	f
 run_once	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/deprecated/event_loop.rs	/^    pub fn run_once(&mut self, handler: &mut H, timeout: Option<Duration>) -> io::Result<()> {$/;"	f
 schedule_accept	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/sys/windows/tcp.rs	/^    fn schedule_accept(&self, me: &mut ListenerInner) {$/;"	f
 schedule_connect	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/sys/windows/tcp.rs	/^    fn schedule_connect(&self, addr: &SocketAddr) -> io::Result<()> {$/;"	f
@@ -1327,6 +1409,7 @@ set_ttl	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/
 set_ttl	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/sys/windows/tcp.rs	/^    pub fn set_ttl(&self, ttl: u32) -> io::Result<()> {$/;"	f
 set_ttl	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/sys/windows/udp.rs	/^    pub fn set_ttl(&self, ttl: u32) -> io::Result<()> {$/;"	f
 set_ttl	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/udp.rs	/^    pub fn set_ttl(&self, ttl: u32) -> io::Result<()> {$/;"	f
+should_keep_alive	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/http-muncher-0.3.2/src/lib.rs	/^    pub fn should_keep_alive(&self) -> bool {$/;"	f
 shutdown	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/deprecated/event_loop.rs	/^    pub fn shutdown(&mut self) {$/;"	f
 shutdown	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/deprecated/unix.rs	/^    pub fn shutdown(&self, how: Shutdown) -> io::Result<usize> {$/;"	f
 shutdown	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/net/tcp.rs	/^    pub fn shutdown(&self, how: Shutdown) -> io::Result<()> {$/;"	f
@@ -1339,6 +1422,8 @@ slot_for	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src
 smoke	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/sys/windows/from_raw_arc.rs	/^    fn smoke() {$/;"	f
 sockaddr_un	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/sys/unix/uds.rs	/^unsafe fn sockaddr_un(path: &Path)$/;"	f
 spawn_wakeup_thread	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/timer.rs	/^fn spawn_wakeup_thread(state: WakeupState, set_readiness: SetReadiness, start: Instant, tick_ms: u64) -> thread::JoinHandle<()> {$/;"	f
+status_code	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/http-muncher-0.3.2/src/lib.rs	/^    pub fn status_code(&self) -> u16 {$/;"	f
+std::fmt::Debug for Parser	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/http-muncher-0.3.2/src/lib.rs	/^impl std::fmt::Debug for Parser {$/;"	i
 stream	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/deprecated/unix.rs	/^    pub fn stream() -> io::Result<UnixSocket> {$/;"	f
 stream	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/sys/unix/uds.rs	/^    pub fn stream() -> io::Result<UnixSocket> {$/;"	f
 sub	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/event_imp.rs	/^    fn sub(self, other: PollOpt) -> PollOpt {$/;"	f
@@ -1365,10 +1450,18 @@ tcp	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/net/
 tcp	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/sys/unix/mod.rs	/^mod tcp;$/;"	m
 tcp	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/sys/windows/mod.rs	/^mod tcp;$/;"	m
 test	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/iovec-0.1.2/src/lib.rs	/^mod test {$/;"	m
+test_catch_error	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/http-muncher-0.3.2/src/lib.rs	/^    fn test_catch_error() {$/;"	f
 test_coalesce_aio	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/sys/unix/kqueue.rs	/^fn test_coalesce_aio() {$/;"	f
 test_debug_pollopt	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/event_imp.rs	/^fn test_debug_pollopt() {$/;"	f
 test_debug_ready	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/event_imp.rs	/^fn test_debug_ready() {$/;"	f
+test_error_status	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/http-muncher-0.3.2/src/lib.rs	/^    fn test_error_status() {$/;"	f
+test_request_parser	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/http-muncher-0.3.2/src/lib.rs	/^    fn test_request_parser() {$/;"	f
+test_response_parser	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/http-muncher-0.3.2/src/lib.rs	/^    fn test_response_parser() {$/;"	f
+test_streaming	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/http-muncher-0.3.2/src/lib.rs	/^    fn test_streaming() {$/;"	f
+test_version	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/http-muncher-0.3.2/src/lib.rs	/^    fn test_version() {$/;"	f
+test_ws_upgrade	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/http-muncher-0.3.2/src/lib.rs	/^    fn test_ws_upgrade() {$/;"	f
 tests	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/sys/windows/from_raw_arc.rs	/^mod tests {$/;"	m
+tests	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/http-muncher-0.3.2/src/lib.rs	/^mod tests {$/;"	m
 tick	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/deprecated/handler.rs	/^    fn tick(&mut self, event_loop: &mut EventLoop<Self>) {$/;"	f
 tick_duration	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/timer.rs	/^    pub fn tick_duration(mut self, duration: Duration) -> Builder {$/;"	f
 timeout	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/deprecated/event_loop.rs	/^    pub fn timeout(&mut self, token: H::Timeout, delay: Duration) -> timer::Result<Timeout> {$/;"	f
@@ -1430,11 +1523,14 @@ unix	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/iovec-0.1
 unix	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/iovec-0.1.2/src/sys/mod.rs	/^mod unix;$/;"	m
 unknown	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/iovec-0.1.2/src/sys/mod.rs	/^mod unknown;$/;"	m
 unlink	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/timer.rs	/^    fn unlink(&mut self, links: &EntryLinks, token: Token) {$/;"	f
+unpause	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/http-muncher-0.3.2/src/lib.rs	/^    pub fn unpause(&mut self) {$/;"	f
+unwrap_context	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/http-muncher-0.3.2/src/lib.rs	/^unsafe fn unwrap_context<'a, H: ParserHandler>(http: *mut HttpParser) -> &'a mut ParserContext<'a, H> {$/;"	f
 update	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/poll.rs	/^    fn update(&self, poll: &Poll, token: Token, interest: Ready, opt: PollOpt) -> io::Result<()> {$/;"	f
 update	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/poll.rs	/^    pub fn update(&self, poll: &Poll, token: Token, interest: Ready, opts: PollOpt) -> io::Result<()> {$/;"	f
 update_token_read_pos	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/poll.rs	/^    fn update_token_read_pos(&mut self) {$/;"	f
 urgent	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/event_imp.rs	/^    pub fn urgent() -> PollOpt {$/;"	f
 validate_args	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/poll.rs	/^fn validate_args(token: Token) -> io::Result<()> {$/;"	f
+version	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/http-muncher-0.3.2/src/lib.rs	/^pub fn version() -> (u32, u32, u32) {$/;"	f
 wakeup	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/poll.rs	/^    fn wakeup(&self) -> io::Result<()> {$/;"	f
 wakeup	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/sys/fuchsia/awakener.rs	/^    pub fn wakeup(&self) -> io::Result<()> {$/;"	f
 wakeup	/home/gopiandcode/.cargo/git/checkouts/mio-e79f285e2377d154/4fcc05a/src/sys/unix/awakener.rs	/^        pub fn wakeup(&self) -> io::Result<()> {$/;"	f
