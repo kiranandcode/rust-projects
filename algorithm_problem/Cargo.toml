@@ -1,0 +1,6 @@
+[package]
+name = "algorithm_problem"
+version = "0.1.0"
+authors = ["Gopiandcode(Kiran Gopinathan) <zcabkgo@ucl.ac.uk>"]
+
+[dependencies]
