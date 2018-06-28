@@ -1,0 +1,30 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+Agent	/home/gopiandcode/Documents/Rust/rust-projects/tic_tac_toe/src/agents/mod.rs	/^pub trait Agent {$/;"	t
+Index for TicTacToeBoard	/home/gopiandcode/Documents/Rust/rust-projects/tic_tac_toe/src/board.rs	/^impl Index<usize> for TicTacToeBoard {$/;"	i
+IndexMut for TicTacToeBoard	/home/gopiandcode/Documents/Rust/rust-projects/tic_tac_toe/src/board.rs	/^impl IndexMut<usize> for TicTacToeBoard {$/;"	i
+OptimalAgent	/home/gopiandcode/Documents/Rust/rust-projects/tic_tac_toe/src/agents/optimal_agent.rs	/^impl OptimalAgent {$/;"	i
+OptimalAgent	/home/gopiandcode/Documents/Rust/rust-projects/tic_tac_toe/src/agents/optimal_agent.rs	/^struct OptimalAgent(TicTacToeCell); $/;"	s
+Output	/home/gopiandcode/Documents/Rust/rust-projects/tic_tac_toe/src/board.rs	/^    type Output = TicTacToeCell;$/;"	T
+TicTacToeBoard	/home/gopiandcode/Documents/Rust/rust-projects/tic_tac_toe/src/board.rs	/^impl TicTacToeBoard {$/;"	i
+TicTacToeBoard	/home/gopiandcode/Documents/Rust/rust-projects/tic_tac_toe/src/board.rs	/^pub struct TicTacToeBoard {$/;"	s
+TicTacToeCell	/home/gopiandcode/Documents/Rust/rust-projects/tic_tac_toe/src/board.rs	/^pub enum TicTacToeCell {$/;"	g
+agents	/home/gopiandcode/Documents/Rust/rust-projects/tic_tac_toe/src/main.rs	/^mod agents;$/;"	m
+board	/home/gopiandcode/Documents/Rust/rust-projects/tic_tac_toe/src/main.rs	/^mod board;$/;"	m
+fmt	/home/gopiandcode/Documents/Rust/rust-projects/tic_tac_toe/src/board.rs	/^     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {$/;"	f
+fmt::Display for TicTacToeBoard	/home/gopiandcode/Documents/Rust/rust-projects/tic_tac_toe/src/board.rs	/^impl fmt::Display for TicTacToeBoard {$/;"	i
+fmt::Display for TicTacToeCell	/home/gopiandcode/Documents/Rust/rust-projects/tic_tac_toe/src/board.rs	/^impl fmt::Display for TicTacToeCell {$/;"	i
+get_next_move	/home/gopiandcode/Documents/Rust/rust-projects/tic_tac_toe/src/agents/mod.rs	/^    fn get_next_move(&mut self, board: &TicTacToeBoard) -> usize; $/;"	f
+get_next_move	/home/gopiandcode/Documents/Rust/rust-projects/tic_tac_toe/src/agents/optimal_agent.rs	/^    fn get_next_move(&mut self, board: &TicTacToeBoard) -> usize {$/;"	f
+has_anyone_won	/home/gopiandcode/Documents/Rust/rust-projects/tic_tac_toe/src/board.rs	/^    pub fn has_anyone_won(&self) -> TicTacToeCell {$/;"	f
+index	/home/gopiandcode/Documents/Rust/rust-projects/tic_tac_toe/src/board.rs	/^    fn index(&self, index : usize) -> &Self::Output {$/;"	f
+index_mut	/home/gopiandcode/Documents/Rust/rust-projects/tic_tac_toe/src/board.rs	/^    fn index_mut(&mut self, index : usize) -> &mut TicTacToeCell {$/;"	f
+main	/home/gopiandcode/Documents/Rust/rust-projects/tic_tac_toe/src/main.rs	/^fn main() {$/;"	f
+new	/home/gopiandcode/Documents/Rust/rust-projects/tic_tac_toe/src/agents/optimal_agent.rs	/^    pub fn new(player : TicTacToeCell) -> Self {$/;"	f
+new	/home/gopiandcode/Documents/Rust/rust-projects/tic_tac_toe/src/board.rs	/^    pub fn new() -> Self {$/;"	f
+optimal_agent	/home/gopiandcode/Documents/Rust/rust-projects/tic_tac_toe/src/agents/mod.rs	/^pub mod optimal_agent;$/;"	m
+super::Agent for OptimalAgent	/home/gopiandcode/Documents/Rust/rust-projects/tic_tac_toe/src/agents/optimal_agent.rs	/^impl super::Agent for OptimalAgent {$/;"	i
