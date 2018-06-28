@@ -20,6 +20,7 @@ impl super::Agent for OptimalAgent {
         // first, if any opponent paths are near done, block them
 
 
+        0
 
     }
 }

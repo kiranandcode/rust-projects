@@ -2,6 +2,64 @@ use std::collections::hash_map::HashMap;
 use std::ops::{Index, IndexMut};
 use std::fmt;
 
+enum TicTacToeIterType {
+    Iter_row,
+    Iter_col,
+    Iter_all
+}
+
+pub struct TicTacToeIter<'a>(&'a TicTacToeBoard, TicTacToeIterType, Option<usize>);
+
+
+
+impl<'a> Iterator for TicTacToeIter<'a> {
+    type Item = &'a TicTacToeCell;
+    fn next(&mut self) -> Option<&'a TicTacToeCell> {
+        match self.1 {
+            TicTacToeIterType::Iter_row => {
+                if let Some(index) = self.2 {
+                    if index == 2 || index == 5 || index == 8 {
+                        self.2 = None;
+                    } else {
+                        self.2 = Some(index + 1);
+                    }
+                    Some(&self.0[index])
+                }
+                else {
+                    None
+                }
+            }
+            TicTacToeIterType::Iter_col =>  {
+                if let Some(index) = self.2 {
+                    if index == 6 || index == 7 || index == 8 {
+                        self.2 = None;
+                    } else {
+                        self.2 = Some(index + 3);
+                    }
+                    Some(&self.0[index])
+                }
+                else {
+                    None
+                }
+            }
+            TicTacToeIterType::Iter_all => {
+                if let Some(index) = self.2 {
+                    if index == 8 {
+                        self.2 = None;
+                    } else {
+                        self.2 = Some(index + 1);
+                    }
+                    Some(&self.0[index])
+                } else {
+                    None
+                }
+            }
+        }
+    }
+}
+
+
+
 #[derive(Debug,Hash,Copy,Clone,PartialEq)]
 pub enum TicTacToeCell {
    X,
@@ -78,6 +136,24 @@ impl TicTacToeBoard {
  
 
     }
+
+    pub fn row_iter<'a>(&'a self, index : usize) ->  TicTacToeIter<'a> {
+        assert!(index < 3, "Row iterator must be called on valid row");
+        TicTacToeIter(&self, TicTacToeIterType::Iter_row, Some(index * 3usize))
+    }
+
+    pub fn col_iter<'a>(&'a self, index : usize) ->  TicTacToeIter<'a> {
+        assert!(index < 3, "Row iterator must be called on valid row");
+        TicTacToeIter(&self, TicTacToeIterType::Iter_col, Some(index))
+    }
+
+
+    pub fn iter<'a>(&'a self) ->  TicTacToeIter<'a> {
+        TicTacToeIter(&self, TicTacToeIterType::Iter_all, Some(0))
+    }
+
+
+
 }
 
 
