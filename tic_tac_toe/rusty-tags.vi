@@ -5,12 +5,14 @@
 !_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
 !_TAG_PROGRAM_VERSION	5.9~svn20110310	//
 Agent	/home/gopiandcode/Documents/Rust/rust-projects/tic_tac_toe/src/agents/mod.rs	/^pub trait Agent {$/;"	t
+IOEngine	/home/gopiandcode/Documents/Rust/rust-projects/tic_tac_toe/src/engine/io.rs	/^impl<T : Agent> IOEngine<T> {$/;"	i
+IOEngine	/home/gopiandcode/Documents/Rust/rust-projects/tic_tac_toe/src/engine/io.rs	/^pub struct IOEngine<T : Agent> {$/;"	s
 Index for TicTacToeBoard	/home/gopiandcode/Documents/Rust/rust-projects/tic_tac_toe/src/board.rs	/^impl Index<usize> for TicTacToeBoard {$/;"	i
 IndexMut for TicTacToeBoard	/home/gopiandcode/Documents/Rust/rust-projects/tic_tac_toe/src/board.rs	/^impl IndexMut<usize> for TicTacToeBoard {$/;"	i
 Item	/home/gopiandcode/Documents/Rust/rust-projects/tic_tac_toe/src/board.rs	/^    type Item = &'a TicTacToeCell;$/;"	T
 Iterator for TicTacToeIter	/home/gopiandcode/Documents/Rust/rust-projects/tic_tac_toe/src/board.rs	/^impl<'a> Iterator for TicTacToeIter<'a> {$/;"	i
 OptimalAgent	/home/gopiandcode/Documents/Rust/rust-projects/tic_tac_toe/src/agents/optimal_agent.rs	/^impl OptimalAgent {$/;"	i
-OptimalAgent	/home/gopiandcode/Documents/Rust/rust-projects/tic_tac_toe/src/agents/optimal_agent.rs	/^struct OptimalAgent(TicTacToeCell); $/;"	s
+OptimalAgent	/home/gopiandcode/Documents/Rust/rust-projects/tic_tac_toe/src/agents/optimal_agent.rs	/^pub struct OptimalAgent(TicTacToeCell); $/;"	s
 Output	/home/gopiandcode/Documents/Rust/rust-projects/tic_tac_toe/src/board.rs	/^    type Output = TicTacToeCell;$/;"	T
 Tests	/home/gopiandcode/Documents/Rust/rust-projects/tic_tac_toe/src/agents/optimal_agent.rs	/^mod Tests {$/;"	m
 TicTacToeBoard	/home/gopiandcode/Documents/Rust/rust-projects/tic_tac_toe/src/board.rs	/^impl TicTacToeBoard {$/;"	i
@@ -21,6 +23,8 @@ TicTacToeIterType	/home/gopiandcode/Documents/Rust/rust-projects/tic_tac_toe/src
 agents	/home/gopiandcode/Documents/Rust/rust-projects/tic_tac_toe/src/main.rs	/^mod agents;$/;"	m
 board	/home/gopiandcode/Documents/Rust/rust-projects/tic_tac_toe/src/main.rs	/^mod board;$/;"	m
 col_iter	/home/gopiandcode/Documents/Rust/rust-projects/tic_tac_toe/src/board.rs	/^    pub fn col_iter<'a>(&'a self, index : usize) ->  TicTacToeIter<'a> {$/;"	f
+engine	/home/gopiandcode/Documents/Rust/rust-projects/tic_tac_toe/src/main.rs	/^mod engine;$/;"	m
+execute	/home/gopiandcode/Documents/Rust/rust-projects/tic_tac_toe/src/engine/io.rs	/^    pub fn execute(&mut self, opponent_first : bool) {$/;"	f
 fmt	/home/gopiandcode/Documents/Rust/rust-projects/tic_tac_toe/src/board.rs	/^     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {$/;"	f
 fmt::Display for TicTacToeBoard	/home/gopiandcode/Documents/Rust/rust-projects/tic_tac_toe/src/board.rs	/^impl fmt::Display for TicTacToeBoard {$/;"	i
 fmt::Display for TicTacToeCell	/home/gopiandcode/Documents/Rust/rust-projects/tic_tac_toe/src/board.rs	/^impl fmt::Display for TicTacToeCell {$/;"	i
@@ -34,18 +38,23 @@ get_majority_no_contention	/home/gopiandcode/Documents/Rust/rust-projects/tic_ta
 get_next_move	/home/gopiandcode/Documents/Rust/rust-projects/tic_tac_toe/src/agents/mod.rs	/^    fn get_next_move(&mut self, board: &TicTacToeBoard) -> usize; $/;"	f
 get_next_move	/home/gopiandcode/Documents/Rust/rust-projects/tic_tac_toe/src/agents/optimal_agent.rs	/^    fn get_next_move(&mut self, board: &TicTacToeBoard) -> usize {$/;"	f
 get_right_diagonal_majority	/home/gopiandcode/Documents/Rust/rust-projects/tic_tac_toe/src/agents/optimal_agent.rs	/^fn get_right_diagonal_majority(board : &TicTacToeBoard) -> Option<(TicTacToeCell,u8)> {$/;"	f
-has_anyone_won	/home/gopiandcode/Documents/Rust/rust-projects/tic_tac_toe/src/board.rs	/^    pub fn has_anyone_won(&self) -> TicTacToeCell {$/;"	f
+has_anyone_won	/home/gopiandcode/Documents/Rust/rust-projects/tic_tac_toe/src/board.rs	/^    pub fn has_anyone_won(&self) -> Option<TicTacToeCell> {$/;"	f
 index	/home/gopiandcode/Documents/Rust/rust-projects/tic_tac_toe/src/board.rs	/^    fn index(&self, index : usize) -> &Self::Output {$/;"	f
 index_mut	/home/gopiandcode/Documents/Rust/rust-projects/tic_tac_toe/src/board.rs	/^    fn index_mut(&mut self, index : usize) -> &mut TicTacToeCell {$/;"	f
+io	/home/gopiandcode/Documents/Rust/rust-projects/tic_tac_toe/src/engine/mod.rs	/^mod io;$/;"	m
 iter	/home/gopiandcode/Documents/Rust/rust-projects/tic_tac_toe/src/board.rs	/^    pub fn iter<'a>(&'a self) ->  TicTacToeIter<'a> {$/;"	f
 main	/home/gopiandcode/Documents/Rust/rust-projects/tic_tac_toe/src/main.rs	/^fn main() {$/;"	f
 new	/home/gopiandcode/Documents/Rust/rust-projects/tic_tac_toe/src/agents/optimal_agent.rs	/^    pub fn new(player : TicTacToeCell) -> Self {$/;"	f
 new	/home/gopiandcode/Documents/Rust/rust-projects/tic_tac_toe/src/board.rs	/^    pub fn new() -> Self {$/;"	f
+new	/home/gopiandcode/Documents/Rust/rust-projects/tic_tac_toe/src/engine/io.rs	/^    pub fn new(player : TicTacToeCell, agent : T, board: TicTacToeBoard) -> Self {$/;"	f
 next	/home/gopiandcode/Documents/Rust/rust-projects/tic_tac_toe/src/board.rs	/^    fn next(&mut self) -> Option<&'a TicTacToeCell> {$/;"	f
+opponent_turn	/home/gopiandcode/Documents/Rust/rust-projects/tic_tac_toe/src/engine/io.rs	/^    pub fn opponent_turn(&mut self) {$/;"	f
 optimal_agent	/home/gopiandcode/Documents/Rust/rust-projects/tic_tac_toe/src/agents/mod.rs	/^pub mod optimal_agent;$/;"	m
 place_central	/home/gopiandcode/Documents/Rust/rust-projects/tic_tac_toe/src/agents/optimal_agent.rs	/^    fn place_central(&self, board: &TicTacToeBoard) -> usize {$/;"	f
-place_in_col	/home/gopiandcode/Documents/Rust/rust-projects/tic_tac_toe/src/agents/optimal_agent.rs	/^    fn place_in_col(&self, i: usize, board: &TicTacToeBoard) -> usize {$/;"	f
-place_in_diagonal	/home/gopiandcode/Documents/Rust/rust-projects/tic_tac_toe/src/agents/optimal_agent.rs	/^    fn place_in_diagonal(&self, i: usize, board: &TicTacToeBoard) -> usize {$/;"	f
-place_in_row	/home/gopiandcode/Documents/Rust/rust-projects/tic_tac_toe/src/agents/optimal_agent.rs	/^    fn place_in_row(&self, i: usize, board : &TicTacToeBoard) -> usize {$/;"	f
+place_in_col	/home/gopiandcode/Documents/Rust/rust-projects/tic_tac_toe/src/agents/optimal_agent.rs	/^    fn place_in_col(&self, col: usize, board: &TicTacToeBoard) -> usize {$/;"	f
+place_in_diagonal	/home/gopiandcode/Documents/Rust/rust-projects/tic_tac_toe/src/agents/optimal_agent.rs	/^    fn place_in_diagonal(&self, i: u8, board: &TicTacToeBoard) -> usize {$/;"	f
+place_in_row	/home/gopiandcode/Documents/Rust/rust-projects/tic_tac_toe/src/agents/optimal_agent.rs	/^    fn place_in_row(&self, row : usize, board : &TicTacToeBoard) -> usize {$/;"	f
+player_turn	/home/gopiandcode/Documents/Rust/rust-projects/tic_tac_toe/src/engine/io.rs	/^    pub fn player_turn(&mut self) {$/;"	f
+print_state	/home/gopiandcode/Documents/Rust/rust-projects/tic_tac_toe/src/engine/io.rs	/^    pub fn print_state(&self) {$/;"	f
 row_iter	/home/gopiandcode/Documents/Rust/rust-projects/tic_tac_toe/src/board.rs	/^    pub fn row_iter<'a>(&'a self, index : usize) ->  TicTacToeIter<'a> {$/;"	f
 super::Agent for OptimalAgent	/home/gopiandcode/Documents/Rust/rust-projects/tic_tac_toe/src/agents/optimal_agent.rs	/^impl super::Agent for OptimalAgent {$/;"	i

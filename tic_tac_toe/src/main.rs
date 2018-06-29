@@ -1,38 +1,16 @@
 mod board;
 mod agents;
+mod engine;
+
 use board::{TicTacToeBoard, TicTacToeCell};
+use engine::IOEngine;
+use agents::optimal_agent::OptimalAgent;
 
 
 fn main() {
+    let board = TicTacToeBoard::new();
+    let opponent = OptimalAgent::new(TicTacToeCell::X);
+    let mut engine = IOEngine::new(TicTacToeCell::O, opponent, board);
 
-    let mut board = TicTacToeBoard::new();
-    board[1] = TicTacToeCell::X;
-    board[3] = TicTacToeCell::X;
-    board[8] = TicTacToeCell::X;
-
-    board[2] = TicTacToeCell::O;
-    board[6] = TicTacToeCell::O;
-    board[4] = TicTacToeCell::O;
-
-    for (index,cell) in board.iter().enumerate() {
-        println!("{}: {}", index, cell);
-    }
-
-    for (index,cell) in board.iter().enumerate() {
-        println!("{}: {}", index, cell);
-    }
- 
-    println!("Iterating over row 0");
-    for (index,cell) in board.row_iter(0).enumerate() {
-        println!("{}: {}", index, cell);
-    }
- 
-    println!("Iterating over col 1");
-    for (index,cell) in board.col_iter(1).enumerate() {
-        println!("{}: {}", index, cell);
-    }
- 
-
-    println!("{}", board);
-    println!("Hello, world!");
+    engine.execute(false);
 }

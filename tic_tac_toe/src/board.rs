@@ -1,11 +1,10 @@
-use std::collections::hash_map::HashMap;
 use std::ops::{Index, IndexMut};
 use std::fmt;
 
 enum TicTacToeIterType {
-    Iter_row,
-    Iter_col,
-    Iter_all
+    IterRow,
+    IterCol,
+    IterAll
 }
 
 pub struct TicTacToeIter<'a>(&'a TicTacToeBoard, TicTacToeIterType, Option<usize>);
@@ -16,7 +15,7 @@ impl<'a> Iterator for TicTacToeIter<'a> {
     type Item = &'a TicTacToeCell;
     fn next(&mut self) -> Option<&'a TicTacToeCell> {
         match self.1 {
-            TicTacToeIterType::Iter_row => {
+            TicTacToeIterType::IterRow => {
                 if let Some(index) = self.2 {
                     if index == 2 || index == 5 || index == 8 {
                         self.2 = None;
@@ -29,7 +28,7 @@ impl<'a> Iterator for TicTacToeIter<'a> {
                     None
                 }
             }
-            TicTacToeIterType::Iter_col =>  {
+            TicTacToeIterType::IterCol =>  {
                 if let Some(index) = self.2 {
                     if index == 6 || index == 7 || index == 8 {
                         self.2 = None;
@@ -42,7 +41,7 @@ impl<'a> Iterator for TicTacToeIter<'a> {
                     None
                 }
             }
-            TicTacToeIterType::Iter_all => {
+            TicTacToeIterType::IterAll => {
                 if let Some(index) = self.2 {
                     if index == 8 {
                         self.2 = None;
@@ -99,39 +98,44 @@ impl TicTacToeBoard {
         }
     }
 
-    pub fn has_anyone_won(&self) -> TicTacToeCell {
+    pub fn has_anyone_won(&self) -> Option<TicTacToeCell> {
         // test rows
         if      self[0] == self[1] &&  self[1] == self[2] && self[0] != TicTacToeCell::Empty {
-            self[0]
+            Some(self[0])
         } 
         else if self[3] == self[4] &&  self[4] == self[5] && self[3] != TicTacToeCell::Empty  {
-            self[3]
+            Some(self[3])
         } 
         else if self[6] == self[7] &&  self[7] == self[8] && self[6] != TicTacToeCell::Empty  {
-            self[6]
+            Some(self[6])
         }
 
         // test columns
         else if self[0] == self[3] &&  self[3] == self[6] && self[0] != TicTacToeCell::Empty {
-            self[0]
+            Some(self[0])
         } 
         else if self[1] == self[4] &&  self[4] == self[7] && self[1] != TicTacToeCell::Empty  {
-            self[1]
+            Some(self[1])
 
         } 
         else if self[2] == self[5] &&  self[5] == self[8] && self[2] != TicTacToeCell::Empty  {
-            self[2]
+            Some(self[2])
         }
 
         // test diagonals
 
         else if self[0] == self[4] &&  self[4] == self[8] && self[0] != TicTacToeCell::Empty {
-            self[0]
+            Some(self[0])
         } 
         else if self[2] == self[4] &&  self[4] == self[6] && self[2] != TicTacToeCell::Empty {
-            self[2]
+            Some(self[2])
         }  else {
-            TicTacToeCell::Empty
+            for cell in self.iter() {
+                if let TicTacToeCell::Empty = cell {
+                    return Some(TicTacToeCell::Empty);
+                }
+            }
+            None
         }
  
 
@@ -139,17 +143,17 @@ impl TicTacToeBoard {
 
     pub fn row_iter<'a>(&'a self, index : usize) ->  TicTacToeIter<'a> {
         assert!(index < 3, "Row iterator must be called on valid row");
-        TicTacToeIter(&self, TicTacToeIterType::Iter_row, Some(index * 3usize))
+        TicTacToeIter(&self, TicTacToeIterType::IterRow, Some(index * 3usize))
     }
 
     pub fn col_iter<'a>(&'a self, index : usize) ->  TicTacToeIter<'a> {
         assert!(index < 3, "Row iterator must be called on valid row");
-        TicTacToeIter(&self, TicTacToeIterType::Iter_col, Some(index))
+        TicTacToeIter(&self, TicTacToeIterType::IterCol, Some(index))
     }
 
 
     pub fn iter<'a>(&'a self) ->  TicTacToeIter<'a> {
-        TicTacToeIter(&self, TicTacToeIterType::Iter_all, Some(0))
+        TicTacToeIter(&self, TicTacToeIterType::IterAll, Some(0))
     }
 
 
