@@ -74,7 +74,7 @@ fn get_majority<'a, T : Iterator<Item=&'a TicTacToeCell>>(iter: T) -> Option<(Ti
         None
     } else if x > o {
         Some((TicTacToeCell::X, x))
-    } else if o < x {
+    } else if o > x {
         Some((TicTacToeCell::O, o))
     } else {
         None
@@ -131,6 +131,7 @@ impl OptimalAgent {
                 break;
             }
         }
+        println!("Selected ({}, {}) -> {}", row, col, row * 3 + col);
         return row * 3 +  col;
     }
 
@@ -168,7 +169,7 @@ impl OptimalAgent {
         }
     }
 
-    fn place_central(&self, board: &TicTacToeBoard) -> usize {
+    fn place_anywhere(&self, board: &TicTacToeBoard) -> usize {
         if let TicTacToeCell::Empty = board[4] {
             4
         } else {
@@ -189,15 +190,25 @@ impl OptimalAgent {
 
 impl super::Agent for OptimalAgent {
     fn get_next_move(&mut self, board: &TicTacToeBoard) -> usize {
+        // Sanity check - no point getting next move if the game is completed
+        // Note: has_anyone_won is an expensive call - in the future it may be worthwhile swapping
+        // it with a cheaper call
         if board.has_anyone_won() != Some(TicTacToeCell::Empty) {
             panic!("Get next move called on Agents::OptimalAgent after game has been completed");
         }
+
+        // first - always prioritize center.
+        if board[4] == TicTacToeCell::Empty {
+            return 4;
+        }
+
         let opponent_piece = if self.0 == TicTacToeCell::X { TicTacToeCell::O } else { TicTacToeCell::X };
 
         // represents     row or col or diag, num, how much
         // for spec - 0 is row, 1 is col, 2 is diag
         // for diag, 0 is \, 1 is /
         let mut max : Option<(i8,usize)> = None;
+
 
         for i in 0..3 {
             if let Some((player, count)) = get_majority(board.row_iter(i)) {
@@ -206,6 +217,7 @@ impl super::Agent for OptimalAgent {
                 }
 
                 if max.is_none() {
+                    println!("Updating max");
                     max = Some((0, i));
                 }
             }
@@ -232,7 +244,7 @@ impl super::Agent for OptimalAgent {
             }
         }
 
-        if let Some((player, count)) = get_left_diagonal_majority(board) {
+        if let Some((player, count)) = get_right_diagonal_majority(board) {
             if count >= 2 {
                 return self.place_in_diagonal(1, board);
             }
@@ -243,6 +255,7 @@ impl super::Agent for OptimalAgent {
 
 
 
+        println!("max is {:?}", max);
         if let Some((spec, ind)) = max {
             // first, if any opponent paths are near done, block them
             match spec {
@@ -252,7 +265,7 @@ impl super::Agent for OptimalAgent {
                 _ => panic!("This path should never be called"),
             }
         } else {
-            self.place_central(board)
+            self.place_anywhere(board)
         }
     }
 }

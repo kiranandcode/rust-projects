@@ -142,6 +142,7 @@ impl TicTacToeBoard {
     }
 
     pub fn row_iter<'a>(&'a self, index : usize) ->  TicTacToeIter<'a> {
+
         assert!(index < 3, "Row iterator must be called on valid row");
         TicTacToeIter(&self, TicTacToeIterType::IterRow, Some(index * 3usize))
     }

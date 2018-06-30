@@ -50,7 +50,7 @@ new	/home/gopiandcode/Documents/Rust/rust-projects/tic_tac_toe/src/engine/io.rs	
 next	/home/gopiandcode/Documents/Rust/rust-projects/tic_tac_toe/src/board.rs	/^    fn next(&mut self) -> Option<&'a TicTacToeCell> {$/;"	f
 opponent_turn	/home/gopiandcode/Documents/Rust/rust-projects/tic_tac_toe/src/engine/io.rs	/^    pub fn opponent_turn(&mut self) {$/;"	f
 optimal_agent	/home/gopiandcode/Documents/Rust/rust-projects/tic_tac_toe/src/agents/mod.rs	/^pub mod optimal_agent;$/;"	m
-place_central	/home/gopiandcode/Documents/Rust/rust-projects/tic_tac_toe/src/agents/optimal_agent.rs	/^    fn place_central(&self, board: &TicTacToeBoard) -> usize {$/;"	f
+place_anywhere	/home/gopiandcode/Documents/Rust/rust-projects/tic_tac_toe/src/agents/optimal_agent.rs	/^    fn place_anywhere(&self, board: &TicTacToeBoard) -> usize {$/;"	f
 place_in_col	/home/gopiandcode/Documents/Rust/rust-projects/tic_tac_toe/src/agents/optimal_agent.rs	/^    fn place_in_col(&self, col: usize, board: &TicTacToeBoard) -> usize {$/;"	f
 place_in_diagonal	/home/gopiandcode/Documents/Rust/rust-projects/tic_tac_toe/src/agents/optimal_agent.rs	/^    fn place_in_diagonal(&self, i: u8, board: &TicTacToeBoard) -> usize {$/;"	f
 place_in_row	/home/gopiandcode/Documents/Rust/rust-projects/tic_tac_toe/src/agents/optimal_agent.rs	/^    fn place_in_row(&self, row : usize, board : &TicTacToeBoard) -> usize {$/;"	f

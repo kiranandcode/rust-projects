@@ -113,12 +113,17 @@ impl<T : Agent> IOEngine<T> {
         let mut win_status = self.board.has_anyone_won();
         while let Some(TicTacToeCell::Empty) = win_status {
             self.player_turn();
+
             win_status = self.board.has_anyone_won();
             if let Some(state) = win_status {
                 if state != TicTacToeCell::Empty {
                     break;
                 }
+            } else {
+                // None result means draw
+                break;
             }
+
             self.opponent_turn();
 
             self.print_state();
