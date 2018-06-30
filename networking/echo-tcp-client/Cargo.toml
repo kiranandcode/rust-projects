@@ -1,5 +1,5 @@
 [package]
-name = "tcp-server"
+name = "echo-tcp-client"
 version = "0.1.0"
 authors = ["Kiran Gopinathan <zcabkgo@ucl.ac.uk>"]
 
