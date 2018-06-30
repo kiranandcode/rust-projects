@@ -1,8 +1,6 @@
 [package]
-name = "gui-base"
+name = "simple_gui_app"
 version = "0.1.0"
 authors = ["Kiran Gopinathan <zcabkgo@ucl.ac.uk>"]
 
 [dependencies]
-sdl2 = "0.31.0"
-gl = "0.10.0"
