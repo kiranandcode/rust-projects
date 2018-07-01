@@ -1,0 +1,15 @@
+[package]
+name = "file_opener"
+version = "0.1.0"
+authors = ["Kiran Gopinathan <zcabkgo@ucl.ac.uk>"]
+
+[dependencies]
+gtk = "^0.4.0"
+gtk-sys = "^0.6.0"
+relm = "^0.14.0"
+relm-attributes = "^0.14.0"
+relm-derive = "^0.14.0"
+
+[dependencies.gio]
+version = "^0.4.0"
+features = ["v2_50"]
