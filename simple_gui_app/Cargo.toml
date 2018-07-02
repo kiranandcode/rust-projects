@@ -4,3 +4,10 @@ version = "0.1.0"
 authors = ["Kiran Gopinathan <zcabkgo@ucl.ac.uk>"]
 
 [dependencies]
+gtk = "^0.3.0"
+relm = "^0.11.0"
+relm-derive = "^0.11.0"
+relm-attributes = "0.14.6"
+gdk = "0.7.0"
+rand = "0.5.3"
+
