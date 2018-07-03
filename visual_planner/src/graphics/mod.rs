@@ -1,4 +1,9 @@
 pub mod visualizer;
+mod components;
+mod render_window;
+
+use graphics::render_window::RenderWindow;
+
 use gtk::{Window, WidgetExt, main, init as gtk_init};
 use std::convert::AsRef;
 
@@ -12,3 +17,6 @@ pub fn run<T: AsRef<Window>>(window : T) {
     window.show_all();
     main();
 }
+
+
+

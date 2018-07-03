@@ -1,5 +1,11 @@
-use gtk::{Window, WindowType, WindowExt, ContainerExt, WidgetExt, HeaderBar, HeaderBarExt, DrawingArea, Inhibit, main_quit};
+use super::components::DrawableObject;
+use super::RenderWindow;
+
 use std::convert::AsRef;
+use std::sync::{Arc, RwLock};
+
+use gdk::{EventMask, EventType, EventButton, BUTTON_PRESS_MASK};
+use gtk::{Window, WindowType, WindowExt, ContainerExt, WidgetExt, HeaderBar, HeaderBarExt, DrawingArea, Inhibit, main_quit};
 
 pub enum Msg {
     
@@ -27,7 +33,7 @@ impl App {
         // connect children
         window.set_titlebar(&header.container);
         window.add(&content.container);
-
+        // params are self, envt
         window.connect_delete_event(move |_, _| {
             main_quit();
             // main_quit ends the gtk event loop, thus prompting our
@@ -70,63 +76,86 @@ impl Header {
 
 
 pub struct Content {
-   container: DrawingArea 
-
+   container: DrawingArea,
+   render_window: Arc<RwLock<RenderWindow>>,
+   draw_queue: Arc<Vec<DrawableObject>>
 }
 
 impl Content {
     fn new() -> Content {
         let drawing_area = DrawingArea::new();
 
+        drawing_area.add_events(BUTTON_PRESS_MASK.bits() as i32);
+        drawing_area.connect_event(|obj, event| { 
+            //println!("event: {:?} {:?}", event, event.get_event_type()); 
+            if let Ok(ref result) = event.clone().downcast::<EventButton>() {
+               println!("Could unwrap: {:?}", result.get_position()); 
+            }
+            
+            Inhibit(false) 
+
+        });
         drawing_area.connect_draw(|_, cr| {
-            cr.set_dash(&[3., 2., 1.], 1.); 
-
-            cr.scale(500f64, 500f64);
-
-            cr.set_source_rgb(250.0/255.0, 224.0/255.0, 55.0/255.0);
-            cr.paint();
-
-            cr.set_line_width(0.05);
-
-            cr.set_source_rgb(0.3, 0.3, 0.3);
-            cr.rectangle(0.0, 0.0, 1.0, 1.0);
-            cr.stroke();
-
-            cr.set_line_width(0.03);
-
-
-            cr.arc(0.5, 0.5, 0.4, 0.0, ::std::f64::consts::PI * 2.);
-            cr.stroke();
-
-
-            let mouth_top = 0.68;
-            let mouth_width = 0.38;
-            let mouth_dx = 0.10;
-            let mouth_dy = 0.10;
-
-
-            cr.move_to(0.50 - mouth_width/2.0, mouth_top);
-            cr.curve_to(0.50 - mouth_dx,     mouth_top + mouth_dy,
-                        0.50 + mouth_dx,     mouth_top + mouth_dy,
-                        0.50 + mouth_width/2.0, mouth_top);
-
-            cr.stroke();
-
-            let eye_y = 0.38;
-            let eye_dx = 0.15;
-
-            cr.arc(0.5 - eye_dx, eye_y, 0.05, 0.0, ::std::f64::consts::PI * 2.);
-            cr.fill();
-
-            cr.arc(0.5 + eye_dx, eye_y, 0.05, 0.0, ::std::f64::consts::PI * 2.);
-            cr.fill();
+           // main draw loop here 
+            // 1. draw background
+            // 2. ask drawables to draw themselves
             
             Inhibit(false)
         });
 
 
         Content {
-            container: drawing_area
+            container: drawing_area,
+            render_window: Arc::new(RwLock::new(RenderWindow {})),
+            draw_queue: Arc::new(Vec::new())
         }
     }
 }
+
+
+// reference cr drawing code:
+//
+//cr.set_dash(&[3., 2., 1.], 1.); 
+
+// cr.scale(500f64, 500f64);
+
+// cr.set_source_rgb(250.0/255.0, 224.0/255.0, 55.0/255.0);
+// cr.paint();
+
+// cr.set_line_width(0.05);
+
+// cr.set_source_rgb(0.3, 0.3, 0.3);
+// cr.rectangle(0.0, 0.0, 1.0, 1.0);
+// cr.stroke();
+
+// cr.set_line_width(0.03);
+
+
+// cr.arc(0.5, 0.5, 0.4, 0.0, ::std::f64::consts::PI * 2.);
+// cr.stroke();
+
+
+// let mouth_top = 0.68;
+// let mouth_width = 0.38;
+// let mouth_dx = 0.10;
+// let mouth_dy = 0.10;
+
+
+// cr.move_to(0.50 - mouth_width/2.0, mouth_top);
+// cr.curve_to(0.50 - mouth_dx,     mouth_top + mouth_dy,
+//             0.50 + mouth_dx,     mouth_top + mouth_dy,
+//             0.50 + mouth_width/2.0, mouth_top);
+
+// cr.stroke();
+
+// let eye_y = 0.38;
+// let eye_dx = 0.15;
+
+// cr.arc(0.5 - eye_dx, eye_y, 0.05, 0.0, ::std::f64::consts::PI * 2.);
+// cr.fill();
+
+// cr.arc(0.5 + eye_dx, eye_y, 0.05, 0.0, ::std::f64::consts::PI * 2.);
+// cr.fill();
+//
+
+

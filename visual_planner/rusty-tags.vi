@@ -825,6 +825,9 @@ DragContextExtManual	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db
 DragContextExtManual	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/drag_context.rs	/^pub trait DragContextExtManual {$/;"	t
 DragProtocol	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/auto/enums.rs	/^pub enum DragProtocol {$/;"	g
 DragResult	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/enums.rs	/^pub enum DragResult {$/;"	g
+Drawable	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/graphics/components/mod.rs	/^pub enum Drawable {$/;"	g
+DrawableObject	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/graphics/components/mod.rs	/^impl DrawableObject {$/;"	i
+DrawableObject	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/graphics/components/mod.rs	/^pub struct DrawableObject {$/;"	s
 DrawingArea	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/drawing_area.rs	/^    pub struct DrawingArea(Object<ffi::GtkDrawingArea>): Widget;$/;"	s
 DrawingArea	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/drawing_area.rs	/^impl DrawingArea {$/;"	i
 DrawingContext	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/auto/drawing_context.rs	/^    pub struct DrawingContext(Object<ffi::GdkDrawingContext>);$/;"	s
@@ -2813,6 +2816,8 @@ Region	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/cairo-r
 RegionFlags	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/flags.rs	/^    pub struct RegionFlags: u32 {$/;"	s
 ReliefStyle	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/enums.rs	/^pub enum ReliefStyle {$/;"	g
 Reload	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/enums.rs	/^    pub const Reload: Key = ffi::GDK_KEY_Reload as u32;$/;"	c
+RenderWindow	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/graphics/render_window.rs	/^impl RenderWindow {$/;"	i
+RenderWindow	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/graphics/render_window.rs	/^pub struct RenderWindow {$/;"	s
 RepeatKeys_Enable	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/enums.rs	/^    pub const RepeatKeys_Enable: Key = ffi::GDK_KEY_RepeatKeys_Enable as u32;$/;"	c
 Reply	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/enums.rs	/^    pub const Reply: Key = ffi::GDK_KEY_Reply as u32;$/;"	c
 Requisition	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/requisition.rs	/^pub struct Requisition {$/;"	s
@@ -5043,6 +5048,7 @@ compare	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.
 compare	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/tree_path.rs	/^    fn compare(&self, b: &TreePath) -> i32 {$/;"	f
 complete	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/entry_completion.rs	/^    fn complete(&self) {$/;"	f
 complete	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/entry_completion.rs	/^    fn complete(&self);$/;"	f
+components	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/graphics/mod.rs	/^mod components;$/;"	m
 compute_checksum_for_bytes	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/glib-0.3.1/src/auto/functions.rs	/^pub fn compute_checksum_for_bytes(checksum_type: ChecksumType, data: &Bytes) -> Option<String> {$/;"	f
 compute_checksum_for_data	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/glib-0.3.1/src/auto/functions.rs	/^pub fn compute_checksum_for_data(checksum_type: ChecksumType, data: &[u8]) -> Option<String> {$/;"	f
 compute_checksum_for_string	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/glib-0.3.1/src/auto/functions.rs	/^pub fn compute_checksum_for_string(checksum_type: ChecksumType, str: &str) -> Option<String> {$/;"	f
@@ -8271,6 +8277,7 @@ drag_unhighlight_row	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db
 drag_unhighlight_row	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/list_box.rs	/^    fn drag_unhighlight_row(&self);$/;"	f
 draw	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/widget.rs	/^    fn draw(&self, cr: &cairo::Context) {$/;"	f
 draw	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/widget.rs	/^    fn draw(&self, cr: &cairo::Context);$/;"	f
+draw	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/graphics/components/mod.rs	/^    pub fn draw(&self, cr : &Context, style: &StyleContext, window : &RenderWindow) {$/;"	f
 draw_x	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/cairo-rs-0.2.0/src/pdf_surface.rs	/^    fn draw_x(cr: &Context) {$/;"	f
 drawing_area	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/mod.rs	/^mod drawing_area;$/;"	m
 drawing_context	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/auto/mod.rs	/^mod drawing_context;$/;"	m
@@ -14396,6 +14403,7 @@ render_layout	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/
 render_line	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/functions.rs	/^pub fn render_line(context: &StyleContext, cr: &cairo::Context, x0: f64, y0: f64, x1: f64, y1: f64) {$/;"	f
 render_option	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/functions.rs	/^pub fn render_option(context: &StyleContext, cr: &cairo::Context, x: f64, y: f64, width: f64, height: f64) {$/;"	f
 render_slider	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/functions.rs	/^pub fn render_slider(context: &StyleContext, cr: &cairo::Context, x: f64, y: f64, width: f64, height: f64, orientation: Orientation) {$/;"	f
+render_window	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/graphics/mod.rs	/^mod render_window;$/;"	m
 reorder	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/cell_layout.rs	/^    fn reorder<P: IsA<CellRenderer>>(&self, cell: &P, position: i32) {$/;"	f
 reorder	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/cell_layout.rs	/^    fn reorder<P: IsA<CellRenderer>>(&self, cell: &P, position: i32);$/;"	f
 reorder	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/list_store.rs	/^    fn reorder(&self, new_order: &[u32]) {$/;"	f
