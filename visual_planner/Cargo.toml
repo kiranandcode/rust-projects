@@ -1,0 +1,8 @@
+[package]
+name = "visual_planner"
+version = "0.1.0"
+authors = ["Kiran Gopinathan <zcabkgo@ucl.ac.uk>"]
+
+[dependencies]
+gtk = { version = "^0.2", features = ["v3_22"] }
+cairo-rs = { version = "^0.2.0", features = ["png"] }
