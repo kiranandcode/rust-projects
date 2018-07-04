@@ -825,9 +825,9 @@ DragContextExtManual	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db
 DragContextExtManual	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/drag_context.rs	/^pub trait DragContextExtManual {$/;"	t
 DragProtocol	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/auto/enums.rs	/^pub enum DragProtocol {$/;"	g
 DragResult	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/enums.rs	/^pub enum DragResult {$/;"	g
-Drawable	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/graphics/components/mod.rs	/^pub enum Drawable {$/;"	g
-DrawableObject	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/graphics/components/mod.rs	/^impl DrawableObject {$/;"	i
-DrawableObject	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/graphics/components/mod.rs	/^pub struct DrawableObject {$/;"	s
+Drawable	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/graphics/components/mod.rs	/^pub trait Drawable {$/;"	t
+DrawableContainer	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/graphics/components/mod.rs	/^impl DrawableContainer {$/;"	i
+DrawableContainer	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/graphics/components/mod.rs	/^pub struct DrawableContainer {$/;"	s
 DrawingArea	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/drawing_area.rs	/^    pub struct DrawingArea(Object<ffi::GtkDrawingArea>): Widget;$/;"	s
 DrawingArea	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/drawing_area.rs	/^impl DrawingArea {$/;"	i
 DrawingContext	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/auto/drawing_context.rs	/^    pub struct DrawingContext(Object<ffi::GdkDrawingContext>);$/;"	s
@@ -3479,6 +3479,8 @@ StyleProperties	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec82
 StylePropertiesExt	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/style_properties.rs	/^pub trait StylePropertiesExt {$/;"	t
 StyleProvider	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/style_provider.rs	/^    pub struct StyleProvider(Object<ffi::GtkStyleProvider>);$/;"	s
 StyleProviderExt	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/style_provider.rs	/^pub trait StyleProviderExt {$/;"	t
+StyleScheme	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/graphics/style_scheme.rs	/^impl StyleScheme {$/;"	i
+StyleScheme	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/graphics/style_scheme.rs	/^pub struct StyleScheme {$/;"	s
 SubpixelLayout	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/auto/enums.rs	/^pub enum SubpixelLayout {$/;"	g
 Subtitle	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/enums.rs	/^    pub const Subtitle: Key = ffi::GDK_KEY_Subtitle as u32;$/;"	c
 Super_L	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/enums.rs	/^    pub const Super_L: Key = ffi::GDK_KEY_Super_L as u32;$/;"	c
@@ -8285,7 +8287,8 @@ drag_unhighlight_row	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db
 drag_unhighlight_row	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/list_box.rs	/^    fn drag_unhighlight_row(&self);$/;"	f
 draw	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/widget.rs	/^    fn draw(&self, cr: &cairo::Context) {$/;"	f
 draw	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/widget.rs	/^    fn draw(&self, cr: &cairo::Context);$/;"	f
-draw	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/graphics/components/mod.rs	/^    pub fn draw(&self, cr : &Context, style: &StyleContext, window : &RenderWindow) {$/;"	f
+draw	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/graphics/components/mod.rs	/^    fn draw(&self, cr : &Context, style: &StyleScheme, window : &RenderWindow);$/;"	f
+draw	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/graphics/components/mod.rs	/^    pub fn draw(&self, cr : &Context, style: &StyleScheme, window : &RenderWindow) {$/;"	f
 draw_x	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/cairo-rs-0.2.0/src/pdf_surface.rs	/^    fn draw_x(cr: &Context) {$/;"	f
 drawing_area	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/mod.rs	/^mod drawing_area;$/;"	m
 drawing_context	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/auto/mod.rs	/^mod drawing_context;$/;"	m
@@ -8651,6 +8654,7 @@ from	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/glib-0.3.
 from	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/glib-0.3.1/src/variant.rs	/^    fn from(value: T) -> Variant {$/;"	f
 from	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/glib-0.3.1/src/wrapper.rs	/^    unsafe fn from(t: T) -> Self;$/;"	f
 from	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/enums.rs	/^    fn from(code: i32) -> Option<Self> {$/;"	f
+from	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/graphics/style_scheme.rs	/^    pub fn from(context: &StyleContext) -> StyleScheme {$/;"	f
 from_bytes	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/glib-0.3.1/src/variant_type.rs	/^    fn from_bytes() {$/;"	f
 from_glib	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/auto/enums.rs	/^    fn from_glib(value: ffi::GdkAxisUse) -> Self {$/;"	f
 from_glib	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/auto/enums.rs	/^    fn from_glib(value: ffi::GdkByteOrder) -> Self {$/;"	f
@@ -13732,8 +13736,8 @@ new	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/
 new	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/target_list.rs	/^    pub fn new(targets: &[TargetEntry]) -> Self {$/;"	f
 new	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/tree_model_filter.rs	/^    pub fn new<T: IsA<TreeModel>>(child_model: &T, root: Option<&TreePath>) -> TreeModelFilter {$/;"	f
 new	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/tree_store.rs	/^    pub fn new(column_types: &[Type]) -> TreeStore {$/;"	f
-new	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/graphics/visualizer.rs	/^    fn new() -> Content {$/;"	f
 new	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/graphics/visualizer.rs	/^    fn new() -> Header {$/;"	f
+new	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/graphics/visualizer.rs	/^    fn new(stylecontext: &StyleContext) -> Content {$/;"	f
 new	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/graphics/visualizer.rs	/^    pub fn new() -> App {$/;"	f
 new_alpha	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/symbolic_color.rs	/^    pub fn new_alpha(color: &SymbolicColor, factor: f64) -> SymbolicColor {$/;"	f
 new_custom	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/paper_size.rs	/^    pub fn new_custom(name: &str, display_name: &str, width: f64, height: f64, unit: Unit) -> PaperSize {$/;"	f
@@ -17420,6 +17424,7 @@ stroke_preserve	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec82
 style_context	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/mod.rs	/^mod style_context;$/;"	m
 style_properties	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/mod.rs	/^mod style_properties;$/;"	m
 style_provider	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/mod.rs	/^mod style_provider;$/;"	m
+style_scheme	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/graphics/mod.rs	/^mod style_scheme;$/;"	m
 subtract	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/cairo-rs-0.2.0/src/region.rs	/^    pub fn subtract(&self, other: &Region) -> Status {$/;"	f
 subtract_days	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/glib-0.3.1/src/date.rs	/^    pub fn subtract_days(&mut self, n_days: u32) {$/;"	f
 subtract_months	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/glib-0.3.1/src/date.rs	/^    pub fn subtract_months(&mut self, n_months: u32) {$/;"	f

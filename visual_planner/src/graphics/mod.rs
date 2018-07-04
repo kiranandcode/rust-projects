@@ -1,8 +1,10 @@
 pub mod visualizer;
 mod components;
 mod render_window;
+mod style_scheme;
 
 use self::render_window::*;
+use self::style_scheme::StyleScheme;
 
 use gtk::{Window, WidgetExt, main, init as gtk_init};
 use std::convert::AsRef;

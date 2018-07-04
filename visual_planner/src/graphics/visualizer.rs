@@ -1,14 +1,14 @@
-use super::components::DrawableObject;
+use super::components::DrawableContainer;
 use super::{
     RenderWindow, 
-    ScreenWidth, 
-    ScreenUnit
+    StyleScheme
 };
 
 use std::convert::AsRef;
 use std::sync::{
     Arc, 
-    RwLock
+    RwLock,
+    Mutex
 };
 
 use gdk::{
@@ -27,7 +27,8 @@ use gtk::{
     HeaderBarExt,        // header.set_show_close_button(true)
     DrawingArea,         // for cairo drawing
     Inhibit,             // returned from all callbacks to toggle default handling - Inhibit(false)
-    main_quit            // end the app
+    main_quit,           // end the app
+    StyleContext         // used for initializing the stylescheme
 };
 
 pub enum Msg {
@@ -46,7 +47,7 @@ impl App {
     pub fn new() -> App {
         let window = Window::new(WindowType::Toplevel);
         let header = Header::new();
-        let content = Content::new();
+        let content = Content::new(&StyleContext::new());
 
         window.set_title("GopViz - Visualizer");
         window.set_wmclass("app-name", "Gopviz");
@@ -99,14 +100,22 @@ impl Header {
 
 
 pub struct Content {
+   /// GTK drawing area on which the component will render all graphics
    container: DrawingArea,
+   /// Colorscheme used to render all objects
+   style_scheme: Arc<RwLock<StyleScheme>>,
+   /// Mapping from screen space to world space
    render_window: Arc<RwLock<RenderWindow>>,
-   draw_queue: Arc<Vec<DrawableObject>>
+   /// List of things to be drawn
+   draw_queue: Arc<RwLock<Vec<DrawableContainer>>>
 }
 
 impl Content {
-    fn new() -> Content {
+    fn new(stylecontext: &StyleContext) -> Content {
         let drawing_area = DrawingArea::new();
+        let render_window = Arc::new(RwLock::new(RenderWindow {}));
+        let draw_queue : Arc<RwLock<Vec<DrawableContainer>>> = Arc::new(RwLock::new(Vec::new()));
+        let style_scheme = Arc::new(RwLock::new(StyleScheme::from(stylecontext)));
 
         drawing_area.add_events(BUTTON_PRESS_MASK.bits() as i32);
         drawing_area.connect_event(|obj, event| { 
@@ -118,19 +127,36 @@ impl Content {
             Inhibit(false) 
 
         });
-        drawing_area.connect_draw(|_, cr| {
-           // main draw loop here 
-            // 1. draw background
-            // 2. ask drawables to draw themselves
-            
-            Inhibit(false)
-        });
+        {
+            let draw_queue = draw_queue.clone();
+            let style_scheme = style_scheme.clone();
+            let render_window = render_window.clone();
+            drawing_area.connect_draw(move |_, cr| {
+                // main draw loop here 
+                // 1. draw background
+
+
+
+
+                // 2. ask drawables to draw themselves
+                let style_scheme = style_scheme.read().unwrap();
+                let render_window = render_window.read().unwrap();
+                let draw_queue = draw_queue.read().unwrap();
+                
+                for drawable in draw_queue.iter() {
+                    drawable.draw(cr, &style_scheme, &render_window);
+                }
+
+                Inhibit(false)
+            });
+        }
 
 
         Content {
             container: drawing_area,
-            render_window: Arc::new(RwLock::new(RenderWindow {})),
-            draw_queue: Arc::new(Vec::new())
+            render_window, 
+            draw_queue,
+            style_scheme
         }
     }
 }
