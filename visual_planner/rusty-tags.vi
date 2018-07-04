@@ -2905,8 +2905,12 @@ Scircumflex	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gd
 Screen	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/auto/screen.rs	/^    pub struct Screen(Object<ffi::GdkScreen>);$/;"	s
 Screen	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/auto/screen.rs	/^impl Screen {$/;"	i
 Screen	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/screen.rs	/^impl Screen {$/;"	i
+ScreenCoords	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/graphics/render_window.rs	/^pub struct ScreenCoords(pub ScreenUnit, pub ScreenUnit);$/;"	s
 ScreenExt	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/auto/screen.rs	/^pub trait ScreenExt {$/;"	t
+ScreenHeight	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/graphics/render_window.rs	/^pub struct ScreenHeight(pub ScreenUnit);$/;"	s
 ScreenSaver	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/enums.rs	/^    pub const ScreenSaver: Key = ffi::GDK_KEY_ScreenSaver as u32;$/;"	c
+ScreenUnit	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/graphics/render_window.rs	/^pub struct ScreenUnit(pub f32);$/;"	s
+ScreenWidth	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/graphics/render_window.rs	/^pub struct ScreenWidth(pub ScreenUnit);$/;"	s
 ScrollClick	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/enums.rs	/^    pub const ScrollClick: Key = ffi::GDK_KEY_ScrollClick as u32;$/;"	c
 ScrollDirection	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/auto/enums.rs	/^pub enum ScrollDirection {$/;"	g
 ScrollDown	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/enums.rs	/^    pub const ScrollDown: Key = ffi::GDK_KEY_ScrollDown as u32;$/;"	c
@@ -4109,6 +4113,10 @@ WindowTypeHint	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823
 WindowWindowClass	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/auto/enums.rs	/^pub enum WindowWindowClass {$/;"	g
 WonSign	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/enums.rs	/^    pub const WonSign: Key = ffi::GDK_KEY_WonSign as u32;$/;"	c
 Word	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/enums.rs	/^    pub const Word: Key = ffi::GDK_KEY_Word as u32;$/;"	c
+WorldCoords	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/graphics/render_window.rs	/^pub struct WorldCoords(pub WorldUnit, pub WorldUnit);$/;"	s
+WorldHeight	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/graphics/render_window.rs	/^pub struct WorldHeight(pub WorldUnit);$/;"	s
+WorldUnit	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/graphics/render_window.rs	/^pub struct WorldUnit(pub f32);$/;"	s
+WorldWidth	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/graphics/render_window.rs	/^pub struct WorldWidth(pub WorldUnit);$/;"	s
 WrapMode	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/enums.rs	/^pub enum WrapMode {$/;"	g
 Wrapper	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/glib-0.3.1/src/wrapper.rs	/^pub trait Wrapper {$/;"	t
 WriteEnv	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/cairo-rs-0.2.0/src/image_surface_png.rs	/^struct WriteEnv<'a, W: 'a + Write> {$/;"	s

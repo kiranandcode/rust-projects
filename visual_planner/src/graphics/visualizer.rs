@@ -1,11 +1,34 @@
 use super::components::DrawableObject;
-use super::RenderWindow;
+use super::{
+    RenderWindow, 
+    ScreenWidth, 
+    ScreenUnit
+};
 
 use std::convert::AsRef;
-use std::sync::{Arc, RwLock};
+use std::sync::{
+    Arc, 
+    RwLock
+};
 
-use gdk::{EventMask, EventType, EventButton, BUTTON_PRESS_MASK};
-use gtk::{Window, WindowType, WindowExt, ContainerExt, WidgetExt, HeaderBar, HeaderBarExt, DrawingArea, Inhibit, main_quit};
+use gdk::{
+    EventMask, 
+    EventType, 
+    EventButton, 
+    BUTTON_PRESS_MASK
+};
+use gtk::{
+    Window,              // for the main app
+    WindowType,          // Window::new(WindowType...
+    WindowExt,           // window.set_title_bar 
+    ContainerExt,        // window.add
+    WidgetExt,           // 
+    HeaderBar,           // for the header
+    HeaderBarExt,        // header.set_show_close_button(true)
+    DrawingArea,         // for cairo drawing
+    Inhibit,             // returned from all callbacks to toggle default handling - Inhibit(false)
+    main_quit            // end the app
+};
 
 pub enum Msg {
     
