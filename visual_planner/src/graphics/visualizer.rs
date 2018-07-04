@@ -113,7 +113,7 @@ pub struct Content {
 impl Content {
     fn new(stylecontext: &StyleContext) -> Content {
         let drawing_area = DrawingArea::new();
-        let render_window = Arc::new(RwLock::new(RenderWindow {}));
+        let render_window = Arc::new(RwLock::new(RenderWindow::new()));
         let draw_queue : Arc<RwLock<Vec<DrawableContainer>>> = Arc::new(RwLock::new(Vec::new()));
         let style_scheme = Arc::new(RwLock::new(StyleScheme::from(stylecontext)));
 

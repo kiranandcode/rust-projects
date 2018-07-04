@@ -2905,12 +2905,15 @@ Scircumflex	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gd
 Screen	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/auto/screen.rs	/^    pub struct Screen(Object<ffi::GdkScreen>);$/;"	s
 Screen	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/auto/screen.rs	/^impl Screen {$/;"	i
 Screen	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/screen.rs	/^impl Screen {$/;"	i
+ScreenBoundingBox	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/graphics/render_window.rs	/^pub struct ScreenBoundingBox(pub ScreenX, pub ScreenY, pub ScreenWidth, pub ScreenHeight);$/;"	s
 ScreenCoords	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/graphics/render_window.rs	/^pub struct ScreenCoords(pub ScreenUnit, pub ScreenUnit);$/;"	s
 ScreenExt	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/auto/screen.rs	/^pub trait ScreenExt {$/;"	t
-ScreenHeight	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/graphics/render_window.rs	/^pub struct ScreenHeight(pub ScreenUnit);$/;"	s
+ScreenHeight	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/graphics/render_window.rs	/^type ScreenHeight = ScreenUnit;$/;"	T
 ScreenSaver	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/enums.rs	/^    pub const ScreenSaver: Key = ffi::GDK_KEY_ScreenSaver as u32;$/;"	c
 ScreenUnit	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/graphics/render_window.rs	/^pub struct ScreenUnit(pub f32);$/;"	s
-ScreenWidth	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/graphics/render_window.rs	/^pub struct ScreenWidth(pub ScreenUnit);$/;"	s
+ScreenWidth	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/graphics/render_window.rs	/^type ScreenWidth = ScreenUnit;$/;"	T
+ScreenX	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/graphics/render_window.rs	/^type ScreenX = ScreenUnit;$/;"	T
+ScreenY	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/graphics/render_window.rs	/^type ScreenY = ScreenUnit;$/;"	T
 ScrollClick	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/enums.rs	/^    pub const ScrollClick: Key = ffi::GDK_KEY_ScrollClick as u32;$/;"	c
 ScrollDirection	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/auto/enums.rs	/^pub enum ScrollDirection {$/;"	g
 ScrollDown	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/enums.rs	/^    pub const ScrollDown: Key = ffi::GDK_KEY_ScrollDown as u32;$/;"	c
@@ -4115,10 +4118,13 @@ WindowTypeHint	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823
 WindowWindowClass	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/auto/enums.rs	/^pub enum WindowWindowClass {$/;"	g
 WonSign	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/enums.rs	/^    pub const WonSign: Key = ffi::GDK_KEY_WonSign as u32;$/;"	c
 Word	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/enums.rs	/^    pub const Word: Key = ffi::GDK_KEY_Word as u32;$/;"	c
+WorldBoundingBox	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/graphics/render_window.rs	/^pub struct WorldBoundingBox(pub WorldX, pub WorldY, pub WorldWidth, pub WorldHeight);$/;"	s
 WorldCoords	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/graphics/render_window.rs	/^pub struct WorldCoords(pub WorldUnit, pub WorldUnit);$/;"	s
-WorldHeight	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/graphics/render_window.rs	/^pub struct WorldHeight(pub WorldUnit);$/;"	s
+WorldHeight	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/graphics/render_window.rs	/^type WorldHeight = WorldUnit;$/;"	T
 WorldUnit	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/graphics/render_window.rs	/^pub struct WorldUnit(pub f32);$/;"	s
-WorldWidth	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/graphics/render_window.rs	/^pub struct WorldWidth(pub WorldUnit);$/;"	s
+WorldWidth	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/graphics/render_window.rs	/^type WorldWidth = WorldUnit;$/;"	T
+WorldX	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/graphics/render_window.rs	/^type WorldX = WorldUnit;$/;"	T
+WorldY	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/graphics/render_window.rs	/^type WorldY = WorldUnit;$/;"	T
 WrapMode	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/enums.rs	/^pub enum WrapMode {$/;"	g
 Wrapper	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/glib-0.3.1/src/wrapper.rs	/^pub trait Wrapper {$/;"	t
 WriteEnv	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/cairo-rs-0.2.0/src/image_surface_png.rs	/^struct WriteEnv<'a, W: 'a + Write> {$/;"	s
@@ -13110,6 +13116,7 @@ is_focus_sibling	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec8
 is_grouped_with	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/gesture.rs	/^    fn is_grouped_with<P: IsA<Gesture>>(&self, other: &P) -> bool {$/;"	f
 is_grouped_with	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/gesture.rs	/^    fn is_grouped_with<P: IsA<Gesture>>(&self, other: &P) -> bool;$/;"	f
 is_implicit	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/event_grab_broken.rs	/^    pub fn is_implicit(&self) -> bool {$/;"	f
+is_in_view	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/graphics/render_window.rs	/^    pub fn is_in_view(&self, bounding_box: &WorldBoundingBox) -> bool {$/;"	f
 is_inhibited	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/application.rs	/^    fn is_inhibited(&self, flags: ApplicationInhibitFlags) -> bool {$/;"	f
 is_inhibited	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/application.rs	/^    fn is_inhibited(&self, flags: ApplicationInhibitFlags) -> bool;$/;"	f
 is_initialized	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/rt.rs	/^pub fn is_initialized() -> bool {$/;"	f
@@ -13736,6 +13743,7 @@ new	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/
 new	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/target_list.rs	/^    pub fn new(targets: &[TargetEntry]) -> Self {$/;"	f
 new	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/tree_model_filter.rs	/^    pub fn new<T: IsA<TreeModel>>(child_model: &T, root: Option<&TreePath>) -> TreeModelFilter {$/;"	f
 new	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/tree_store.rs	/^    pub fn new(column_types: &[Type]) -> TreeStore {$/;"	f
+new	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/graphics/render_window.rs	/^    pub fn new() -> RenderWindow {$/;"	f
 new	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/graphics/visualizer.rs	/^    fn new() -> Header {$/;"	f
 new	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/graphics/visualizer.rs	/^    fn new(stylecontext: &StyleContext) -> Content {$/;"	f
 new	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/graphics/visualizer.rs	/^    pub fn new() -> App {$/;"	f
