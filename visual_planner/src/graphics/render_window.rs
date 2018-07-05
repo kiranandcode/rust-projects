@@ -1,9 +1,9 @@
 use std::ops::Add;
 /// a newtype representing world units to ensure type safety
-#[derive(Debug, PartialEq, PartialOrd)]
+#[derive(Debug, PartialEq, PartialOrd, Copy, Clone)]
 pub struct WorldUnit(pub f32);
 /// a newtype representing screen units to ensure type safety
-#[derive(Debug, PartialEq, PartialOrd)]
+#[derive(Debug, PartialEq, PartialOrd, Copy, Clone)]
 pub struct ScreenUnit(pub f32);
 
 // I've made coordiates their own type as I figure they'll be a cohesive unit in the system
@@ -35,6 +35,47 @@ type ScreenY = ScreenUnit;
 pub struct WorldBoundingBox(pub WorldX, pub WorldY, pub WorldWidth, pub WorldHeight);
 pub struct ScreenBoundingBox(pub ScreenX, pub ScreenY, pub ScreenWidth, pub ScreenHeight);
 
+impl Add for WorldUnit {
+    type Output = WorldUnit;
+    fn add(self, other : WorldUnit) -> WorldUnit {
+        WorldUnit(self.0 + other.0)
+    }
+}
+
+impl WorldBoundingBox {
+
+    pub fn point_within_bounds(&self, x : WorldUnit, y: WorldUnit) -> bool {
+        let self_x = (self.0);
+        let self_y = (self.1);
+        let self_w = (self.2); 
+        let self_h = (self.3); 
+ 
+            (x >= self_x) && (x <= self_x + self_w) &&
+                (y >= self_y) && (y <= self_y + self_h)
+    }
+
+
+    pub fn check_intersect(boxa : &WorldBoundingBox, boxb : &WorldBoundingBox) -> bool {
+        let WorldBoundingBox(boxa_x, boxa_y, boxa_w, boxa_h) = *boxa;
+        let WorldBoundingBox(boxb_x, boxb_y, boxb_w, boxb_h) = *boxb;
+
+        // check whether any vertex of the rendering box lies within the box
+        boxa.point_within_bounds(boxb_x         , boxb_y         ) ||
+        boxa.point_within_bounds(boxb_x + boxb_w, boxb_y         ) ||
+        boxa.point_within_bounds(boxb_x         , boxb_y + boxb_h) ||
+        boxa.point_within_bounds(boxb_x + boxb_w, boxb_y + boxb_h) ||
+
+
+        // check whether any vertex of the rendering box lies within the box
+        boxb.point_within_bounds(boxa_x         , boxa_y         ) ||
+        boxb.point_within_bounds(boxa_x + boxa_w, boxa_y         ) ||
+        boxb.point_within_bounds(boxa_x         , boxa_y + boxa_h) ||
+        boxb.point_within_bounds(boxa_x + boxa_w, boxa_y + boxa_h)
+
+
+    }
+}
+
 /// Represents a mapping between a virtual window in worldspace to the screen
 /// Could be implemented as a 3d matrix, but would require pulling in
 /// additional dependancies
@@ -57,36 +98,27 @@ impl RenderWindow {
     }
 
     pub fn is_in_view(&self, bounding_box: &WorldBoundingBox) -> bool {
-        let self_x = (self.world_bounding_box.0).0;
-        let self_y = (self.world_bounding_box.1).0;
-        let self_w = (self.world_bounding_box.2).0; 
-        let self_h = (self.world_bounding_box.3).0; 
-        let bounding_x = (bounding_box.0).0;
-        let bounding_y = (bounding_box.1).0;
-        let bounding_w = (bounding_box.2).0;
-        let bounding_h = (bounding_box.3).0;
-
-        let point_within_screen_bounds = |x : f32, y : f32| -> bool {
-            (x >= self_x) && (x <= self_x + self_w) &&
-                (y >= self_y) && (y <= self_y + self_h)
-        };
-        let point_within_bounding_bounds = |x : f32, y : f32| -> bool {
-            (x >= bounding_x) && (x <= bounding_x + bounding_w) &&
-                (y >= bounding_y) && (y <= bounding_y + bounding_h)
-        };
-
-
-
         // check whether any vertex of the box lies within the rendering box
-        point_within_screen_bounds(bounding_x             , bounding_y             ) ||
-        point_within_screen_bounds(bounding_x + bounding_w, bounding_y             ) ||
-        point_within_screen_bounds(bounding_x             , bounding_y + bounding_h) ||
-        point_within_screen_bounds(bounding_x + bounding_w, bounding_y + bounding_h) ||
-
-        // check whether any vertex of the rendering box lies within the box
-        point_within_bounding_bounds(self_x         , self_y         ) ||
-        point_within_bounding_bounds(self_x + self_w, self_y         ) ||
-        point_within_bounding_bounds(self_x         , self_y + self_h) ||
-        point_within_bounding_bounds(self_x + self_w, self_y + self_h)
+        WorldBoundingBox::check_intersect(&self.world_bounding_box, bounding_box)
     }
+}
+
+
+#[cfg(test)]
+mod test {
+    use super::*;
+     
+    #[test]
+    pub fn point_within_bounds_inside() {
+        let unit_box = WorldBoundingBox(WorldUnit(0.0), WorldUnit(1.0), WorldUnit(1.0), WorldUnit(1.0)); 
+        assert!(unit_box.point_within_bounds(WorldUnit(0.5), WorldUnit(0.5)));
+    }
+
+    #[test]
+    pub fn point_within_bounds_outside() {
+        let unit_box = WorldBoundingBox(WorldUnit(0.0), WorldUnit(1.0), WorldUnit(1.0), WorldUnit(1.0)); 
+        assert!(!unit_box.point_within_bounds(WorldUnit(1.5), WorldUnit(1.5)));
+    }
+
+
 }
