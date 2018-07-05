@@ -2524,6 +2524,7 @@ MouseKeys_Enable	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec8
 MovementStep	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/enums.rs	/^pub enum MovementStep {$/;"	g
 Msg	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/graphics/visualizer.rs	/^pub enum Msg {$/;"	g
 Muhenkan	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/enums.rs	/^    pub const Muhenkan: Key = ffi::GDK_KEY_Muhenkan as u32;$/;"	c
+Mul for WorldUnit	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/graphics/render_window.rs	/^impl Mul for WorldUnit {$/;"	i
 Multi_key	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/enums.rs	/^    pub const Multi_key: Key = ffi::GDK_KEY_Multi_key as u32;$/;"	c
 MultipleCandidate	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/enums.rs	/^    pub const MultipleCandidate: Key = ffi::GDK_KEY_MultipleCandidate as u32;$/;"	c
 Music	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/enums.rs	/^    pub const Music: Key = ffi::GDK_KEY_Music as u32;$/;"	c
@@ -2818,6 +2819,7 @@ Region	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/cairo-r
 RegionFlags	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/flags.rs	/^    pub struct RegionFlags: u32 {$/;"	s
 ReliefStyle	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/enums.rs	/^pub enum ReliefStyle {$/;"	g
 Reload	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/enums.rs	/^    pub const Reload: Key = ffi::GDK_KEY_Reload as u32;$/;"	c
+RenderUnit	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/graphics/render_window.rs	/^pub struct RenderUnit(pub f32);$/;"	s
 RenderWindow	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/graphics/render_window.rs	/^impl RenderWindow {$/;"	i
 RenderWindow	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/graphics/render_window.rs	/^pub struct RenderWindow {$/;"	s
 RepeatKeys_Enable	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/enums.rs	/^    pub const RepeatKeys_Enable: Key = ffi::GDK_KEY_RepeatKeys_Enable as u32;$/;"	c
@@ -2907,8 +2909,8 @@ Scircumflex	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gd
 Screen	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/auto/screen.rs	/^    pub struct Screen(Object<ffi::GdkScreen>);$/;"	s
 Screen	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/auto/screen.rs	/^impl Screen {$/;"	i
 Screen	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/screen.rs	/^impl Screen {$/;"	i
-ScreenBoundingBox	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/graphics/render_window.rs	/^pub struct ScreenBoundingBox(pub ScreenX, pub ScreenY, pub ScreenWidth, pub ScreenHeight);$/;"	s
 ScreenCoords	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/graphics/render_window.rs	/^pub struct ScreenCoords(pub ScreenUnit, pub ScreenUnit);$/;"	s
+ScreenDimensions	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/graphics/render_window.rs	/^pub struct ScreenDimensions(pub ScreenWidth, pub ScreenHeight);$/;"	s
 ScreenExt	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/auto/screen.rs	/^pub trait ScreenExt {$/;"	t
 ScreenHeight	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/graphics/render_window.rs	/^type ScreenHeight = ScreenUnit;$/;"	T
 ScreenSaver	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/enums.rs	/^    pub const ScreenSaver: Key = ffi::GDK_KEY_ScreenSaver as u32;$/;"	c
@@ -3486,6 +3488,7 @@ StyleProvider	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/
 StyleProviderExt	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/style_provider.rs	/^pub trait StyleProviderExt {$/;"	t
 StyleScheme	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/graphics/style_scheme.rs	/^impl StyleScheme {$/;"	i
 StyleScheme	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/graphics/style_scheme.rs	/^pub struct StyleScheme {$/;"	s
+Sub for WorldUnit	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/graphics/render_window.rs	/^impl Sub for WorldUnit {$/;"	i
 SubpixelLayout	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/auto/enums.rs	/^pub enum SubpixelLayout {$/;"	g
 Subtitle	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/enums.rs	/^    pub const Subtitle: Key = ffi::GDK_KEY_Subtitle as u32;$/;"	c
 Super_L	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/enums.rs	/^    pub const Super_L: Key = ffi::GDK_KEY_Super_L as u32;$/;"	c
@@ -4954,6 +4957,11 @@ changed	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.
 chdir	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/glib-0.3.1/src/auto/functions.rs	/^pub fn chdir<P: AsRef<std::path::Path>>(path: P) -> i32 {$/;"	f
 check_button	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/mod.rs	/^mod check_button;$/;"	m
 check_intersect	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/graphics/render_window.rs	/^    pub fn check_intersect(boxa : &WorldBoundingBox, boxb : &WorldBoundingBox) -> bool {$/;"	f
+check_intersect_corner	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/graphics/render_window.rs	/^    pub fn check_intersect_corner() {$/;"	f
+check_intersect_edge	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/graphics/render_window.rs	/^    pub fn check_intersect_edge() {$/;"	f
+check_intersect_inside	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/graphics/render_window.rs	/^    pub fn check_intersect_inside() {$/;"	f
+check_intersect_intersect	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/graphics/render_window.rs	/^    pub fn check_intersect_intersect() {$/;"	f
+check_intersect_outside	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/graphics/render_window.rs	/^    pub fn check_intersect_outside() {$/;"	f
 check_menu_item	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/mod.rs	/^mod check_menu_item;$/;"	m
 check_resize	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/container.rs	/^    fn check_resize(&self) {$/;"	f
 check_resize	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/container.rs	/^    fn check_resize(&self);$/;"	f
@@ -13533,6 +13541,8 @@ move_before	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gt
 move_before	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/list_store.rs	/^    fn move_before<'a, P: Into<Option<&'a TreeIter>>>(&self, iter: &TreeIter, position: P);$/;"	f
 move_before	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/tree_store.rs	/^    fn move_before<'a, P: Into<Option<&'a TreeIter>>>(&self, iter: &TreeIter, position: P) {$/;"	f
 move_before	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/tree_store.rs	/^    fn move_before<'a, P: Into<Option<&'a TreeIter>>>(&self, iter: &TreeIter, position: P);$/;"	f
+move_box	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/graphics/render_window.rs	/^    pub fn move_box(&mut self, dx : WorldUnit, dy : WorldUnit) {$/;"	f
+move_box_works	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/graphics/render_window.rs	/^    pub fn move_box_works() {$/;"	f
 move_child	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/text_view.rs	/^    fn move_child<P: IsA<Widget>>(&self, child: &P, xpos: i32, ypos: i32) {$/;"	f
 move_child	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/text_view.rs	/^    fn move_child<P: IsA<Widget>>(&self, child: &P, xpos: i32, ypos: i32);$/;"	f
 move_column_after	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/tree_view.rs	/^    fn move_column_after<'a, P: Into<Option<&'a TreeViewColumn>>>(&self, column: &TreeViewColumn, base_column: P) {$/;"	f
@@ -13557,6 +13567,7 @@ moveto	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/cairo-r
 moveto_closepath	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/cairo-rs-0.2.0/src/paths.rs	/^    fn moveto_closepath() {$/;"	f
 moveto_lineto_moveto	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/cairo-rs-0.2.0/src/paths.rs	/^    fn moveto_lineto_moveto() {$/;"	f
 mu	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/enums.rs	/^    pub const mu: Key = ffi::GDK_KEY_mu as u32;$/;"	c
+mul	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/graphics/render_window.rs	/^    fn mul(self, other : WorldUnit) -> WorldUnit {$/;"	f
 multiply	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/cairo-rs-0.2.0/src/matrices.rs	/^    fn multiply(left: &Matrix, right: &Matrix) -> Matrix {$/;"	f
 multiply	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/cairo-rs-0.2.0/src/matrices.rs	/^    fn multiply(left: &Matrix, right: &Matrix) -> Matrix;$/;"	f
 multiply	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/enums.rs	/^    pub const multiply: Key = ffi::GDK_KEY_multiply as u32;$/;"	c
@@ -14555,6 +14566,14 @@ scale	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/cairo-rs
 scale	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/cairo-rs-0.2.0/src/matrices.rs	/^    fn scale(&mut self, sx: f64, sy: f64) {$/;"	f
 scale	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/cairo-rs-0.2.0/src/matrices.rs	/^    fn scale(&mut self, sx: f64, sy: f64);$/;"	f
 scale	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/mod.rs	/^mod scale;$/;"	m
+scale_box	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/graphics/render_window.rs	/^    pub fn scale_box(&mut self, sx : WorldUnit, sy : WorldUnit) {$/;"	f
+scale_box_around_center	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/graphics/render_window.rs	/^    pub fn scale_box_around_center(&mut self, sx : WorldUnit, sy: WorldUnit) {$/;"	f
+scale_box_around_center_works	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/graphics/render_window.rs	/^    pub fn scale_box_around_center_works() {$/;"	f
+scale_box_around_point	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/graphics/render_window.rs	/^    pub fn scale_box_around_point(&mut self, sx : WorldUnit, sy: WorldUnit, point : WorldCoords) {$/;"	f
+scale_box_around_point_center_works	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/graphics/render_window.rs	/^    pub fn scale_box_around_point_center_works() {$/;"	f
+scale_box_around_point_corner_works	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/graphics/render_window.rs	/^    pub fn scale_box_around_point_corner_works() {$/;"	f
+scale_box_checks	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/graphics/render_window.rs	/^    pub fn scale_box_checks() {$/;"	f
+scale_box_works	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/graphics/render_window.rs	/^    pub fn scale_box_works() {$/;"	f
 scale_button	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/mod.rs	/^mod scale_button;$/;"	m
 scaled_font	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/cairo-rs-0.2.0/src/font/mod.rs	/^mod scaled_font;$/;"	m
 scaron	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/enums.rs	/^    pub const scaron: Key = ffi::GDK_KEY_scaron as u32;$/;"	c
@@ -14820,6 +14839,11 @@ set_bottom_margin	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec
 set_bottom_margin	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/page_setup.rs	/^    fn set_bottom_margin(&self, margin: f64, unit: Unit);$/;"	f
 set_bottom_margin	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/text_view.rs	/^    fn set_bottom_margin(&self, bottom_margin: i32) {$/;"	f
 set_bottom_margin	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/text_view.rs	/^    fn set_bottom_margin(&self, bottom_margin: i32);$/;"	f
+set_box	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/graphics/render_window.rs	/^    pub fn set_box(&mut self, point : WorldCoords, width: WorldWidth, height: WorldHeight) {$/;"	f
+set_box_between	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/graphics/render_window.rs	/^    pub fn set_box_between(&mut self, point_a : WorldCoords, point_b : WorldCoords) {$/;"	f
+set_box_between_order_irrelevant	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/graphics/render_window.rs	/^    pub fn set_box_between_order_irrelevant() {$/;"	f
+set_box_between_works	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/graphics/render_window.rs	/^    pub fn set_box_between_works() {$/;"	f
+set_box_works	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/graphics/render_window.rs	/^    pub fn set_box_works() {$/;"	f
 set_buffer	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/entry.rs	/^    fn set_buffer(&self, buffer: &EntryBuffer) {$/;"	f
 set_buffer	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/entry.rs	/^    fn set_buffer(&self, buffer: &EntryBuffer);$/;"	f
 set_buffer	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/text_view.rs	/^    fn set_buffer<'a, P: Into<Option<&'a TextBuffer>>>(&self, buffer: P) {$/;"	f
@@ -17441,6 +17465,7 @@ style_context	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/
 style_properties	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/mod.rs	/^mod style_properties;$/;"	m
 style_provider	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/mod.rs	/^mod style_provider;$/;"	m
 style_scheme	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/graphics/mod.rs	/^mod style_scheme;$/;"	m
+sub	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/graphics/render_window.rs	/^    fn sub(self, other : WorldUnit) -> WorldUnit {$/;"	f
 subtract	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/cairo-rs-0.2.0/src/region.rs	/^    pub fn subtract(&self, other: &Region) -> Status {$/;"	f
 subtract_days	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/glib-0.3.1/src/date.rs	/^    pub fn subtract_days(&mut self, n_days: u32) {$/;"	f
 subtract_months	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/glib-0.3.1/src/date.rs	/^    pub fn subtract_months(&mut self, n_months: u32) {$/;"	f
