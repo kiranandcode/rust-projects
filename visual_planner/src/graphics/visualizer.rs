@@ -14,8 +14,14 @@ use std::sync::{
 use gdk::{
     EventMask, 
     EventType, 
+
+    // the following two imports are for handling button clicks
     EventButton, 
-    BUTTON_PRESS_MASK
+    BUTTON_PRESS_MASK,
+
+    // the following two imports are for handling drags
+    EventMotion,
+    BUTTON1_MOTION_MASK
 };
 use gtk::{
     Window,              // for the main app
@@ -118,10 +124,14 @@ impl Content {
         let style_scheme = Arc::new(RwLock::new(StyleScheme::from(stylecontext)));
 
         drawing_area.add_events(BUTTON_PRESS_MASK.bits() as i32);
+        drawing_area.add_events(BUTTON1_MOTION_MASK.bits() as i32);
         drawing_area.connect_event(|obj, event| { 
             //println!("event: {:?} {:?}", event, event.get_event_type()); 
             if let Ok(ref result) = event.clone().downcast::<EventButton>() {
                println!("Could unwrap: {:?}", result.get_position()); 
+            }
+            if let Ok(ref result) = event.clone().downcast::<EventMotion>() {
+               println!("Motion unwrap: {:?}", result.get_position()); 
             }
             
             Inhibit(false) 
