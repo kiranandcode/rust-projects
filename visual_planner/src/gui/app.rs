@@ -1,6 +1,5 @@
-use super::components::DrawableContainer;
-use super::renderer::Renderer;
-use super::{
+use renderer::{
+    Renderer,
     RenderWindow, 
     StyleScheme
 };
@@ -38,9 +37,6 @@ use gtk::{
     StyleContext         // used for initializing the stylescheme
 };
 
-pub enum Msg {
-    
-}
 
 /// Window containing a visualizer
 pub struct App {

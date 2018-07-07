@@ -1,7 +1,7 @@
 pub mod message;
 use self::message::gtk::GtkMessage;
 use self::message::renderer::RendererMessage;
-use graphics::types::*;
+use types::*;
 
 use std::sync::mpsc::{Sender, Receiver};
 use std::sync::mpsc;

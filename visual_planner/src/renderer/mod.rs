@@ -1,11 +1,13 @@
+pub mod render_window;
+pub mod style_scheme;
+mod components;
+use types::*;
 
-use super::components::DrawableContainer;
-use super::types::*;
-use super::{
-    RenderWindow, 
-    StyleScheme
-};
-use event::{EventManagerBuilder};
+use self::components::DrawableContainer;
+pub use self::style_scheme::StyleScheme;
+pub use self::render_window::RenderWindow;
+
+use event::EventManagerBuilder;
 use event::message::renderer::RendererMessage;
 use event::message::gtk::GtkMessage;
 
@@ -51,7 +53,7 @@ use gtk::{
 
 
 pub struct Renderer {
-   /// GTK drawing area on which the component will render all graphics
+   /// GTK drawing area on which the component will render all gui
    container: DrawingArea,
    /// Colorscheme used to render all objects
    style_scheme: Arc<RwLock<StyleScheme>>,

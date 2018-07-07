@@ -1,4 +1,4 @@
-use super::types::*;
+use types::*;
 // Have I gone too far?
 // Well, I guess I'll find out
 

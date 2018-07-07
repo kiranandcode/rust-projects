@@ -1,4 +1,4 @@
-use graphics::types::*;
+use types::*;
 
 /// A thread-safe wrapper for important messages sent by gtk
 #[derive(Debug,PartialEq,PartialOrd,Clone)]
