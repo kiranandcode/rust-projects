@@ -37,91 +37,30 @@ use gtk::{
     StyleContext         // used for initializing the stylescheme
 };
 
-pub enum Msg {
-    
-}
 
-/// Window containing a visualizer
-pub struct App {
-   window: Window, 
-   header: Header,
-   content: Content
-}
-
-
-impl App {
-    pub fn new() -> App {
-        let window = Window::new(WindowType::Toplevel);
-        let header = Header::new();
-        let content = Content::new(&StyleContext::new());
-
-        window.set_title("GopViz - Visualizer");
-        window.set_wmclass("app-name", "Gopviz");
-        window.set_default_size(500, 500);
-
-
-        // connect children
-        window.set_titlebar(&header.container);
-        window.add(&content.container);
-        // params are self, envt
-        window.connect_delete_event(move |_, _| {
-            main_quit();
-            // main_quit ends the gtk event loop, thus prompting our
-            // app to close - there's no need to run the default 
-            // handler
-            Inhibit(false) 
-        });
-       
-        App {
-            window,
-            header,
-            content
-        }
-    }
-}
-
-impl AsRef<Window> for App {
-    fn as_ref(&self) -> &Window {
-        &self.window
-    }
-}
-
-
-pub struct Header {
-    container: HeaderBar
-}
-
-impl Header {
-    fn new() -> Header {
-        let container = HeaderBar::new();
-
-        container.set_title("GopViz - Visualizer");
-        container.set_show_close_button(true);
-
-        Header {
-            container
-        }
-    }
-}
-
-
-pub struct Content {
+pub struct Renderer {
    /// GTK drawing area on which the component will render all graphics
    container: DrawingArea,
    /// Colorscheme used to render all objects
    style_scheme: Arc<RwLock<StyleScheme>>,
    /// Mapping from screen space to world space
    render_window: Arc<RwLock<RenderWindow>>,
-   /// List of things to be drawn
-   draw_queue: Arc<RwLock<Vec<DrawableContainer>>>
+   /// List of things to be drawn 
+   draw_queue: Arc<RwLock<Vec<DrawableContainer>>> 
+   // note: we need the rwlock as we don't know where the draw callback is called
 }
 
-impl Content {
-    fn new(stylecontext: &StyleContext) -> Content {
+impl AsRef<DrawingArea> for Renderer {
+    fn as_ref(&self) -> &DrawingArea {
+        &self.container
+    }
+}
+
+impl Renderer {
+    pub fn new(render_window : Arc<RwLock<RenderWindow>>, style_scheme: Arc<RwLock<StyleScheme>>) -> Renderer {
         let drawing_area = DrawingArea::new();
-        let render_window = Arc::new(RwLock::new(RenderWindow::new()));
         let draw_queue : Arc<RwLock<Vec<DrawableContainer>>> = Arc::new(RwLock::new(Vec::new()));
-        let style_scheme = Arc::new(RwLock::new(StyleScheme::from(stylecontext)));
+
 
         drawing_area.add_events(BUTTON_PRESS_MASK.bits() as i32);
         drawing_area.add_events(BUTTON1_MOTION_MASK.bits() as i32);
@@ -144,6 +83,14 @@ impl Content {
             drawing_area.connect_draw(move |_, cr| {
                 // main draw loop here 
                 // 1. draw background
+                cr.set_source_rgb(250.0/255.0, 224.0/255.0, 55.0/255.0);
+                cr.paint();
+
+               
+
+                cr.set_source_rgb(0.3, 0.3, 0.3);
+                cr.rectangle(0.0, 0.0, 1.0, 1.0);
+                cr.stroke();
 
 
 
@@ -162,7 +109,7 @@ impl Content {
         }
 
 
-        Content {
+        Renderer {
             container: drawing_area,
             render_window, 
             draw_queue,

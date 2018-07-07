@@ -1,4 +1,5 @@
-pub mod visualizer;
+pub mod gui;
+mod renderer;
 mod components;
 mod render_window;
 mod style_scheme;

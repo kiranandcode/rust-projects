@@ -3,7 +3,7 @@ extern crate gtk;
 extern crate gdk;
 mod graphics;
 
-use graphics::visualizer::App;
+use graphics::gui::App;
 
 fn main() {
     graphics::init();
