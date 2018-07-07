@@ -1,8 +1,10 @@
 pub mod gui;
+pub mod types;
 mod renderer;
 mod components;
 mod render_window;
 mod style_scheme;
+
 
 use self::render_window::*;
 use self::style_scheme::StyleScheme;

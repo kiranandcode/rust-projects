@@ -1,29 +1,8 @@
-use std::ops::{Add,Sub,Mul};
-use std::cmp;
-
-/// a newtype representing world units to ensure type safety
-#[derive(Debug, PartialEq, PartialOrd, Copy, Clone)]
-pub struct WorldUnit(pub f32);
-/// a newtype representing screen units to ensure type safety
-#[derive(Debug, PartialEq, PartialOrd, Copy, Clone)]
-pub struct ScreenUnit(pub f32);
-/// a newtype representing render units (0.0 - 1.0) to ensure type safety
-#[derive(Debug, PartialEq, PartialOrd, Copy, Clone)]
-pub struct RenderUnit(pub f32);
-
-// I've made coordiates their own type as I figure they'll be a cohesive unit in the system
-
-/// a newtype representing world coordinates to ensure type safety
-#[derive(Debug, PartialEq, PartialOrd, Clone)]
-pub struct WorldCoords(pub WorldUnit, pub WorldUnit);
-/// a newtype representing screen coordinates to ensure type safety
-#[derive(Debug, PartialEq, PartialOrd, Clone)]
-pub struct ScreenCoords(pub ScreenUnit, pub ScreenUnit);
-#[derive(Debug, PartialEq, PartialOrd, Clone)]
-pub struct RenderCoords(pub RenderUnit, pub RenderUnit);
-
+use super::types::*;
 // Have I gone too far?
 // Well, I guess I'll find out
+
+// I've made coordiates their own type as I figure they'll be a cohesive unit in the system
 
 type WorldWidth = WorldUnit;
 type WorldHeight = WorldUnit;
@@ -38,61 +17,20 @@ type ScreenHeight = ScreenUnit;
 type ScreenX = ScreenUnit;
 type ScreenY = ScreenUnit;
 
+type RenderX = RenderUnit;
+type RenderY = RenderUnit;
+
+
+
 
 /// Represents a rectangle in world space - can be moved and scaled freely
 #[derive(Debug, PartialEq, PartialOrd)]
 pub struct WorldBoundingBox(pub WorldX, pub WorldY, pub WorldWidth, pub WorldHeight);
 
-/// Represents a rectangle in screen space - immovable, but can be rescaled
-#[derive(Debug, PartialEq, PartialOrd)]
-pub struct ScreenDimensions(pub ScreenWidth, pub ScreenHeight);
-
-impl Add for WorldUnit {
-    type Output = WorldUnit;
-    fn add(self, other : WorldUnit) -> WorldUnit {
-        WorldUnit(self.0 + other.0)
-    }
-}
-
-impl Sub for WorldUnit {
-    type Output = WorldUnit;
-    fn sub(self, other : WorldUnit) -> WorldUnit {
-        WorldUnit(self.0 - other.0)
-    }
-}
-
-impl Mul for WorldUnit {
-    type Output = WorldUnit;
-    fn mul(self, other : WorldUnit) -> WorldUnit {
-        WorldUnit(self.0 * other.0)
-    }
-}
-
-impl ScreenDimensions {
-    fn set_width(&mut self, width : ScreenWidth) {
-        assert!(width.0 > 0.0);
-        self.0  = width;
-    }
-
-    fn set_height(&mut self, height : ScreenHeight) {
-        assert!(height.0 > 0.0);
-        self.1 = height;
-    }
-
-    fn set_dimensions(&mut self, width : ScreenWidth, height: ScreenHeight) {
-        assert!(width.0 > 0.0);
-        assert!(height.0 > 0.0);
-
-        self.0  = width;
-        self.1 = height;
-    }
-
-}
-
 impl WorldBoundingBox {
 
     pub fn point_within_bounds(&self, point : &WorldCoords) -> bool {
-        let self_x = (self.0);
+       let self_x = (self.0);
         let self_y = (self.1);
         let self_w = (self.2); 
         let self_h = (self.3); 
@@ -213,10 +151,16 @@ pub struct RenderWindow {
 impl RenderWindow {
     // update screen_dim
     // world to screen
-    pub fn new() -> RenderWindow {
+    pub fn new(screen_width: ScreenUnit, screen_height: ScreenUnit) -> RenderWindow {
+        let width = screen_width.0;
+        let height = screen_height.0;
+        let x = -width/2.0;
+        let y = -height/2.0;
+        let dimensions = ScreenDimensions(screen_width, screen_height);
+
         RenderWindow {
-            world_bounding_box: WorldBoundingBox(WorldUnit(0.0), WorldUnit(0.0), WorldUnit(0.0), WorldUnit(0.0)),
-            screen_bounding_box: ScreenDimensions(ScreenUnit(0.0), ScreenUnit(0.0)),
+            world_bounding_box: WorldBoundingBox(WorldUnit(x), WorldUnit(y), WorldUnit(width), WorldUnit(height)),
+            screen_bounding_box: dimensions
         }
     }
 
@@ -402,7 +346,7 @@ mod test {
     pub fn update_screen_dimensions_simple_works() {
         let mut simple_world_box = WorldBoundingBox(WorldUnit(0.0), WorldUnit(0.0), WorldUnit(1.0), WorldUnit(1.0)); 
         let mut simple_screen_box = ScreenDimensions(ScreenUnit(10.0), ScreenUnit(10.0)); 
-        let mut render_window = RenderWindow::new();
+        let mut render_window = RenderWindow::new(ScreenUnit(0.0), ScreenUnit(0.0));
 
         render_window.world_bounding_box = simple_world_box;
         render_window.screen_bounding_box = simple_screen_box;
@@ -418,7 +362,7 @@ mod test {
     pub fn update_screen_dimensions_works() {
         let mut simple_world_box = WorldBoundingBox(WorldUnit(0.0), WorldUnit(0.0), WorldUnit(1.0), WorldUnit(5.0)); 
         let mut simple_screen_box = ScreenDimensions(ScreenUnit(10.0), ScreenUnit(50.0)); 
-        let mut render_window = RenderWindow::new();
+        let mut render_window = RenderWindow::new(ScreenUnit(0.0), ScreenUnit(0.0));
 
         render_window.world_bounding_box = simple_world_box;
         render_window.screen_bounding_box = simple_screen_box;
@@ -427,7 +371,5 @@ mod test {
         assert_eq!(render_window.screen_bounding_box, ScreenDimensions(ScreenUnit(100.0), ScreenUnit(100.0)));
         assert_eq!(render_window.world_bounding_box, WorldBoundingBox(WorldUnit(0.0), WorldUnit(0.0), WorldUnit(50.0), WorldUnit(50.0)));
     }
-
-
 
 }
