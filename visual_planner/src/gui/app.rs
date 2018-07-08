@@ -38,7 +38,12 @@ use gtk::{
     main_quit,           // end the app
     StyleContext,        // used for initializing the stylescheme
     Notebook,            // 
-    NotebookExt          //
+    NotebookExt,         //
+    Box,
+    BoxExt,
+    Orientation,
+    ListBox,
+    ListBoxExt,
 };
 
 
@@ -51,7 +56,7 @@ pub struct App {
 }
 
 pub struct Model {
-    style_context: StyleContext
+    pub (in gui) style_context: StyleContext
 }
 
 impl App {
@@ -106,7 +111,7 @@ impl AsRef<Window> for App {
 
 
 pub struct Header {
-    container: HeaderBar
+    pub (in gui) container: HeaderBar
 }
 
 impl Header {
@@ -124,30 +129,109 @@ impl Header {
 
 
 pub struct Content {
-    conversation_renderer: DialogRenderer,
-    main_tabs: Notebook
+    pub (in gui) main_box: Box,
+
+        pub (in gui) side_bar_panel: Box,
+            pub (in gui) map_list: ListBox,
+            pub (in gui) layer_list: ListBox,
+
+        pub (in gui) main_tabs: Notebook,
+            pub (in gui) conversation_renderer: DialogRenderer,
+
+        pub (in gui) options_tabs: Notebook,
+            pub (in gui) properties_list: ListBox,
+            pub (in gui) variables_box: Box,
+                pub (in gui) global_variables: ListBox,
+                pub (in gui) local_variables: ListBox,
 }
 
 impl Content {
     fn new(event_builder : &mut EventManagerBuilder, style_context: Arc<RwLock<StyleScheme>>) -> Self {
+        let main_box = Box::new(Orientation::Horizontal, 0);
 
-        let notebook = Notebook::new();
-        let renderer = DialogRenderer::new(event_builder, style_context);
-        notebook.add(renderer.as_ref());
-        notebook.set_menu_label_text(renderer.as_ref(), "Dialog Editor");
-        notebook.set_tab_label_text(renderer.as_ref(), "Dialog Editor");
+            let side_bar_panel = Box::new(Orientation::Vertical, 0);
+
+                let map_list = ListBox::new();
+                let layer_list = ListBox::new();
+
+                side_bar_panel.pack_start(&map_list, true, true, 0);
+                side_bar_panel.pack_start(&layer_list, true, true, 0);
+
+
+            let main_tabs = Notebook::new();
+                let conversation_renderer = DialogRenderer::new(event_builder, style_context);
+        
+                main_tabs.add(conversation_renderer.as_ref());
+                main_tabs.set_menu_label_text(conversation_renderer.as_ref(), "Dialog Editor");
+                main_tabs.set_tab_label_text(conversation_renderer.as_ref(), "Dialog Editor");
+
+
+            let options_tabs = Notebook::new();
+                let properties_list = ListBox::new();
+
+                let variables_box = Box::new(Orientation::Vertical, 0);
+                    let local_variables = ListBox::new();
+                    let global_variables = ListBox::new();
+
+                    variables_box.pack_start(&global_variables, true, true, 0);
+                    variables_box.pack_start(&local_variables, true, true, 0);
+
+
+                options_tabs.add(&properties_list);
+                options_tabs.set_menu_label_text(&properties_list, "Properties");
+                options_tabs.set_tab_label_text(&properties_list, "Properties");
+
+                options_tabs.add(&variables_box);
+                options_tabs.set_menu_label_text(&variables_box, "Variables");
+                options_tabs.set_tab_label_text(&variables_box, "Variables");
+
+
+        main_box.pack_start(
+            &side_bar_panel,
+            false,
+            true,
+            0
+        );
+
+        main_box.pack_start(
+            &main_tabs,
+            true,
+            true,
+            0
+        );
+
+        main_box.pack_end(
+            &options_tabs,
+            false,
+            false,
+            0
+        );
 
         Content {
-            conversation_renderer: renderer,
-            main_tabs: notebook
+
+            main_box,
+
+                side_bar_panel,
+                    map_list,
+                    layer_list,
+
+                main_tabs,
+                    conversation_renderer,
+
+            options_tabs,
+            properties_list,
+            variables_box,
+
+            local_variables,
+            global_variables,
         }
 
     }
 }
 
 
-impl AsRef<Notebook> for Content {
-    fn as_ref(&self) -> &Notebook {
-        &self.main_tabs
+impl AsRef<Box> for Content {
+    fn as_ref(&self) -> &Box {
+        &self.main_box
     }
 }

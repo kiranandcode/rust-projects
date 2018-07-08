@@ -281,14 +281,14 @@ AsMut	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.
 AsMut for AsyncBorrow	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/cairo-rs-0.2.0/src/image_surface.rs	/^impl<T, F: FnOnce(T) + 'static> AsMut<T> for AsyncBorrow<T, F> {$/;"	i
 AsRef	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/event.rs	/^        impl AsRef<::ffi::$ffi_name> for $name {$/;"	i
 AsRef for App	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/gui/app.rs	/^impl AsRef<Window> for App {$/;"	i
-AsRef for Content	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/gui/app.rs	/^impl AsRef<Notebook> for Content {$/;"	i
+AsRef for Content	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/gui/app.rs	/^impl AsRef<Box> for Content {$/;"	i
 AsRef for Context	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/cairo-rs-0.2.0/src/context.rs	/^impl AsRef<Context> for Context {$/;"	i
 AsRef for Device	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/cairo-rs-0.2.0/src/xcb.rs	/^impl AsRef<Device> for Device {$/;"	i
+AsRef for DialogRenderer	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/renderer/dialog/mod.rs	/^impl AsRef<DrawingArea> for DialogRenderer {$/;"	i
 AsRef for ImageSurface	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/cairo-rs-0.2.0/src/image_surface.rs	/^impl AsRef<Surface> for ImageSurface {$/;"	i
 AsRef for PDFSurface	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/cairo-rs-0.2.0/src/pdf_surface.rs	/^impl AsRef<Surface> for PDFSurface {$/;"	i
 AsRef for Rectangle	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/rectangle.rs	/^impl AsRef<RectangleInt> for Rectangle {$/;"	i
 AsRef for Region	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/cairo-rs-0.2.0/src/region.rs	/^impl AsRef<Region> for Region {$/;"	i
-AsRef for Renderer	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/renderer/mod.rs	/^impl AsRef<DrawingArea> for Renderer {$/;"	i
 AsRef for Surface	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/cairo-rs-0.2.0/src/surface.rs	/^impl AsRef<Surface> for Surface {$/;"	i
 AsRef for Win32Surface	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/cairo-rs-0.2.0/src/win32_surface.rs	/^impl AsRef<Surface> for Win32Surface {$/;"	i
 AsRef for XCBConnection	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/cairo-rs-0.2.0/src/xcb.rs	/^impl AsRef<XCBConnection> for XCBConnection {$/;"	i
@@ -808,6 +808,8 @@ DialogExt	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-
 DialogExtManual	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/dialog.rs	/^pub trait DialogExtManual {$/;"	t
 DialogExtManual for O	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/dialog.rs	/^impl<O: DialogExt> DialogExtManual for O {$/;"	i
 DialogFlags	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/flags.rs	/^    pub struct DialogFlags: u32 {$/;"	s
+DialogRenderer	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/renderer/dialog/mod.rs	/^impl DialogRenderer {$/;"	i
+DialogRenderer	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/renderer/dialog/mod.rs	/^pub struct DialogRenderer {$/;"	s
 DirectionType	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/enums.rs	/^pub enum DirectionType {$/;"	g
 Display	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/auto/display.rs	/^    pub struct Display(Object<ffi::GdkDisplay>);$/;"	s
 Display	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/auto/display.rs	/^impl Display {$/;"	i
@@ -2836,8 +2838,6 @@ RenderX	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/render
 RenderX	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/types.rs	/^type RenderX = RenderUnit;$/;"	T
 RenderY	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/renderer/render_window.rs	/^type RenderY = RenderUnit;$/;"	T
 RenderY	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/types.rs	/^type RenderY = RenderUnit;$/;"	T
-Renderer	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/renderer/mod.rs	/^impl Renderer {$/;"	i
-Renderer	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/renderer/mod.rs	/^pub struct Renderer {$/;"	s
 RendererMessage	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/event/message/renderer.rs	/^pub enum RendererMessage {$/;"	g
 RepeatKeys_Enable	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/enums.rs	/^    pub const RepeatKeys_Enable: Key = ffi::GDK_KEY_RepeatKeys_Enable as u32;$/;"	c
 Reply	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/enums.rs	/^    pub const Reply: Key = ffi::GDK_KEY_Reply as u32;$/;"	c
@@ -4507,9 +4507,9 @@ as_ref	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/cairo-r
 as_ref	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/cairo-rs-0.2.0/src/xcb.rs	/^    fn as_ref(&self) -> &XCBVisualType {$/;"	f
 as_ref	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/event.rs	/^            fn as_ref(&self) -> &::ffi::$ffi_name {$/;"	f
 as_ref	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/rectangle.rs	/^    fn as_ref(&self) -> &RectangleInt {$/;"	f
-as_ref	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/gui/app.rs	/^    fn as_ref(&self) -> &Notebook {$/;"	f
+as_ref	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/gui/app.rs	/^    fn as_ref(&self) -> &Box {$/;"	f
 as_ref	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/gui/app.rs	/^    fn as_ref(&self) -> &Window {$/;"	f
-as_ref	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/renderer/mod.rs	/^    fn as_ref(&self) -> &DrawingArea {$/;"	f
+as_ref	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/renderer/dialog/mod.rs	/^    fn as_ref(&self) -> &DrawingArea {$/;"	f
 asciicircum	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/enums.rs	/^    pub const asciicircum: Key = ffi::GDK_KEY_asciicircum as u32;$/;"	c
 asciitilde	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/enums.rs	/^    pub const asciitilde: Key = ffi::GDK_KEY_asciitilde as u32;$/;"	c
 aspect_frame	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/mod.rs	/^mod aspect_frame;$/;"	m
@@ -5108,7 +5108,7 @@ compare	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.
 compare	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/tree_path.rs	/^    fn compare(&self, b: &TreePath) -> i32 {$/;"	f
 complete	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/entry_completion.rs	/^    fn complete(&self) {$/;"	f
 complete	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/entry_completion.rs	/^    fn complete(&self);$/;"	f
-components	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/renderer/mod.rs	/^mod components;$/;"	m
+components	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/renderer/mod.rs	/^pub mod components;$/;"	m
 compute_checksum_for_bytes	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/glib-0.3.1/src/auto/functions.rs	/^pub fn compute_checksum_for_bytes(checksum_type: ChecksumType, data: &Bytes) -> Option<String> {$/;"	f
 compute_checksum_for_data	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/glib-0.3.1/src/auto/functions.rs	/^pub fn compute_checksum_for_data(checksum_type: ChecksumType, data: &[u8]) -> Option<String> {$/;"	f
 compute_checksum_for_string	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/glib-0.3.1/src/auto/functions.rs	/^pub fn compute_checksum_for_string(checksum_type: ChecksumType, str: &str) -> Option<String> {$/;"	f
@@ -8193,6 +8193,7 @@ dgettext	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/glib-
 diaeresis	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/enums.rs	/^    pub const diaeresis: Key = ffi::GDK_KEY_diaeresis as u32;$/;"	c
 dialog	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/mod.rs	/^mod dialog;$/;"	m
 dialog	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/lib.rs	/^mod dialog;$/;"	m
+dialog	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/renderer/mod.rs	/^pub mod dialog;$/;"	m
 diamond	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/enums.rs	/^    pub const diamond: Key = ffi::GDK_KEY_diamond as u32;$/;"	c
 difference	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/glib-0.3.1/src/auto/date_time.rs	/^    pub fn difference(&self, begin: &DateTime) -> TimeSpan {$/;"	f
 digitspace	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/enums.rs	/^    pub const digitspace: Key = ffi::GDK_KEY_digitspace as u32;$/;"	c
@@ -13801,7 +13802,7 @@ new	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/event/mod.
 new	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/gui/app.rs	/^    fn new() -> Header {$/;"	f
 new	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/gui/app.rs	/^    fn new(event_builder : &mut EventManagerBuilder, style_context: Arc<RwLock<StyleScheme>>) -> Self {$/;"	f
 new	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/gui/app.rs	/^    pub fn new(event_builder: &mut EventManagerBuilder) -> App {$/;"	f
-new	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/renderer/mod.rs	/^    pub fn new(event_builder : &mut EventManagerBuilder, style_scheme: Arc<RwLock<StyleScheme>>) -> Renderer {$/;"	f
+new	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/renderer/dialog/mod.rs	/^    pub fn new(event_builder : &mut EventManagerBuilder, style_scheme: Arc<RwLock<StyleScheme>>) -> DialogRenderer {$/;"	f
 new	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/renderer/render_window.rs	/^    pub fn new(screen_width: ScreenUnit, screen_height: ScreenUnit) -> RenderWindow {$/;"	f
 new_alpha	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/symbolic_color.rs	/^    pub fn new_alpha(color: &SymbolicColor, factor: f64) -> SymbolicColor {$/;"	f
 new_custom	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/paper_size.rs	/^    pub fn new_custom(name: &str, display_name: &str, width: f64, height: f64, unit: Unit) -> PaperSize {$/;"	f
