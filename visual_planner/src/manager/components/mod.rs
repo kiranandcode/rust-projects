@@ -10,11 +10,20 @@ pub use self::variable_box::*;
 pub use self::state_change_box::*;
 pub use self::entry_box::*;
 
+use types::*;
 
-pub enum ModelBox {
+#[derive(Debug, PartialEq, PartialOrd)]
+pub enum BoxModel {
     DialogModel(DialogBox),
     DecisionModel(DecisionBox),
     VariableModel(VariableBox),
     StateChangeModel(StateChangeBox),
     EntryModel(EntryBox)
+}
+
+
+/// Generic struct containing all components required to render a model
+pub struct Model {
+    position: WorldCoords,
+    bounding_box: WorldBoundingBox,
 }

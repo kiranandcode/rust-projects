@@ -1,3 +1,5 @@
+pub mod dialog_view;
+
 use super::{RenderWindow, StyleScheme};
 
 use std::sync::Mutex;

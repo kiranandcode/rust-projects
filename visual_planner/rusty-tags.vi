@@ -360,6 +360,7 @@ BounceKeys_Enable	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec
 Box	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/box_.rs	/^    pub struct Box(Object<ffi::GtkBox>): Container, Widget, Orientable;$/;"	s
 Box	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/box_.rs	/^impl Box {$/;"	i
 BoxExt	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/box_.rs	/^pub trait BoxExt {$/;"	t
+BoxModel	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/manager/components/mod.rs	/^pub enum BoxModel {$/;"	g
 Boxed	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/glib-0.3.1/src/boxed.rs	/^pub struct Boxed<T: 'static, MM: BoxedMemoryManager<T>> {$/;"	s
 BoxedMemoryManager	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/glib-0.3.1/src/boxed.rs	/^pub trait BoxedMemoryManager<T>: 'static {$/;"	t
 Break	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/enums.rs	/^    pub const Break: Key = ffi::GDK_KEY_Break as u32;$/;"	c
@@ -812,6 +813,7 @@ DialogExtManual for O	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299d
 DialogFlags	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/flags.rs	/^    pub struct DialogFlags: u32 {$/;"	s
 DialogRenderer	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/renderer/dialog/mod.rs	/^impl DialogRenderer {$/;"	i
 DialogRenderer	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/renderer/dialog/mod.rs	/^pub struct DialogRenderer {$/;"	s
+DialogView	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/renderer/components/dialog_view.rs	/^pub struct DialogView {$/;"	s
 DirectionType	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/enums.rs	/^pub enum DirectionType {$/;"	g
 Display	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/auto/display.rs	/^    pub struct Display(Object<ffi::GdkDisplay>);$/;"	s
 Display	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/auto/display.rs	/^impl Display {$/;"	i
@@ -2525,10 +2527,13 @@ MiscExt	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.
 ModeLock	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/enums.rs	/^    pub const ModeLock: Key = ffi::GDK_KEY_ModeLock as u32;$/;"	c
 Mode_switch	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/enums.rs	/^    pub const Mode_switch: Key = ffi::GDK_KEY_Mode_switch as u32;$/;"	c
 Model	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/gui/app.rs	/^pub struct Model {$/;"	s
-ModelBox	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/manager/components/mod.rs	/^pub enum ModelBox {$/;"	g
+Model	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/manager/components/mod.rs	/^pub struct Model {$/;"	s
 ModelButton	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/model_button.rs	/^    pub struct ModelButton(Object<ffi::GtkModelButton>): Button, Bin, Container, Widget, Actionable;$/;"	s
 ModelButton	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/model_button.rs	/^impl ModelButton {$/;"	i
 ModelButtonExt	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/model_button.rs	/^pub trait ModelButtonExt {$/;"	t
+ModelID	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/manager/mod.rs	/^pub struct ModelID(usize);$/;"	s
+ModelManager	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/manager/mod.rs	/^impl ModelManager {$/;"	i
+ModelManager	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/manager/mod.rs	/^pub struct ModelManager {$/;"	s
 ModifierIntent	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/auto/enums.rs	/^pub enum ModifierIntent {$/;"	g
 ModifierType	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/auto/flags.rs	/^    pub struct ModifierType: u32 {$/;"	s
 MonBrightnessDown	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/enums.rs	/^    pub const MonBrightnessDown: Key = ffi::GDK_KEY_MonBrightnessDown as u32;$/;"	c
@@ -4152,8 +4157,8 @@ WindowTypeHint	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823
 WindowWindowClass	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/auto/enums.rs	/^pub enum WindowWindowClass {$/;"	g
 WonSign	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/enums.rs	/^    pub const WonSign: Key = ffi::GDK_KEY_WonSign as u32;$/;"	c
 Word	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/enums.rs	/^    pub const Word: Key = ffi::GDK_KEY_Word as u32;$/;"	c
-WorldBoundingBox	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/renderer/render_window.rs	/^impl WorldBoundingBox {$/;"	i
-WorldBoundingBox	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/renderer/render_window.rs	/^pub struct WorldBoundingBox(pub WorldX, pub WorldY, pub WorldWidth, pub WorldHeight);$/;"	s
+WorldBoundingBox	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/types.rs	/^impl WorldBoundingBox {$/;"	i
+WorldBoundingBox	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/types.rs	/^pub struct WorldBoundingBox(pub WorldX, pub WorldY, pub WorldWidth, pub WorldHeight);$/;"	s
 WorldCoords	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/types.rs	/^pub struct WorldCoords(pub WorldX, pub WorldY);$/;"	s
 WorldHeight	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/renderer/render_window.rs	/^type WorldHeight = WorldUnit;$/;"	T
 WorldHeight	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/types.rs	/^type WorldHeight = WorldUnit;$/;"	T
@@ -4993,7 +4998,7 @@ changed	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.
 changed	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/text_tag.rs	/^    fn changed(&self, size_changed: bool);$/;"	f
 chdir	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/glib-0.3.1/src/auto/functions.rs	/^pub fn chdir<P: AsRef<std::path::Path>>(path: P) -> i32 {$/;"	f
 check_button	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/mod.rs	/^mod check_button;$/;"	m
-check_intersect	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/renderer/render_window.rs	/^    pub fn check_intersect(boxa : &WorldBoundingBox, boxb : &WorldBoundingBox) -> bool {$/;"	f
+check_intersect	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/types.rs	/^    pub fn check_intersect(boxa : &WorldBoundingBox, boxb : &WorldBoundingBox) -> bool {$/;"	f
 check_intersect_corner	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/renderer/render_window.rs	/^    pub fn check_intersect_corner() {$/;"	f
 check_intersect_edge	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/renderer/render_window.rs	/^    pub fn check_intersect_edge() {$/;"	f
 check_intersect_inside	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/renderer/render_window.rs	/^    pub fn check_intersect_inside() {$/;"	f
@@ -8203,6 +8208,7 @@ dialog	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2
 dialog	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/lib.rs	/^mod dialog;$/;"	m
 dialog	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/renderer/mod.rs	/^pub mod dialog;$/;"	m
 dialog_box	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/manager/components/mod.rs	/^mod dialog_box;$/;"	m
+dialog_view	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/renderer/components/mod.rs	/^pub mod dialog_view;$/;"	m
 diamond	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/enums.rs	/^    pub const diamond: Key = ffi::GDK_KEY_diamond as u32;$/;"	c
 difference	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/glib-0.3.1/src/auto/date_time.rs	/^    pub fn difference(&self, begin: &DateTime) -> TimeSpan {$/;"	f
 digitspace	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/enums.rs	/^    pub const digitspace: Key = ffi::GDK_KEY_digitspace as u32;$/;"	c
@@ -13489,6 +13495,8 @@ lookup_icon_for_scale	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299d
 lookup_icon_for_scale	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/icon_theme.rs	/^    fn lookup_icon_for_scale(&self, icon_name: &str, size: i32, scale: i32, flags: IconLookupFlags) -> Option<IconInfo>;$/;"	f
 lookup_icon_set	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/style_context.rs	/^    fn lookup_icon_set(&self, stock_id: &str) -> Option<IconSet> {$/;"	f
 lookup_icon_set	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/style_context.rs	/^    fn lookup_icon_set(&self, stock_id: &str) -> Option<IconSet>;$/;"	f
+lookup_id	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/manager/mod.rs	/^    pub fn lookup_id(&self, id: ModelID) -> &BoxModel {$/;"	f
+lookup_id_mut	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/manager/mod.rs	/^    pub fn lookup_id_mut(&mut self, id: ModelID) -> &mut BoxModel {$/;"	f
 lookup_item	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/recent_manager.rs	/^    fn lookup_item(&self, uri: &str) -> Result<Option<RecentInfo>, Error> {$/;"	f
 lookup_item	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/recent_manager.rs	/^    fn lookup_item(&self, uri: &str) -> Result<Option<RecentInfo>, Error>;$/;"	f
 lower	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/auto/window.rs	/^    fn lower(&self) {$/;"	f
@@ -13590,7 +13598,7 @@ move_before	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gt
 move_before	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/list_store.rs	/^    fn move_before<'a, P: Into<Option<&'a TreeIter>>>(&self, iter: &TreeIter, position: P);$/;"	f
 move_before	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/tree_store.rs	/^    fn move_before<'a, P: Into<Option<&'a TreeIter>>>(&self, iter: &TreeIter, position: P) {$/;"	f
 move_before	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/tree_store.rs	/^    fn move_before<'a, P: Into<Option<&'a TreeIter>>>(&self, iter: &TreeIter, position: P);$/;"	f
-move_box	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/renderer/render_window.rs	/^    fn move_box(&mut self, dx : WorldUnit, dy : WorldUnit) {$/;"	f
+move_box	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/types.rs	/^    pub fn move_box(&mut self, dx : WorldUnit, dy : WorldUnit) {$/;"	f
 move_box_works	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/renderer/render_window.rs	/^    pub fn move_box_works() {$/;"	f
 move_child	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/text_view.rs	/^    fn move_child<P: IsA<Widget>>(&self, child: &P, xpos: i32, ypos: i32) {$/;"	f
 move_child	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/text_view.rs	/^    fn move_child<P: IsA<Widget>>(&self, child: &P, xpos: i32, ypos: i32);$/;"	f
@@ -14128,7 +14136,7 @@ place_on_monitor	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec8
 places_sidebar	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/mod.rs	/^mod places_sidebar;$/;"	m
 plus	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/enums.rs	/^    pub const plus: Key = ffi::GDK_KEY_plus as u32;$/;"	c
 plusminus	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/enums.rs	/^    pub const plusminus: Key = ffi::GDK_KEY_plusminus as u32;$/;"	c
-point_within_bounds	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/renderer/render_window.rs	/^    pub fn point_within_bounds(&self, point : &WorldCoords) -> bool {$/;"	f
+point_within_bounds	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/types.rs	/^    pub fn point_within_bounds(&self, point : &WorldCoords) -> bool {$/;"	f
 point_within_bounds_inside	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/renderer/render_window.rs	/^    pub fn point_within_bounds_inside() {$/;"	f
 point_within_bounds_outside	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/renderer/render_window.rs	/^    pub fn point_within_bounds_outside() {$/;"	f
 pointer_grab	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/auto/functions.rs	/^pub fn pointer_grab<'a, 'b, P: Into<Option<&'a Window>>, Q: Into<Option<&'b Cursor>>>(window: &Window, owner_events: bool, event_mask: EventMask, confine_to: P, cursor: Q, time_: u32) -> GrabStatus {$/;"	f
@@ -14571,6 +14579,7 @@ retrieve_proxy_menu_item	/home/gopiandcode/.cargo/registry/src/github.com-1ecc62
 retrieve_proxy_menu_item	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/tool_item.rs	/^    fn retrieve_proxy_menu_item(&self) -> Option<Widget>;$/;"	f
 return_if_fail_warning	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/glib-0.3.1/src/auto/functions.rs	/^pub fn return_if_fail_warning<'a, 'b, P: Into<Option<&'a str>>, Q: Into<Option<&'b str>>>(log_domain: P, pretty_function: &str, expression: Q) {$/;"	f
 revealer	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/mod.rs	/^mod revealer;$/;"	m
+reverse_lookup	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/manager/mod.rs	/^    pub fn reverse_lookup(&self, model: &BoxModel) -> ModelID {$/;"	f
 rgb_to_hsv	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/functions.rs	/^pub fn rgb_to_hsv(r: f64, g: f64, b: f64) -> (f64, f64, f64) {$/;"	f
 rgba	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/lib.rs	/^mod rgba;$/;"	m
 rightanglebracket	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/enums.rs	/^    pub const rightanglebracket: Key = ffi::GDK_KEY_rightanglebracket as u32;$/;"	c
@@ -14620,10 +14629,10 @@ scale	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/cairo-rs
 scale	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/cairo-rs-0.2.0/src/matrices.rs	/^    fn scale(&mut self, sx: f64, sy: f64) {$/;"	f
 scale	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/cairo-rs-0.2.0/src/matrices.rs	/^    fn scale(&mut self, sx: f64, sy: f64);$/;"	f
 scale	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/mod.rs	/^mod scale;$/;"	m
-scale_box	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/renderer/render_window.rs	/^    pub fn scale_box(&mut self, sx : WorldUnit, sy : WorldUnit) {$/;"	f
-scale_box_around_center	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/renderer/render_window.rs	/^    fn scale_box_around_center(&mut self, sx : WorldUnit, sy: WorldUnit) {$/;"	f
+scale_box	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/types.rs	/^    pub fn scale_box(&mut self, sx : WorldUnit, sy : WorldUnit) {$/;"	f
+scale_box_around_center	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/types.rs	/^    pub fn scale_box_around_center(&mut self, sx : WorldUnit, sy: WorldUnit) {$/;"	f
 scale_box_around_center_works	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/renderer/render_window.rs	/^    pub fn scale_box_around_center_works() {$/;"	f
-scale_box_around_point	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/renderer/render_window.rs	/^    fn scale_box_around_point(&mut self, sx : WorldUnit, sy: WorldUnit, point : &WorldCoords) {$/;"	f
+scale_box_around_point	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/types.rs	/^    pub fn scale_box_around_point(&mut self, sx : WorldUnit, sy: WorldUnit, point : &WorldCoords) {$/;"	f
 scale_box_around_point_center_works	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/renderer/render_window.rs	/^    pub fn scale_box_around_point_center_works() {$/;"	f
 scale_box_around_point_corner_works	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/renderer/render_window.rs	/^    pub fn scale_box_around_point_corner_works() {$/;"	f
 scale_box_checks	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/renderer/render_window.rs	/^    pub fn scale_box_checks() {$/;"	f
@@ -14900,8 +14909,8 @@ set_bottom_margin	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec
 set_bottom_margin	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/page_setup.rs	/^    fn set_bottom_margin(&self, margin: f64, unit: Unit);$/;"	f
 set_bottom_margin	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/text_view.rs	/^    fn set_bottom_margin(&self, bottom_margin: i32) {$/;"	f
 set_bottom_margin	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/text_view.rs	/^    fn set_bottom_margin(&self, bottom_margin: i32);$/;"	f
-set_box	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/renderer/render_window.rs	/^    fn set_box(&mut self, point : WorldCoords, width: WorldWidth, height: WorldHeight) {$/;"	f
-set_box_between	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/renderer/render_window.rs	/^    fn set_box_between(&mut self, point_a : WorldCoords, point_b : WorldCoords) {$/;"	f
+set_box	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/types.rs	/^    pub fn set_box(&mut self, point : WorldCoords, width: WorldWidth, height: WorldHeight) {$/;"	f
+set_box_between	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/types.rs	/^    pub fn set_box_between(&mut self, point_a : WorldCoords, point_b : WorldCoords) {$/;"	f
 set_box_between_order_irrelevant	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/renderer/render_window.rs	/^    pub fn set_box_between_order_irrelevant() {$/;"	f
 set_box_between_works	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/renderer/render_window.rs	/^    pub fn set_box_between_works() {$/;"	f
 set_box_works	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/renderer/render_window.rs	/^    pub fn set_box_works() {$/;"	f
@@ -15159,8 +15168,8 @@ set_digits	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk
 set_digits	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/scale.rs	/^    fn set_digits(&self, digits: i32);$/;"	f
 set_digits	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/spin_button.rs	/^    fn set_digits(&self, digits: u32) {$/;"	f
 set_digits	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/spin_button.rs	/^    fn set_digits(&self, digits: u32);$/;"	f
-set_dimensions	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/renderer/render_window.rs	/^    fn set_dimensions(&mut self, width : WorldWidth, height: WorldHeight) {$/;"	f
 set_dimensions	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/types.rs	/^    pub fn set_dimensions(&mut self, width : ScreenWidth, height: ScreenHeight) {$/;"	f
+set_dimensions	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/types.rs	/^    pub fn set_dimensions(&mut self, width : WorldWidth, height: WorldHeight) {$/;"	f
 set_direction	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/icon_source.rs	/^    pub fn set_direction(&mut self, direction: TextDirection) {$/;"	f
 set_direction	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/menu_button.rs	/^    fn set_direction(&self, direction: ArrowType) {$/;"	f
 set_direction	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/menu_button.rs	/^    fn set_direction(&self, direction: ArrowType);$/;"	f
@@ -15412,8 +15421,8 @@ set_headers_visible	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9
 set_headers_visible	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/tree_view.rs	/^    fn set_headers_visible(&self, headers_visible: bool);$/;"	f
 set_heading	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/app_chooser_dialog.rs	/^    fn set_heading(&self, heading: &str) {$/;"	f
 set_heading	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/app_chooser_dialog.rs	/^    fn set_heading(&self, heading: &str);$/;"	f
-set_height	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/renderer/render_window.rs	/^    fn set_height(&mut self, height : WorldHeight) {$/;"	f
 set_height	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/types.rs	/^    pub fn set_height(&mut self, height : ScreenHeight) {$/;"	f
+set_height	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/types.rs	/^    pub fn set_height(&mut self, height : WorldHeight) {$/;"	f
 set_help_overlay	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/application_window.rs	/^    fn set_help_overlay<'a, P: Into<Option<&'a ShortcutsWindow>>>(&self, help_overlay: P) {$/;"	f
 set_help_overlay	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/application_window.rs	/^    fn set_help_overlay<'a, P: Into<Option<&'a ShortcutsWindow>>>(&self, help_overlay: P);$/;"	f
 set_hexpand	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/widget.rs	/^    fn set_hexpand(&self, expand: bool) {$/;"	f
@@ -17364,8 +17373,8 @@ set_wide_handle	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec82
 set_wide_handle	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/paned.rs	/^    fn set_wide_handle(&self, wide: bool);$/;"	f
 set_widget	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/tree_view_column.rs	/^    fn set_widget<'a, P: IsA<Widget> + 'a, Q: Into<Option<&'a P>>>(&self, widget: Q) {$/;"	f
 set_widget	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/tree_view_column.rs	/^    fn set_widget<'a, P: IsA<Widget> + 'a, Q: Into<Option<&'a P>>>(&self, widget: Q);$/;"	f
-set_width	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/renderer/render_window.rs	/^    fn set_width(&mut self, width : WorldWidth) {$/;"	f
 set_width	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/types.rs	/^    pub fn set_width(&mut self, width : ScreenWidth) {$/;"	f
+set_width	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/types.rs	/^    pub fn set_width(&mut self, width : WorldWidth) {$/;"	f
 set_width_chars	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/entry.rs	/^    fn set_width_chars(&self, n_chars: i32) {$/;"	f
 set_width_chars	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/entry.rs	/^    fn set_width_chars(&self, n_chars: i32);$/;"	f
 set_width_chars	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/file_chooser_button.rs	/^    fn set_width_chars(&self, n_chars: i32) {$/;"	f
