@@ -1,8 +1,9 @@
 use renderer::{
-    Renderer,
-    RenderWindow, 
+    RenderWindow,
     StyleScheme
 };
+use renderer::dialog::DialogRenderer;
+
 use event::{EventManager, EventManagerBuilder};
 
 use std::convert::AsRef;
@@ -123,7 +124,7 @@ impl Header {
 
 
 pub struct Content {
-    conversation_renderer: Renderer,
+    conversation_renderer: DialogRenderer,
     main_tabs: Notebook
 }
 
@@ -131,7 +132,7 @@ impl Content {
     fn new(event_builder : &mut EventManagerBuilder, style_context: Arc<RwLock<StyleScheme>>) -> Self {
 
         let notebook = Notebook::new();
-        let renderer = Renderer::new(event_builder, style_context);
+        let renderer = DialogRenderer::new(event_builder, style_context);
         notebook.add(renderer.as_ref());
         notebook.set_menu_label_text(renderer.as_ref(), "Dialog Editor");
         notebook.set_tab_label_text(renderer.as_ref(), "Dialog Editor");
