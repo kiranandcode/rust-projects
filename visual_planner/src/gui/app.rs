@@ -24,6 +24,7 @@ use gdk::{
     BUTTON1_MOTION_MASK
 };
 use gtk::{
+    Widget,
     Window,              // for the main app
     WindowType,          // Window::new(WindowType...
     WindowExt,           // window.set_title_bar 
@@ -34,7 +35,9 @@ use gtk::{
     DrawingArea,         // for cairo drawing
     Inhibit,             // returned from all callbacks to toggle default handling - Inhibit(false)
     main_quit,           // end the app
-    StyleContext         // used for initializing the stylescheme
+    StyleContext,        // used for initializing the stylescheme
+    Notebook,            // 
+    NotebookExt          //
 };
 
 
@@ -63,9 +66,11 @@ impl App {
         window.set_wmclass("app-name", "Gopviz");
         window.set_default_size(500, 500);
 
+        
 
         // connect children
         window.set_titlebar(&header.container);
+
         window.add(content.as_ref());
         // params are self, envt
         window.connect_delete_event(move |_, _| {
@@ -118,22 +123,30 @@ impl Header {
 
 
 pub struct Content {
-    conversation_renderer: Renderer
+    conversation_renderer: Renderer,
+    main_tabs: Notebook
 }
 
 impl Content {
     fn new(event_builder : &mut EventManagerBuilder, style_context: Arc<RwLock<StyleScheme>>) -> Self {
 
+        let notebook = Notebook::new();
+        let renderer = Renderer::new(event_builder, style_context);
+        notebook.add(renderer.as_ref());
+        notebook.set_menu_label_text(renderer.as_ref(), "Dialog Editor");
+        notebook.set_tab_label_text(renderer.as_ref(), "Dialog Editor");
+
         Content {
-            conversation_renderer: Renderer::new(event_builder, style_context)
+            conversation_renderer: renderer,
+            main_tabs: notebook
         }
 
     }
 }
 
 
-impl AsRef<DrawingArea> for Content {
-    fn as_ref(&self) -> &DrawingArea {
-        self.conversation_renderer.as_ref()
+impl AsRef<Notebook> for Content {
+    fn as_ref(&self) -> &Notebook {
+        &self.main_tabs
     }
 }

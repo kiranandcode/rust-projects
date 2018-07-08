@@ -189,7 +189,7 @@ impl Renderer {
                 let end_y = (bounding_box.1 + bounding_box.3).0;
 
                 let mut x = 100.0 *  (start_x / 100.0).floor();
-                let mut y = 100.0 * (start_y / 100.0).floor();
+                let mut y = 100.0 *  (start_y / 100.0).floor();
 
                 let mut point_1 = WorldCoords(WorldUnit(x), WorldUnit(start_y));
                 let mut point_2 = WorldCoords(WorldUnit(x), WorldUnit(end_y));

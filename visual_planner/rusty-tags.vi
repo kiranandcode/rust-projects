@@ -281,7 +281,7 @@ AsMut	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.
 AsMut for AsyncBorrow	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/cairo-rs-0.2.0/src/image_surface.rs	/^impl<T, F: FnOnce(T) + 'static> AsMut<T> for AsyncBorrow<T, F> {$/;"	i
 AsRef	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/event.rs	/^        impl AsRef<::ffi::$ffi_name> for $name {$/;"	i
 AsRef for App	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/gui/app.rs	/^impl AsRef<Window> for App {$/;"	i
-AsRef for Content	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/gui/app.rs	/^impl AsRef<DrawingArea> for Content {$/;"	i
+AsRef for Content	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/gui/app.rs	/^impl AsRef<Notebook> for Content {$/;"	i
 AsRef for Context	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/cairo-rs-0.2.0/src/context.rs	/^impl AsRef<Context> for Context {$/;"	i
 AsRef for Device	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/cairo-rs-0.2.0/src/xcb.rs	/^impl AsRef<Device> for Device {$/;"	i
 AsRef for ImageSurface	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/cairo-rs-0.2.0/src/image_surface.rs	/^impl AsRef<Surface> for ImageSurface {$/;"	i
@@ -4507,7 +4507,7 @@ as_ref	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/cairo-r
 as_ref	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/cairo-rs-0.2.0/src/xcb.rs	/^    fn as_ref(&self) -> &XCBVisualType {$/;"	f
 as_ref	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/event.rs	/^            fn as_ref(&self) -> &::ffi::$ffi_name {$/;"	f
 as_ref	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/rectangle.rs	/^    fn as_ref(&self) -> &RectangleInt {$/;"	f
-as_ref	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/gui/app.rs	/^    fn as_ref(&self) -> &DrawingArea {$/;"	f
+as_ref	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/gui/app.rs	/^    fn as_ref(&self) -> &Notebook {$/;"	f
 as_ref	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/gui/app.rs	/^    fn as_ref(&self) -> &Window {$/;"	f
 as_ref	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/renderer/mod.rs	/^    fn as_ref(&self) -> &DrawingArea {$/;"	f
 asciicircum	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/enums.rs	/^    pub const asciicircum: Key = ffi::GDK_KEY_asciicircum as u32;$/;"	c
