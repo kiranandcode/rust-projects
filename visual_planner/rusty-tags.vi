@@ -678,6 +678,7 @@ DateTime	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/glib-
 DateWeekday	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/glib-0.3.1/src/auto/enums.rs	/^pub enum DateWeekday {$/;"	g
 DateYear	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/glib-0.3.1/src/auto/alias.rs	/^pub type DateYear = u16;$/;"	T
 Dcaron	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/enums.rs	/^    pub const Dcaron: Key = ffi::GDK_KEY_Dcaron as u32;$/;"	c
+DecisionBox	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/manager/components/decision_box.rs	/^pub struct DecisionBox {$/;"	s
 Default for AboutDialog	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/about_dialog.rs	/^impl Default for AboutDialog {$/;"	i
 Default for AccelGroup	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/accel_group.rs	/^impl Default for AccelGroup {$/;"	i
 Default for ActionBar	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/action_bar.rs	/^impl Default for ActionBar {$/;"	i
@@ -804,6 +805,7 @@ DeviceType	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk
 Dialog	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/dialog.rs	/^    pub struct Dialog(Object<ffi::GtkDialog>): Window, Bin, Container, Widget;$/;"	s
 Dialog	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/dialog.rs	/^impl Dialog {$/;"	i
 Dialog	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/dialog.rs	/^impl Dialog {$/;"	i
+DialogBox	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/manager/components/dialog_box.rs	/^pub struct DialogBox {$/;"	s
 DialogExt	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/dialog.rs	/^pub trait DialogExt {$/;"	t
 DialogExtManual	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/dialog.rs	/^pub trait DialogExtManual {$/;"	t
 DialogExtManual for O	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/dialog.rs	/^impl<O: DialogExt> DialogExtManual for O {$/;"	i
@@ -886,6 +888,7 @@ Emacron	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.
 End	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/enums.rs	/^    pub const End: Key = ffi::GDK_KEY_End as u32;$/;"	c
 Entry	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/entry.rs	/^    pub struct Entry(Object<ffi::GtkEntry>): Widget, CellEditable, Editable;$/;"	s
 Entry	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/entry.rs	/^impl Entry {$/;"	i
+EntryBox	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/manager/components/entry_box.rs	/^pub struct EntryBox {$/;"	s
 EntryBuffer	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/entry_buffer.rs	/^    pub struct EntryBuffer(Object<ffi::GtkEntryBuffer>);$/;"	s
 EntryBuffer	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/entry_buffer.rs	/^impl EntryBuffer {$/;"	i
 EntryCompletion	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/entry_completion.rs	/^    pub struct EntryCompletion(Object<ffi::GtkEntryCompletion>): CellLayout;$/;"	s
@@ -2522,6 +2525,7 @@ MiscExt	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.
 ModeLock	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/enums.rs	/^    pub const ModeLock: Key = ffi::GDK_KEY_ModeLock as u32;$/;"	c
 Mode_switch	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/enums.rs	/^    pub const Mode_switch: Key = ffi::GDK_KEY_Mode_switch as u32;$/;"	c
 Model	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/gui/app.rs	/^pub struct Model {$/;"	s
+ModelBox	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/manager/components/mod.rs	/^pub enum ModelBox {$/;"	g
 ModelButton	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/model_button.rs	/^    pub struct ModelButton(Object<ffi::GtkModelButton>): Button, Bin, Container, Widget, Actionable;$/;"	s
 ModelButton	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/model_button.rs	/^impl ModelButton {$/;"	i
 ModelButtonExt	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/model_button.rs	/^pub trait ModelButtonExt {$/;"	t
@@ -3284,6 +3288,7 @@ Standby	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.
 Start	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/enums.rs	/^    pub const Start: Key = ffi::GDK_KEY_Start as u32;$/;"	c
 Stash	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/glib-0.3.1/src/translate.rs	/^pub struct Stash<'a, P: Copy, T: ?Sized + ToGlibPtr<'a, P>> (pub P, pub <T as ToGlibPtr<'a, P>>::Storage);$/;"	s
 StashMut	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/glib-0.3.1/src/translate.rs	/^pub struct StashMut<'a, P: Copy, T: ?Sized> (pub P, pub <T as ToGlibPtrMut<'a, P>>::Storage)$/;"	s
+StateChangeBox	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/manager/components/state_change_box.rs	/^pub struct StateChangeBox {$/;"	s
 StateFlags	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/flags.rs	/^    pub struct StateFlags: u32 {$/;"	s
 StateType	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/enums.rs	/^pub enum StateType {$/;"	g
 StaticType	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/glib-0.3.1/src/types.rs	/^        impl StaticType for $name {$/;"	i
@@ -4071,6 +4076,7 @@ VISIBILITY_NOTIFY_MASK	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299
 Value	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/glib-0.3.1/src/value.rs	/^impl Value {$/;"	i
 Value	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/glib-0.3.1/src/value.rs	/^pub struct Value(gobject_ffi::GValue);$/;"	s
 ValueArray	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/glib-0.3.1/src/value.rs	/^pub struct ValueArray(Vec<gobject_ffi::GValue>);$/;"	s
+VariableBox	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/manager/components/variable_box.rs	/^pub struct VariableBox {$/;"	s
 Variant	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/glib-0.3.1/src/variant.rs	/^    pub struct Variant(Shared<glib_ffi::GVariant>);$/;"	s
 Variant	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/glib-0.3.1/src/variant.rs	/^impl Variant {$/;"	i
 VariantTy	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/glib-0.3.1/src/variant_type.rs	/^impl VariantTy {$/;"	i
@@ -5108,6 +5114,7 @@ compare	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.
 compare	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/tree_path.rs	/^    fn compare(&self, b: &TreePath) -> i32 {$/;"	f
 complete	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/entry_completion.rs	/^    fn complete(&self) {$/;"	f
 complete	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/entry_completion.rs	/^    fn complete(&self);$/;"	f
+components	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/manager/mod.rs	/^pub mod components;$/;"	m
 components	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/renderer/mod.rs	/^pub mod components;$/;"	m
 compute_checksum_for_bytes	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/glib-0.3.1/src/auto/functions.rs	/^pub fn compute_checksum_for_bytes(checksum_type: ChecksumType, data: &Bytes) -> Option<String> {$/;"	f
 compute_checksum_for_data	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/glib-0.3.1/src/auto/functions.rs	/^pub fn compute_checksum_for_data(checksum_type: ChecksumType, data: &[u8]) -> Option<String> {$/;"	f
@@ -8017,6 +8024,7 @@ debug_cap_xshm_version	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299
 debug_get_precision	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/cairo-rs-0.2.0/src/xcb.rs	/^    pub fn debug_get_precision(&self) -> i32 {$/;"	f
 debug_set_precision	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/cairo-rs-0.2.0/src/xcb.rs	/^    pub fn debug_set_precision(&self, precision: i32) {$/;"	f
 decimalpoint	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/enums.rs	/^    pub const decimalpoint: Key = ffi::GDK_KEY_decimalpoint as u32;$/;"	c
+decision_box	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/manager/components/mod.rs	/^mod decision_box;$/;"	m
 default	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/auto/app_launch_context.rs	/^    fn default() -> Self {$/;"	f
 default	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/window.rs	/^    fn default() -> WindowAttr {$/;"	f
 default	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/glib-0.3.1/src/auto/key_file.rs	/^    fn default() -> Self {$/;"	f
@@ -8194,6 +8202,7 @@ diaeresis	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-
 dialog	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/mod.rs	/^mod dialog;$/;"	m
 dialog	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/lib.rs	/^mod dialog;$/;"	m
 dialog	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/renderer/mod.rs	/^pub mod dialog;$/;"	m
+dialog_box	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/manager/components/mod.rs	/^mod dialog_box;$/;"	m
 diamond	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/enums.rs	/^    pub const diamond: Key = ffi::GDK_KEY_diamond as u32;$/;"	c
 difference	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/glib-0.3.1/src/auto/date_time.rs	/^    pub fn difference(&self, begin: &DateTime) -> TimeSpan {$/;"	f
 digitspace	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/enums.rs	/^    pub const digitspace: Key = ffi::GDK_KEY_digitspace as u32;$/;"	c
@@ -8433,6 +8442,7 @@ ensure_status	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/
 ensure_status	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/cairo-rs-0.2.0/src/paths.rs	/^    pub fn ensure_status(&self) {$/;"	f
 ensure_status	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/cairo-rs-0.2.0/src/patterns.rs	/^    fn ensure_status(&self) {$/;"	f
 entry	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/mod.rs	/^mod entry;$/;"	m
+entry_box	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/manager/components/mod.rs	/^mod entry_box;$/;"	m
 entry_buffer	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/lib.rs	/^mod entry_buffer;$/;"	m
 entry_completion	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/mod.rs	/^mod entry_completion;$/;"	m
 enums	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/auto/mod.rs	/^mod enums;$/;"	m
@@ -13512,6 +13522,7 @@ malesymbol	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk
 maltesecross	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/enums.rs	/^    pub const maltesecross: Key = ffi::GDK_KEY_maltesecross as u32;$/;"	c
 manage_dnd	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/auto/drag_context.rs	/^    fn manage_dnd(&self, ipc_window: &Window, actions: DragAction) -> bool {$/;"	f
 manage_dnd	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/auto/drag_context.rs	/^    fn manage_dnd(&self, ipc_window: &Window, actions: DragAction) -> bool;$/;"	f
+manager	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/main.rs	/^mod manager;$/;"	m
 map	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/widget.rs	/^    fn map(&self) {$/;"	f
 map	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/widget.rs	/^    fn map(&self);$/;"	f
 map_color	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/style_properties.rs	/^    fn map_color(&self, name: &str, color: &SymbolicColor) {$/;"	f
@@ -17471,6 +17482,7 @@ starts_line	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gt
 starts_sentence	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/text_iter.rs	/^    pub fn starts_sentence(&self) -> bool {$/;"	f
 starts_tag	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/text_iter.rs	/^    pub fn starts_tag<'a, P: Into<Option<&'a TextTag>>>(&self, tag: P) -> bool {$/;"	f
 starts_word	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/text_iter.rs	/^    pub fn starts_word(&self) -> bool {$/;"	f
+state_change_box	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/manager/components/mod.rs	/^mod state_change_box;$/;"	m
 state_is_running	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/style_context.rs	/^    fn state_is_running(&self, state: StateType) -> Option<f64> {$/;"	f
 state_is_running	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/style_context.rs	/^    fn state_is_running(&self, state: StateType) -> Option<f64>;$/;"	f
 static_type	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/auto/enums.rs	/^    fn static_type() -> Type {$/;"	f
@@ -18278,6 +18290,7 @@ value_changed	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/
 value_changed	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/adjustment.rs	/^    fn value_changed(&self);$/;"	f
 value_from_string_type	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/builder.rs	/^    fn value_from_string_type(&self, type_: glib::types::Type, string: &str) -> Result<glib::Value, Error> {$/;"	f
 value_from_string_type	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/builder.rs	/^    fn value_from_string_type(&self, type_: glib::types::Type, string: &str) -> Result<glib::Value, Error>;$/;"	f
+variable_box	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/manager/components/mod.rs	/^mod variable_box;$/;"	m
 variant	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/glib-0.3.1/src/lib.rs	/^pub mod variant;$/;"	m
 variant_get_gtype	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/glib-0.3.1/src/auto/functions.rs	/^pub fn variant_get_gtype() -> types::Type {$/;"	f
 variant_type	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/glib-0.3.1/src/lib.rs	/^mod variant_type;$/;"	m

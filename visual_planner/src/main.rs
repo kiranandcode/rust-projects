@@ -7,6 +7,7 @@ mod renderer;
 mod gui;
 mod types;
 mod event;
+mod manager;
 
 use event::EventManager;
 use gui::App;
