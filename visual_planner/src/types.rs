@@ -21,13 +21,13 @@ type RenderY = RenderUnit;
 
 /// a newtype representing world units to ensure type safety
 #[derive(Debug, PartialEq, PartialOrd, Copy, Clone)]
-pub struct WorldUnit(pub f32);
+pub struct WorldUnit(pub f64);
 /// a newtype representing screen units to ensure type safety
 #[derive(Debug, PartialEq, PartialOrd, Copy, Clone)]
-pub struct ScreenUnit(pub f32);
+pub struct ScreenUnit(pub f64);
 /// a newtype representing render units (0.0 - 1.0) to ensure type safety
 #[derive(Debug, PartialEq, PartialOrd, Copy, Clone)]
-pub struct RenderUnit(pub f32);
+pub struct RenderUnit(pub f64);
 
 
 /// a newtype representing world coordinates to ensure type safety

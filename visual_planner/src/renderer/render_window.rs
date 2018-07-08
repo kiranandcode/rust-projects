@@ -158,10 +158,19 @@ impl RenderWindow {
         let y = -height/2.0;
         let dimensions = ScreenDimensions(screen_width, screen_height);
 
+        println!("At creation xywh is {:?}, {:?}, {:?}, {:?}", x,y,width,height);
         RenderWindow {
             world_bounding_box: WorldBoundingBox(WorldUnit(x), WorldUnit(y), WorldUnit(width), WorldUnit(height)),
             screen_bounding_box: dimensions
         }
+    }
+
+    pub fn world_bounding_box(&self) -> &WorldBoundingBox {
+        &self.world_bounding_box
+    }
+
+    pub fn screen_dimensions(&self) -> &ScreenDimensions {
+        &self.screen_bounding_box
     }
 
     pub fn is_bounding_box_onscreen(&self, bounding_box: &WorldBoundingBox) -> bool {
@@ -173,11 +182,29 @@ impl RenderWindow {
         self.world_bounding_box.point_within_bounds(world_coords)
     }
 
+    pub fn screen_to_world_x(&self, coord_x: ScreenUnit) -> WorldUnit {
+         WorldUnit((self.world_bounding_box.0).0 + (coord_x.0 / (self.screen_bounding_box.0).0) * (self.world_bounding_box.2).0)
+    }
+
+    pub fn screen_to_world_y(&self, coord_y: ScreenUnit) -> WorldUnit {
+        WorldUnit((self.world_bounding_box.1).0 + (coord_y.0 / (self.screen_bounding_box.1).0) * (self.world_bounding_box.3).0)
+    }
+ 
+
     pub fn screen_to_world(&self, screen_coords: &ScreenCoords) -> WorldCoords {
         let npx = (self.world_bounding_box.0).0 + ((screen_coords.0).0 / (self.screen_bounding_box.0).0) * (self.world_bounding_box.2).0;
         let npy = (self.world_bounding_box.1).0 + ((screen_coords.1).0 / (self.screen_bounding_box.1).0) * (self.world_bounding_box.3).0;
         WorldCoords(WorldUnit(npx), WorldUnit(npy))
     }
+
+    pub fn world_to_screen_x(&self, coord_x: WorldUnit) -> ScreenUnit {
+        ScreenUnit(((coord_x.0 - (self.world_bounding_box.0).0) / (self.world_bounding_box.2).0) * (self.screen_bounding_box.0).0)
+    }
+
+    pub fn world_to_screen_y(&self, coord_y: WorldUnit) -> ScreenUnit {
+         ScreenUnit(((coord_y.0 - (self.world_bounding_box.1).0) / (self.world_bounding_box.3).0) * (self.screen_bounding_box.1).0)
+    }
+ 
 
     pub fn world_to_screen(&self, world_coords: &WorldCoords) -> ScreenCoords {
         let npx = (((world_coords.0).0 - (self.world_bounding_box.0).0) / (self.world_bounding_box.2).0) * (self.screen_bounding_box.0).0;
@@ -185,11 +212,29 @@ impl RenderWindow {
         ScreenCoords(ScreenUnit(npx), ScreenUnit(npy))
     }
 
+    pub fn screen_to_render_x(&self, coord_x: ScreenUnit) -> RenderUnit {
+            RenderUnit(coord_x.0 / (self.screen_bounding_box.0).0)
+    }
+
+    pub fn screen_to_render_y(&self, coord_y: ScreenUnit) -> RenderUnit {
+        RenderUnit(coord_y.0 / (self.screen_bounding_box.1).0)
+    }
+
     pub fn screen_to_render(&self, screen_coords: &ScreenCoords) -> RenderCoords {
         let npx = (screen_coords.0).0 / (self.screen_bounding_box.0).0;
         let npy = (screen_coords.1).0 / (self.screen_bounding_box.1).0;
         RenderCoords(RenderUnit(npx), RenderUnit(npy))
     }
+
+    pub fn world_to_render_x(&self, coord_x: WorldUnit) -> RenderUnit {
+        self.screen_to_render_x(self.world_to_screen_x(coord_x))
+    }
+
+    pub fn world_to_render_y(&self, coord_y: WorldUnit) -> RenderUnit {
+        self.screen_to_render_y(self.world_to_screen_y(coord_y))
+    }
+
+ 
 
     pub fn world_to_render(&self, world_coords: &WorldCoords) -> RenderCoords {
         self.screen_to_render(&self.world_to_screen(world_coords))

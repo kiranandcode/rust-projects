@@ -80,8 +80,8 @@ impl Renderer {
 
         let render_window = Arc::new(RwLock::new(
                 RenderWindow::new(
-                    ScreenUnit(drawing_area.get_allocated_width() as f32), 
-                    ScreenUnit(drawing_area.get_allocated_height() as f32)
+                    ScreenUnit(drawing_area.get_allocated_width() as f64), 
+                    ScreenUnit(drawing_area.get_allocated_height() as f64)
                 )
         ));
 
@@ -102,8 +102,8 @@ impl Renderer {
 
                 sender.send(
                     GtkMessage::RendererScreenResize(
-                        ScreenUnit(width as f32), 
-                        ScreenUnit(height as f32)
+                        ScreenUnit(width as f64), 
+                        ScreenUnit(height as f64)
                     )
                 );
             }
@@ -118,21 +118,80 @@ impl Renderer {
             let style_scheme = style_scheme.clone();
             let render_window = render_window.clone();
             drawing_area.connect_draw(move |_, cr| {
+                let style_scheme = style_scheme.read().unwrap();
+                let render_window = render_window.read().unwrap();
+                let draw_queue = draw_queue.read().unwrap();
 
-                // main draw loop here 
-                // 1. draw background
-                cr.set_source_rgb(250.0/255.0, 224.0/255.0, 55.0/255.0);
-                cr.paint();
+
+
+                {
+                    let ScreenDimensions(ScreenUnit(ref width), ScreenUnit(ref height)) = render_window.screen_dimensions();
+                    // cr.scale(*width, *height);
+                }
+
 
                 cr.set_source_rgb(0.3, 0.3, 0.3);
+                cr.paint();
+
+                let bounding_box = render_window.world_bounding_box();
+
+                let start_x = (bounding_box.0).0; 
+                let start_y = (bounding_box.1).0; 
+
+                let end_x = (bounding_box.0 + bounding_box.2).0;
+                let end_y = (bounding_box.1 + bounding_box.3).0;
+
+                let mut x = (start_x / 100.0).floor();
+                let mut y = (start_y / 100.0).floor();
+
+                let mut point_1 = WorldCoords(WorldUnit(x), WorldUnit(start_y));
+                let mut point_2 = WorldCoords(WorldUnit(x), WorldUnit(end_y));
+
+                // cr.set_line_width(0.03);
+                while x < end_x {
+                    point_1.0 = WorldUnit(x);
+                    point_2.0 = WorldUnit(x);
+
+                    let ScreenCoords(ScreenUnit(x1), ScreenUnit(y1)) = render_window.world_to_screen(&point_1);
+                    let ScreenCoords(ScreenUnit(x2), ScreenUnit(y2)) = render_window.world_to_screen(&point_2);
+
+                    cr.set_source_rgb(250.0/255.0, 224.0/255.0, 55.0/255.0);
+                    cr.new_path();
+                    cr.move_to(x1,y1);
+                    cr.line_to(x2, y2);
+                    cr.close_path();
+                    cr.stroke();
+                    x += 100.0;
+                }
+
+                let mut point_1 = WorldCoords(WorldUnit(start_x), WorldUnit(y));
+                let mut point_2 = WorldCoords(WorldUnit(end_x), WorldUnit(y));
+
+                while y < end_y {
+                    point_1.1 = WorldUnit(y);
+                    point_2.1 = WorldUnit(y);
+
+                    let ScreenCoords(ScreenUnit(x1), ScreenUnit(y1)) = render_window.world_to_screen(&point_1);
+                    let ScreenCoords(ScreenUnit(x2), ScreenUnit(y2)) = render_window.world_to_screen(&point_2);
+
+                    cr.set_source_rgb(250.0/255.0, 224.0/255.0, 55.0/255.0);
+                    cr.new_path();
+                    cr.move_to(x1,y1);
+                    cr.line_to(x2, y2);
+                    cr.close_path();
+                    cr.stroke();
+                    y += 100.0;
+                }
+ 
+
+                // main draw loop here
+                // 1. draw background
+
                 cr.rectangle(0.0, 0.0, 1.0, 1.0);
                 cr.stroke();
 
                 // 2. ask drawables to draw themselves
-                let style_scheme = style_scheme.read().unwrap();
-                let render_window = render_window.read().unwrap();
-                let draw_queue = draw_queue.read().unwrap();
-                
+
                 for drawable in draw_queue.iter() {
                     drawable.draw(cr, &style_scheme, &render_window);
                 }
