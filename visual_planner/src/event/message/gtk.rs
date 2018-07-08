@@ -3,5 +3,6 @@ use types::*;
 /// A thread-safe wrapper for important messages sent by gtk
 #[derive(Debug,PartialEq,PartialOrd,Clone)]
 pub enum GtkMessage {
-    RendererScreenResize(ScreenUnit, ScreenUnit)
+    RendererScreenResize(ScreenUnit, ScreenUnit),
+    Scroll(ScreenUnit, ScreenUnit, ScrollDirection, f64)
 }

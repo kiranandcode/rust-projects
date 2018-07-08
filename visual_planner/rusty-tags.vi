@@ -2435,6 +2435,8 @@ LogOff	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6
 LogWindowTree	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/enums.rs	/^    pub const LogWindowTree: Key = ffi::GDK_KEY_LogWindowTree as u32;$/;"	c
 Lstroke	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/enums.rs	/^    pub const Lstroke: Key = ffi::GDK_KEY_Lstroke as u32;$/;"	c
 M	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/enums.rs	/^    pub const M: Key = ffi::GDK_KEY_M as u32;$/;"	c
+MAX_ZOOM_IN	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/renderer/render_window.rs	/^const MAX_ZOOM_IN  : i32 = 10;$/;"	c
+MAX_ZOOM_OUT	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/renderer/render_window.rs	/^const MAX_ZOOM_OUT : i32 = -100;$/;"	c
 META_MASK	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/auto/flags.rs	/^        const META_MASK = 268435456;$/;"	c
 MOD1_MASK	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/auto/flags.rs	/^        const MOD1_MASK = 8;$/;"	c
 MOD2_MASK	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/auto/flags.rs	/^        const MOD2_MASK = 16;$/;"	c
@@ -2940,6 +2942,7 @@ ScreenY	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/render
 ScreenY	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/types.rs	/^type ScreenY = ScreenUnit;$/;"	T
 ScrollClick	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/enums.rs	/^    pub const ScrollClick: Key = ffi::GDK_KEY_ScrollClick as u32;$/;"	c
 ScrollDirection	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/auto/enums.rs	/^pub enum ScrollDirection {$/;"	g
+ScrollDirection	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/types.rs	/^pub enum ScrollDirection {$/;"	g
 ScrollDown	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/enums.rs	/^    pub const ScrollDown: Key = ffi::GDK_KEY_ScrollDown as u32;$/;"	c
 ScrollStep	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/enums.rs	/^pub enum ScrollStep {$/;"	g
 ScrollType	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/enums.rs	/^pub enum ScrollType {$/;"	g
@@ -18366,4 +18369,5 @@ zacute	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6
 zcaron	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/enums.rs	/^    pub const zcaron: Key = ffi::GDK_KEY_zcaron as u32;$/;"	c
 zerosubscript	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/enums.rs	/^    pub const zerosubscript: Key = ffi::GDK_KEY_zerosubscript as u32;$/;"	c
 zerosuperior	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/enums.rs	/^    pub const zerosuperior: Key = ffi::GDK_KEY_zerosuperior as u32;$/;"	c
+zoom_window	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/renderer/render_window.rs	/^    pub fn zoom_window(&mut self, center: &ScreenCoords, direction: ScrollDirection, mut delta: f64) {$/;"	f
 zstroke	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/enums.rs	/^    pub const zstroke: Key = ffi::GDK_KEY_zstroke as u32;$/;"	c

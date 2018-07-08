@@ -65,12 +65,17 @@ impl EventManager {
                 let gdk_receiver = event_manager.gdk_receiver;
                 let renderer_channel = event_manager.renderer_channel;
                 for event in gdk_receiver.iter() {
-                    println!("Got event e {:?}", event);
+                    // println!("Got event {:?}", event);
 
                     match event {
                         GtkMessage::RendererScreenResize(width, height) =>  {
                             if let Some(ref chnl) = renderer_channel {
                                 chnl.send(RendererMessage::ResizeEvent(ScreenDimensions(width,height)));
+                            }
+                        }
+                        GtkMessage::Scroll(width, height, scroll_direction, delta) => {
+                            if let Some(ref chnl) = renderer_channel {
+                                chnl.send(RendererMessage::ScrollEvent(ScreenCoords(width,height), scroll_direction, delta));
                             }
                         }
                     }

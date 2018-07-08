@@ -1,4 +1,6 @@
 use types::*;
+
 pub enum RendererMessage {
-    ResizeEvent(ScreenDimensions)
+    ResizeEvent(ScreenDimensions),
+    ScrollEvent(ScreenCoords, ScrollDirection, f64)
 }

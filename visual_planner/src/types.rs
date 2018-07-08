@@ -85,4 +85,11 @@ impl ScreenDimensions {
 
 }
 
+/// Represents a scroll direction
+#[derive(Debug,PartialEq,PartialOrd,Clone)]
+pub enum ScrollDirection {
+    Up,
+    Down
+}
+
 

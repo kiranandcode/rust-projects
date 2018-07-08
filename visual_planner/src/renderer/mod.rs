@@ -35,7 +35,10 @@ use gdk::{
     BUTTON1_MOTION_MASK,
 
     EventConfigure,
-    PROPERTY_CHANGE_MASK
+    PROPERTY_CHANGE_MASK,
+
+    EventScroll,
+    SCROLL_MASK
 };
 use gtk::{
     Window,              // for the main app
@@ -89,28 +92,80 @@ impl Renderer {
 
         drawing_area.add_events(BUTTON_PRESS_MASK.bits() as i32);
         drawing_area.add_events(BUTTON1_MOTION_MASK.bits() as i32);
-        drawing_area.connect_event(move |obj, event| { 
-            // println!("event: {:?} {:?}", event, event.get_event_type()); 
-            if let Ok(ref result) = event.clone().downcast::<EventButton>() {
-               println!("Could unwrap: {:?}", result.get_position()); 
-            }
-            if let Ok(ref result) = event.clone().downcast::<EventMotion>() {
-               println!("Motion unwrap: {:?}", result.get_position()); 
-            }
-            if let Ok(ref result) = event.clone().downcast::<EventConfigure>() {
-                let (width, height) = result.get_size();
+        drawing_area.add_events(SCROLL_MASK.bits() as i32);
 
-                sender.send(
-                    GtkMessage::RendererScreenResize(
-                        ScreenUnit(width as f64), 
-                        ScreenUnit(height as f64)
-                    )
-                );
-            }
-            
-            Inhibit(false) 
+        {
 
-        });
+                let drawing_area_ref = drawing_area.clone(); 
+                drawing_area.connect_event(move |obj, event| { 
+
+                if let Ok(ref result) = event.clone().downcast::<EventScroll>() {
+                    let (x, y) = result.get_position();
+                    let mut delta = 1.0;
+
+                    let direction = result.get_direction();
+
+                    let direction = match direction {
+                        ::gdk::ScrollDirection::Up => {
+                            delta = 1.0/1.1;     
+                            Some(ScrollDirection::Up)
+                        }
+                        ::gdk::ScrollDirection::Down => {
+                            delta = 1.1;    
+                            Some(ScrollDirection::Down)
+                        },
+                        ::gdk::ScrollDirection::Smooth => {
+                            let (x, y) = result.get_delta();
+                            
+                            if x > 0.0 {
+                                delta = 1.0/1.1;
+                                Some(ScrollDirection::Up)
+                            } else {
+                                delta = 1.1;
+                                Some(ScrollDirection::Down)
+                            }
+                        }
+                        _ => {
+                            None
+                        }
+                    };
+
+                    if let Some(dir) = direction {
+                        sender.send(
+                            GtkMessage::Scroll(
+                                ScreenUnit(x as f64), 
+                                ScreenUnit(y as f64),
+                                dir,
+                                delta
+                            )
+                        );
+                    }
+
+
+                    // slightly annoyying - have to queue redraw here? not the most logical
+                    drawing_area_ref.queue_draw();
+                }
+                if let Ok(ref result) = event.clone().downcast::<EventButton>() {
+                   println!("Could unwrap: {:?}", result.get_position()); 
+                }
+                if let Ok(ref result) = event.clone().downcast::<EventMotion>() {
+                   println!("Motion unwrap: {:?}", result.get_position()); 
+                } 
+                if let Ok(ref result) = event.clone().downcast::<EventConfigure>() {
+                    let (width, height) = result.get_size();
+
+                    sender.send(
+                        GtkMessage::RendererScreenResize(
+                            ScreenUnit(width as f64), 
+                            ScreenUnit(height as f64)
+                        )
+                    );
+                }
+                
+                Inhibit(false) 
+
+            });
+        }
 
 
         {
@@ -121,14 +176,6 @@ impl Renderer {
                 let style_scheme = style_scheme.read().unwrap();
                 let render_window = render_window.read().unwrap();
                 let draw_queue = draw_queue.read().unwrap();
-
-
-
-                {
-                    let ScreenDimensions(ScreenUnit(ref width), ScreenUnit(ref height)) = render_window.screen_dimensions();
-                    // cr.scale(*width, *height);
-                }
-
 
                 cr.set_source_rgb(0.3, 0.3, 0.3);
                 cr.paint();
@@ -141,8 +188,8 @@ impl Renderer {
                 let end_x = (bounding_box.0 + bounding_box.2).0;
                 let end_y = (bounding_box.1 + bounding_box.3).0;
 
-                let mut x = (start_x / 100.0).floor();
-                let mut y = (start_y / 100.0).floor();
+                let mut x = 100.0 *  (start_x / 100.0).floor();
+                let mut y = 100.0 * (start_y / 100.0).floor();
 
                 let mut point_1 = WorldCoords(WorldUnit(x), WorldUnit(start_y));
                 let mut point_2 = WorldCoords(WorldUnit(x), WorldUnit(end_y));
@@ -205,6 +252,7 @@ impl Renderer {
         event_builder.set_renderer_channel(sender);
 
         let renderer_event_thread = {
+            let drawing_area = drawing_area.clone();
             let render_window = render_window.clone();
             thread::spawn(move || {
                for event in receiver.iter() {
@@ -213,6 +261,13 @@ impl Renderer {
                             if let Ok(mut rw) = render_window.write() {
                                 rw.update_screen_dimensions(dimensions);
                             }
+                        },
+                        RendererMessage::ScrollEvent(point, direction, delta) => {
+                            println!("pos : {:?}, {:?}", point, direction);
+                            if let Ok(mut rw) = render_window.write() {
+                                rw.zoom_window(&point, direction, delta);
+                            }
+ 
                         }
                    }
                }

@@ -21,7 +21,8 @@ type RenderX = RenderUnit;
 type RenderY = RenderUnit;
 
 
-
+const MAX_ZOOM_OUT : i32 = -100;
+const MAX_ZOOM_IN  : i32 = 10;
 
 /// Represents a rectangle in world space - can be moved and scaled freely
 #[derive(Debug, PartialEq, PartialOrd)]
@@ -89,11 +90,12 @@ impl WorldBoundingBox {
         let new_height = self.3 * sy;
         let new_x = (self.0 - point.0) * sx + point.0;
         let new_y = (self.1 - point.1) * sy + point.1;
+        println!("Box was {:?}", self);
         self.0 = new_x;
         self.1 = new_y;
         self.2 = new_width;
         self.3 = new_height;
-
+        println!("Box is now {:?}", self);
     }
 
     fn set_box_between(&mut self, point_a : WorldCoords, point_b : WorldCoords) {
@@ -144,8 +146,10 @@ impl WorldBoundingBox {
 pub struct RenderWindow {
     // world_dimensions - width, height
     world_bounding_box: WorldBoundingBox,
+    // scale
+    render_window_scale: i32,
     // screen_dimensions - width height
-    screen_bounding_box: ScreenDimensions
+    screen_bounding_box: ScreenDimensions,
 }
 
 impl RenderWindow {
@@ -161,6 +165,7 @@ impl RenderWindow {
         println!("At creation xywh is {:?}, {:?}, {:?}, {:?}", x,y,width,height);
         RenderWindow {
             world_bounding_box: WorldBoundingBox(WorldUnit(x), WorldUnit(y), WorldUnit(width), WorldUnit(height)),
+            render_window_scale: 0,
             screen_bounding_box: dimensions
         }
     }
@@ -240,25 +245,57 @@ impl RenderWindow {
         self.screen_to_render(&self.world_to_screen(world_coords))
     }
 
+    pub fn zoom_window(&mut self, center: &ScreenCoords, direction: ScrollDirection, mut delta: f64) {
+        println!("I am being asked to scale you!, delta: {}", delta);
+
+        let point = self.screen_to_world(center);
+        // self.render_window_scale = self.render_window_scale + WorldUnit(delta);
+        let scale = WorldUnit(delta);
+        let current_level = self.render_window_scale;
+        match direction {
+            ScrollDirection::Up => {
+                if current_level < MAX_ZOOM_IN {
+                    self.render_window_scale += 1;
+                    self.world_bounding_box.scale_box_around_point(scale, scale, &point);
+                }
+            }
+            ScrollDirection::Down => {
+                if current_level > MAX_ZOOM_OUT {
+                    self.render_window_scale -= 1;
+                    self.world_bounding_box.scale_box_around_point(scale, scale, &point);
+                }
+            }
+        }
+
+
+    }
+
     /// Updates the screen dimensions maintaining the aspect ratio
     pub fn update_screen_dimensions(&mut self, screen_dimensions: ScreenDimensions) {
         if (self.screen_bounding_box.0).0 != (screen_dimensions.0).0  {
+
             let ratio = WorldUnit((screen_dimensions.0).0 / (screen_dimensions.1).0);
-            let scaling = WorldUnit((screen_dimensions.0).0 / (self.screen_bounding_box.0).0);
+
+            let scaling = WorldUnit((screen_dimensions.1).0 / (self.screen_bounding_box.1).0);
 
             self.screen_bounding_box.set_dimensions(screen_dimensions.0, screen_dimensions.1);
 
             let new_width = self.world_bounding_box.3 * ratio * scaling;
             let new_height = self.world_bounding_box.3 * scaling;
+
+
             self.world_bounding_box.set_dimensions(new_width, new_height);
         } else {
+
             let ratio = WorldUnit((screen_dimensions.1).0 / (screen_dimensions.0).0);
+
             let scaling = WorldUnit((screen_dimensions.0).0 / (self.screen_bounding_box.0).0);
 
             self.screen_bounding_box.set_dimensions(screen_dimensions.0, screen_dimensions.1);
 
             let new_height = self.world_bounding_box.2 * ratio * scaling;
             let new_width = self.world_bounding_box.2 * scaling;
+
             self.world_bounding_box.set_dimensions(new_width, new_height);
         }
     }
