@@ -4,8 +4,8 @@ use super::components::DrawableContainer;
 pub use super::{StyleScheme, RenderWindow};
 
 use event::EventManagerBuilder;
-use event::message::renderer::RendererMessage;
-use event::message::gtk::GtkMessage;
+use event::message::renderer::DialogRendererMessage;
+use event::message::GeneralMessage;
 
 use std::convert::AsRef;
 use std::sync::mpsc;
@@ -84,7 +84,7 @@ impl DialogRenderer {
                 )
         ));
 
-        let sender : Sender<GtkMessage> = event_builder.get_gdk_channel();
+        let sender : Sender<GeneralMessage> = event_builder.get_gdk_channel();
 
         drawing_area.add_events(BUTTON_PRESS_MASK.bits() as i32);
         drawing_area.add_events(BUTTON1_MOTION_MASK.bits() as i32);
@@ -128,7 +128,7 @@ impl DialogRenderer {
 
                     if let Some(dir) = direction {
                         sender.send(
-                            GtkMessage::Scroll(
+                            GeneralMessage::Scroll(
                                 ScreenUnit(x as f64), 
                                 ScreenUnit(y as f64),
                                 dir,
@@ -151,7 +151,7 @@ impl DialogRenderer {
                     let (width, height) = result.get_size();
 
                     sender.send(
-                        GtkMessage::RendererScreenResize(
+                        GeneralMessage::RendererScreenResize(
                             ScreenUnit(width as f64), 
                             ScreenUnit(height as f64)
                         )
@@ -243,7 +243,7 @@ impl DialogRenderer {
             });
         }
 
-        let (sender, receiver) : (Sender<RendererMessage>,Receiver<RendererMessage>) = mpsc::channel();
+        let (sender, receiver) : (Sender<DialogRendererMessage>,Receiver<DialogRendererMessage>) = mpsc::channel();
         
         event_builder.set_renderer_channel(sender);
 
@@ -253,12 +253,12 @@ impl DialogRenderer {
             thread::spawn(move || {
                for event in receiver.iter() {
                    match event {
-                        RendererMessage::ResizeEvent(dimensions) => {
+                        DialogRendererMessage::ResizeEvent(dimensions) => {
                             if let Ok(mut rw) = render_window.write() {
                                 rw.update_screen_dimensions(dimensions);
                             }
                         },
-                        RendererMessage::ScrollEvent(point, direction, delta) => {
+                        DialogRendererMessage::ScrollEvent(point, direction, delta) => {
                             println!("pos : {:?}, {:?}", point, direction);
                             if let Ok(mut rw) = render_window.write() {
                                 rw.zoom_window(&point, direction, delta);

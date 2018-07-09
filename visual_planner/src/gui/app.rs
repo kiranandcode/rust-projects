@@ -42,8 +42,25 @@ use gtk::{
     Box,
     BoxExt,
     Orientation,
+
     ListBox,
     ListBoxExt,
+
+    Toolbar,
+    ToolbarExt,
+
+    ToolButton,
+    ToolButtonExt,
+
+    MenuBar,
+    MenuBarExt,
+    
+    Menu,
+    MenuExt,
+
+    MenuItem,
+    MenuItemExt,
+    MenuShellExt,
 };
 
 
@@ -130,100 +147,145 @@ impl Header {
 
 pub struct Content {
     pub (in gui) main_box: Box,
+        pub (in gui) menu_bar: MenuBar,
+        pub (in gui) tool_bar: Toolbar,
 
-        pub (in gui) side_bar_panel: Box,
-            pub (in gui) map_list: ListBox,
-            pub (in gui) layer_list: ListBox,
+        pub (in gui) content_box: Box,
 
-        pub (in gui) main_tabs: Notebook,
-            pub (in gui) conversation_renderer: DialogRenderer,
+            pub (in gui) side_bar_panel: Box,
+                pub (in gui) map_list: ListBox,
+                pub (in gui) layer_list: ListBox,
 
-        pub (in gui) options_tabs: Notebook,
-            pub (in gui) properties_list: ListBox,
-            pub (in gui) variables_box: Box,
-                pub (in gui) global_variables: ListBox,
-                pub (in gui) local_variables: ListBox,
+            pub (in gui) main_tabs: Notebook,
+                pub (in gui) conversation_renderer: DialogRenderer,
+
+            pub (in gui) options_tabs: Notebook,
+                pub (in gui) properties_list: ListBox,
+                pub (in gui) variables_box: Box,
+                    pub (in gui) global_variables: ListBox,
+                    pub (in gui) local_variables: ListBox,
 }
 
 impl Content {
     fn new(event_builder : &mut EventManagerBuilder, style_context: Arc<RwLock<StyleScheme>>) -> Self {
-        let main_box = Box::new(Orientation::Horizontal, 0);
+        let main_box = Box::new(Orientation::Vertical, 0);
+            let menu_bar = MenuBar::new();
+                let menu = Menu::new();
+                let file_menu_item = MenuItem::new_with_label("File");      
+                let file_open_menu_item = MenuItem::new_with_label("Open");      
+                let file_save_menu_item = MenuItem::new_with_label("Save");      
+                let file_exit_menu_item = MenuItem::new_with_label("Exit");      
 
-            let side_bar_panel = Box::new(Orientation::Vertical, 0);
+                file_menu_item.set_submenu(&menu);
+                    menu.append(&file_open_menu_item);
+                    menu.append(&file_save_menu_item);
+                    menu.append(&file_exit_menu_item);
+                        file_exit_menu_item.connect_activate(|_| { ::gtk::main_quit(); });
 
-                let map_list = ListBox::new();
-                let layer_list = ListBox::new();
+                menu_bar.append(&file_menu_item);
+            let tool_bar = Toolbar::new();
+                let zoom_out = ToolButton::new_from_stock("gtk-zoom-in");
+                tool_bar.insert(&zoom_out,0);
 
-                side_bar_panel.pack_start(&map_list, true, true, 0);
-                side_bar_panel.pack_start(&layer_list, true, true, 0);
+            let content_box = Box::new(Orientation::Horizontal, 0);
 
+                let side_bar_panel = Box::new(Orientation::Vertical, 0);
 
-            let main_tabs = Notebook::new();
-                let conversation_renderer = DialogRenderer::new(event_builder, style_context);
-        
-                main_tabs.add(conversation_renderer.as_ref());
-                main_tabs.set_menu_label_text(conversation_renderer.as_ref(), "Dialog Editor");
-                main_tabs.set_tab_label_text(conversation_renderer.as_ref(), "Dialog Editor");
+                    let map_list = ListBox::new();
+                    let layer_list = ListBox::new();
 
-
-            let options_tabs = Notebook::new();
-                let properties_list = ListBox::new();
-
-                let variables_box = Box::new(Orientation::Vertical, 0);
-                    let local_variables = ListBox::new();
-                    let global_variables = ListBox::new();
-
-                    variables_box.pack_start(&global_variables, true, true, 0);
-                    variables_box.pack_start(&local_variables, true, true, 0);
-
-
-                options_tabs.add(&properties_list);
-                options_tabs.set_menu_label_text(&properties_list, "Properties");
-                options_tabs.set_tab_label_text(&properties_list, "Properties");
-
-                options_tabs.add(&variables_box);
-                options_tabs.set_menu_label_text(&variables_box, "Variables");
-                options_tabs.set_tab_label_text(&variables_box, "Variables");
+                    side_bar_panel.pack_start(&map_list, true, true, 0);
+                    side_bar_panel.pack_start(&layer_list, true, true, 0);
 
 
+                let main_tabs = Notebook::new();
+                    let conversation_renderer = DialogRenderer::new(event_builder, style_context);
+            
+                    main_tabs.add(conversation_renderer.as_ref());
+                    main_tabs.set_menu_label_text(conversation_renderer.as_ref(), "Dialog Editor");
+                    main_tabs.set_tab_label_text(conversation_renderer.as_ref(), "Dialog Editor");
+
+
+                let options_tabs = Notebook::new();
+                    let properties_list = ListBox::new();
+
+                    let variables_box = Box::new(Orientation::Vertical, 0);
+                        let local_variables = ListBox::new();
+                        let global_variables = ListBox::new();
+
+                        variables_box.pack_start(&global_variables, true, true, 0);
+                        variables_box.pack_start(&local_variables, true, true, 0);
+
+
+                    options_tabs.add(&properties_list);
+                    options_tabs.set_menu_label_text(&properties_list, "Properties");
+                    options_tabs.set_tab_label_text(&properties_list, "Properties");
+
+                    options_tabs.add(&variables_box);
+                    options_tabs.set_menu_label_text(&variables_box, "Variables");
+                    options_tabs.set_tab_label_text(&variables_box, "Variables");
+
+
+            content_box.pack_start(
+                &side_bar_panel,
+                false,
+                false,
+                0
+            );
+
+            content_box.pack_start(
+                &main_tabs,
+                true,
+                true,
+                0
+            );
+
+            content_box.pack_end(
+                &options_tabs,
+                false,
+                false,
+                0
+            );
         main_box.pack_start(
-            &side_bar_panel,
+            &menu_bar,
             false,
-            true,
+            false,
             0
         );
 
         main_box.pack_start(
-            &main_tabs,
-            true,
-            true,
+            &tool_bar,
+            false,
+            false,
             0
         );
 
-        main_box.pack_end(
-            &options_tabs,
-            false,
-            false,
+        main_box.pack_start(
+            &content_box,
+            true,
+            true,
             0
         );
 
         Content {
 
             main_box,
+                menu_bar,
+                tool_bar,
+                content_box,
 
-                side_bar_panel,
-                    map_list,
-                    layer_list,
+                    side_bar_panel,
+                        map_list,
+                        layer_list,
 
-                main_tabs,
-                    conversation_renderer,
+                    main_tabs,
+                        conversation_renderer,
 
-            options_tabs,
-            properties_list,
-            variables_box,
-
-            local_variables,
-            global_variables,
+                    options_tabs,
+                        properties_list,
+                        variables_box,
+                            local_variables,
+                            global_variables,
         }
 
     }

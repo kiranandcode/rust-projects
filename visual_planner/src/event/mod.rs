@@ -1,6 +1,6 @@
 pub mod message;
-use self::message::gtk::GtkMessage;
-use self::message::renderer::RendererMessage;
+use self::message::GeneralMessage;
+use self::message::renderer::DialogRendererMessage;
 use types::*;
 
 use std::sync::mpsc::{Sender, Receiver};
@@ -11,8 +11,8 @@ use std::thread;
 use gdk::Event;
 
 pub struct EventManagerBuilder {
-    renderer_channel: Option<Sender<message::renderer::RendererMessage>>, 
-    gdk_pair: (Receiver<GtkMessage>, Sender<GtkMessage>),
+    renderer_channel: Option<Sender<message::renderer::DialogRendererMessage>>, 
+    gdk_pair: (Receiver<GeneralMessage>, Sender<GeneralMessage>),
 }
 
 impl EventManagerBuilder {
@@ -24,11 +24,11 @@ impl EventManagerBuilder {
         }
    }
 
-   pub fn get_gdk_channel(&mut self) -> Sender<GtkMessage> {
+   pub fn get_gdk_channel(&mut self) -> Sender<GeneralMessage> {
         self.gdk_pair.1.clone()
    }
 
-   pub fn set_renderer_channel(&mut self, renderer_channel : Sender<message::renderer::RendererMessage>) -> &mut Self {
+   pub fn set_renderer_channel(&mut self, renderer_channel : Sender<message::renderer::DialogRendererMessage>) -> &mut Self {
        self.renderer_channel = Some(renderer_channel);
        self
    }
@@ -48,8 +48,9 @@ impl EventManagerBuilder {
 }
 
 pub struct EventManager {
-    gdk_receiver: Receiver<GtkMessage>,
-    renderer_channel: Option<Sender<message::renderer::RendererMessage>>, 
+    gdk_receiver: Receiver<GeneralMessage>,
+    renderer_channel: Option<Sender<message::renderer::DialogRendererMessage>>, 
+    
 }
 
 
@@ -68,14 +69,14 @@ impl EventManager {
                     // println!("Got event {:?}", event);
 
                     match event {
-                        GtkMessage::RendererScreenResize(width, height) =>  {
+                        GeneralMessage::RendererScreenResize(width, height) =>  {
                             if let Some(ref chnl) = renderer_channel {
-                                chnl.send(RendererMessage::ResizeEvent(ScreenDimensions(width,height)));
+                                chnl.send(DialogRendererMessage::ResizeEvent(ScreenDimensions(width,height)));
                             }
                         }
-                        GtkMessage::Scroll(width, height, scroll_direction, delta) => {
+                        GeneralMessage::Scroll(width, height, scroll_direction, delta) => {
                             if let Some(ref chnl) = renderer_channel {
-                                chnl.send(RendererMessage::ScrollEvent(ScreenCoords(width,height), scroll_direction, delta));
+                                chnl.send(DialogRendererMessage::ScrollEvent(ScreenCoords(width,height), scroll_direction, delta));
                             }
                         }
                     }

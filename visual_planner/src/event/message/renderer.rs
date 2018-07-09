@@ -1,6 +1,6 @@
 use types::*;
 
-pub enum RendererMessage {
+pub enum DialogRendererMessage {
     ResizeEvent(ScreenDimensions),
     ScrollEvent(ScreenCoords, ScrollDirection, f64)
 }

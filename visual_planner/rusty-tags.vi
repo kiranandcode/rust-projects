@@ -811,8 +811,12 @@ DialogExt	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-
 DialogExtManual	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/dialog.rs	/^pub trait DialogExtManual {$/;"	t
 DialogExtManual for O	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/dialog.rs	/^impl<O: DialogExt> DialogExtManual for O {$/;"	i
 DialogFlags	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/flags.rs	/^    pub struct DialogFlags: u32 {$/;"	s
+DialogInputManager	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/input/dialog.rs	/^impl DialogInputManager {$/;"	i
+DialogInputManager	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/input/dialog.rs	/^pub struct DialogInputManager {$/;"	s
+DialogInputManagerState	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/input/dialog.rs	/^pub enum DialogInputManagerState {$/;"	g
 DialogRenderer	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/renderer/dialog/mod.rs	/^impl DialogRenderer {$/;"	i
 DialogRenderer	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/renderer/dialog/mod.rs	/^pub struct DialogRenderer {$/;"	s
+DialogRendererMessage	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/event/message/renderer.rs	/^pub enum DialogRendererMessage {$/;"	g
 DialogView	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/renderer/components/dialog_view.rs	/^pub struct DialogView {$/;"	s
 DirectionType	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/enums.rs	/^pub enum DirectionType {$/;"	g
 Display	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/auto/display.rs	/^    pub struct Display(Object<ffi::GdkDisplay>);$/;"	s
@@ -1691,6 +1695,7 @@ Gbreve	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6
 Gcaron	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/enums.rs	/^    pub const Gcaron: Key = ffi::GDK_KEY_Gcaron as u32;$/;"	c
 Gcedilla	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/enums.rs	/^    pub const Gcedilla: Key = ffi::GDK_KEY_Gcedilla as u32;$/;"	c
 Gcircumflex	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/enums.rs	/^    pub const Gcircumflex: Key = ffi::GDK_KEY_Gcircumflex as u32;$/;"	c
+GeneralMessage	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/event/message/mod.rs	/^pub enum GeneralMessage {$/;"	g
 Geometry	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/geometry.rs	/^pub struct Geometry {$/;"	s
 Georgian_an	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/enums.rs	/^    pub const Georgian_an: Key = ffi::GDK_KEY_Georgian_an as u32;$/;"	c
 Georgian_ban	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/enums.rs	/^    pub const Georgian_ban: Key = ffi::GDK_KEY_Georgian_ban as u32;$/;"	c
@@ -2020,7 +2025,6 @@ Grid	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0
 Grid	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/grid.rs	/^impl Grid {$/;"	i
 GridExt	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/grid.rs	/^pub trait GridExt {$/;"	t
 GtkApplicationExt	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/application.rs	/^pub trait GtkApplicationExt {$/;"	t
-GtkMessage	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/event/message/gtk.rs	/^pub enum GtkMessage {$/;"	g
 H	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/enums.rs	/^    pub const H: Key = ffi::GDK_KEY_H as u32;$/;"	c
 HINT_ASPECT	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/auto/flags.rs	/^        const HINT_ASPECT = 16;$/;"	c
 HINT_BASE_SIZE	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/auto/flags.rs	/^        const HINT_BASE_SIZE = 8;$/;"	c
@@ -2847,7 +2851,6 @@ RenderX	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/render
 RenderX	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/types.rs	/^type RenderX = RenderUnit;$/;"	T
 RenderY	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/renderer/render_window.rs	/^type RenderY = RenderUnit;$/;"	T
 RenderY	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/types.rs	/^type RenderY = RenderUnit;$/;"	T
-RendererMessage	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/event/message/renderer.rs	/^pub enum RendererMessage {$/;"	g
 RepeatKeys_Enable	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/enums.rs	/^    pub const RepeatKeys_Enable: Key = ffi::GDK_KEY_RepeatKeys_Enable as u32;$/;"	c
 Reply	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/enums.rs	/^    pub const Reply: Key = ffi::GDK_KEY_Reply as u32;$/;"	c
 Requisition	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/requisition.rs	/^pub struct Requisition {$/;"	s
@@ -8206,6 +8209,7 @@ dgettext	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/glib-
 diaeresis	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/enums.rs	/^    pub const diaeresis: Key = ffi::GDK_KEY_diaeresis as u32;$/;"	c
 dialog	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/mod.rs	/^mod dialog;$/;"	m
 dialog	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/lib.rs	/^mod dialog;$/;"	m
+dialog	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/input/mod.rs	/^pub mod dialog;$/;"	m
 dialog	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/renderer/mod.rs	/^pub mod dialog;$/;"	m
 dialog_box	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/manager/components/mod.rs	/^mod dialog_box;$/;"	m
 dialog_view	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/renderer/components/mod.rs	/^pub mod dialog_view;$/;"	m
@@ -10063,7 +10067,7 @@ get_frame_time	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823
 get_frame_time	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/auto/frame_timings.rs	/^    pub fn get_frame_time(&self) -> i64 {$/;"	f
 get_fullscreen_mode	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/auto/window.rs	/^    fn get_fullscreen_mode(&self) -> FullscreenMode {$/;"	f
 get_fullscreen_mode	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/auto/window.rs	/^    fn get_fullscreen_mode(&self) -> FullscreenMode;$/;"	f
-get_gdk_channel	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/event/mod.rs	/^   pub fn get_gdk_channel(&mut self) -> Sender<GtkMessage> {$/;"	f
+get_gdk_channel	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/event/mod.rs	/^   pub fn get_gdk_channel(&mut self) -> Sender<GeneralMessage> {$/;"	f
 get_geometry	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/auto/monitor.rs	/^    fn get_geometry(&self) -> Rectangle {$/;"	f
 get_geometry	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/auto/monitor.rs	/^    fn get_geometry(&self) -> Rectangle;$/;"	f
 get_geometry	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/auto/window.rs	/^    fn get_geometry(&self) -> (i32, i32, i32, i32) {$/;"	f
@@ -12812,7 +12816,6 @@ green	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.
 grid	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/mod.rs	/^mod grid;$/;"	m
 group	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/gesture.rs	/^    fn group<P: IsA<Gesture>>(&self, gesture: &P) {$/;"	f
 group	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/gesture.rs	/^    fn group<P: IsA<Gesture>>(&self, gesture: &P);$/;"	f
-gtk	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/event/message/mod.rs	/^pub mod gtk;$/;"	m
 gui	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/main.rs	/^mod gui;$/;"	m
 guillemotleft	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/enums.rs	/^    pub const guillemotleft: Key = ffi::GDK_KEY_guillemotleft as u32;$/;"	c
 guillemotright	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/enums.rs	/^    pub const guillemotright: Key = ffi::GDK_KEY_guillemotright as u32;$/;"	c
@@ -12824,6 +12827,7 @@ handle_event	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/g
 handle_event	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/search_bar.rs	/^    fn handle_event(&self, event: &gdk::Event) -> bool;$/;"	f
 handle_event	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/search_entry.rs	/^    fn handle_event(&self, event: &gdk::Event) -> bool {$/;"	f
 handle_event	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/search_entry.rs	/^    fn handle_event(&self, event: &gdk::Event) -> bool;$/;"	f
+handle_message	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/input/dialog.rs	/^   pub fn handle_message(message: GeneralMessage) -> DialogRendererMessage {$/;"	f
 has_application	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/recent_info.rs	/^    pub fn has_application(&self, app_name: &str) -> bool {$/;"	f
 has_class	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/style_context.rs	/^    fn has_class(&self, class_name: &str) -> bool {$/;"	f
 has_class	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/style_context.rs	/^    fn has_class(&self, class_name: &str) -> bool;$/;"	f
@@ -16817,7 +16821,7 @@ set_relative_to	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec82
 set_relative_to	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/popover.rs	/^    fn set_relative_to<'a, P: IsA<Widget> + 'a, Q: Into<Option<&'a P>>>(&self, relative_to: Q);$/;"	f
 set_relief	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/button.rs	/^    fn set_relief(&self, relief: ReliefStyle) {$/;"	f
 set_relief	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/button.rs	/^    fn set_relief(&self, relief: ReliefStyle);$/;"	f
-set_renderer_channel	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/event/mod.rs	/^   pub fn set_renderer_channel(&mut self, renderer_channel : Sender<message::renderer::RendererMessage>) -> &mut Self {$/;"	f
+set_renderer_channel	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/event/mod.rs	/^   pub fn set_renderer_channel(&mut self, renderer_channel : Sender<message::renderer::DialogRendererMessage>) -> &mut Self {$/;"	f
 set_reorderable	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/icon_view.rs	/^    fn set_reorderable(&self, reorderable: bool) {$/;"	f
 set_reorderable	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/icon_view.rs	/^    fn set_reorderable(&self, reorderable: bool);$/;"	f
 set_reorderable	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/tree_view.rs	/^    fn set_reorderable(&self, reorderable: bool) {$/;"	f
