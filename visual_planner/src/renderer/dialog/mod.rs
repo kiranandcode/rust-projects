@@ -1,5 +1,5 @@
 use types::*;
-
+use super::components::dialog_view::DialogView;
 use super::components::DrawableContainer;
 pub use super::{StyleScheme, RenderWindow};
 
@@ -70,7 +70,9 @@ impl AsRef<DrawingArea> for DialogRenderer {
 
 impl DialogRenderer {
     pub fn new(event_builder : &mut EventManagerBuilder, style_scheme: Arc<RwLock<StyleScheme>>) -> DialogRenderer {
-        let draw_queue : Arc<RwLock<Vec<DrawableContainer>>> = Arc::new(RwLock::new(Vec::new()));
+        let mut draw_queue = Vec::new();
+        draw_queue.push(DrawableContainer::new(Box::new(DialogView::new())));
+        let draw_queue : Arc<RwLock<Vec<DrawableContainer>>> = Arc::new(RwLock::new(draw_queue));
 
         let drawing_area = DrawingArea::new();
 

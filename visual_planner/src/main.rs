@@ -11,7 +11,7 @@ mod manager;
 
 use event::EventManager;
 use gui::App;
-use gtk::{Settings, SettingsExt};
+use gtk::{Settings, SettingsExt, StyleContext, StyleContextExt};
 
 
 fn main() {

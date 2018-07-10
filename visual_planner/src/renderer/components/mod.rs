@@ -19,6 +19,11 @@ pub struct DrawableContainer {
 }
 
 impl DrawableContainer {
+    pub fn new(drawable: Box<Drawable>) -> Self {
+        DrawableContainer {
+            object: Mutex::new(drawable) 
+        }
+    }
     pub fn draw(&self, cr : &Context, style: &StyleScheme, window : &RenderWindow) {
         // 1. lock mutext
         // 2. match on object and call respective draw fn
