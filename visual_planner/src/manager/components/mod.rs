@@ -23,7 +23,7 @@ pub enum BoxModel {
 
 
 /// Generic struct containing all components required to render a model
+#[derive(Debug, PartialEq, PartialOrd)]
 pub struct Model {
-    position: WorldCoords,
-    bounding_box: WorldBoundingBox,
+    pub (in manager) bounding_box: WorldBoundingBox,
 }

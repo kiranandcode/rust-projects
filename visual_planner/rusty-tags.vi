@@ -806,6 +806,7 @@ DeviceType	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk
 Dialog	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/dialog.rs	/^    pub struct Dialog(Object<ffi::GtkDialog>): Window, Bin, Container, Widget;$/;"	s
 Dialog	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/dialog.rs	/^impl Dialog {$/;"	i
 Dialog	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/dialog.rs	/^impl Dialog {$/;"	i
+DialogBox	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/manager/components/dialog_box.rs	/^impl DialogBox {$/;"	i
 DialogBox	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/manager/components/dialog_box.rs	/^pub struct DialogBox {$/;"	s
 DialogExt	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/dialog.rs	/^pub trait DialogExt {$/;"	t
 DialogExtManual	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/dialog.rs	/^pub trait DialogExtManual {$/;"	t
@@ -9383,6 +9384,7 @@ get_bottom_margin	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec
 get_bottom_margin	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/text_view.rs	/^    fn get_bottom_margin(&self) -> i32;$/;"	f
 get_bounding_box	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/gesture.rs	/^    fn get_bounding_box(&self) -> Option<gdk::Rectangle> {$/;"	f
 get_bounding_box	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/gesture.rs	/^    fn get_bounding_box(&self) -> Option<gdk::Rectangle>;$/;"	f
+get_bounding_box	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/manager/components/dialog_box.rs	/^    pub fn get_bounding_box(&self) -> &WorldBoundingBox {$/;"	f
 get_bounding_box_center	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/gesture.rs	/^    fn get_bounding_box_center(&self) -> Option<(f64, f64)> {$/;"	f
 get_bounding_box_center	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/gesture.rs	/^    fn get_bounding_box_center(&self) -> Option<(f64, f64)>;$/;"	f
 get_bounds	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/text_buffer.rs	/^    fn get_bounds(&self) -> (TextIter, TextIter) {$/;"	f
@@ -13825,6 +13827,7 @@ new	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/event/mod.
 new	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/gui/app.rs	/^    fn new() -> Header {$/;"	f
 new	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/gui/app.rs	/^    fn new(event_builder : &mut EventManagerBuilder, style_context: Arc<RwLock<StyleScheme>>) -> Self {$/;"	f
 new	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/gui/app.rs	/^    pub fn new(event_builder: &mut EventManagerBuilder) -> App {$/;"	f
+new	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/manager/components/dialog_box.rs	/^    pub fn new() -> Self {$/;"	f
 new	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/renderer/dialog/mod.rs	/^    pub fn new(event_builder : &mut EventManagerBuilder, style_scheme: Arc<RwLock<StyleScheme>>) -> DialogRenderer {$/;"	f
 new	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/renderer/render_window.rs	/^    pub fn new(screen_width: ScreenUnit, screen_height: ScreenUnit) -> RenderWindow {$/;"	f
 new_alpha	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/symbolic_color.rs	/^    pub fn new_alpha(color: &SymbolicColor, factor: f64) -> SymbolicColor {$/;"	f

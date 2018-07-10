@@ -14,9 +14,7 @@ use std::thread::JoinHandle;
 use std::thread;
 use std::sync::{
     Arc, 
-    RwLock,
-    Mutex
-};
+    RwLock, Mutex };
 
 use gdk::{
     EventMask, 
@@ -173,7 +171,8 @@ impl DialogRenderer {
                 let render_window = render_window.read().unwrap();
                 let draw_queue = draw_queue.read().unwrap();
 
-                cr.set_source_rgb(0.3, 0.3, 0.3);
+                println!("Color: {:?}", style_scheme.bg.red);
+                cr.set_source_rgba(style_scheme.bg.red, style_scheme.bg.green, style_scheme.bg.blue, style_scheme.bg.alpha);
                 cr.paint();
 
                 let bounding_box = render_window.world_bounding_box();
@@ -198,7 +197,7 @@ impl DialogRenderer {
                     let ScreenCoords(ScreenUnit(x1), ScreenUnit(y1)) = render_window.world_to_screen(&point_1);
                     let ScreenCoords(ScreenUnit(x2), ScreenUnit(y2)) = render_window.world_to_screen(&point_2);
 
-                    cr.set_source_rgb(250.0/255.0, 224.0/255.0, 55.0/255.0);
+                    cr.set_source_rgba(style_scheme.bg_mid.red, style_scheme.bg_mid.green, style_scheme.bg_mid.blue, style_scheme.bg_mid.alpha);
                     cr.new_path();
                     cr.move_to(x1,y1);
                     cr.line_to(x2, y2);
