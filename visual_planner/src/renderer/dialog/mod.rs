@@ -7,6 +7,8 @@ use event::EventManagerBuilder;
 use event::message::renderer::DialogRendererMessage;
 use event::message::GeneralMessage;
 
+use gui::manager::GuiManager;
+
 use std::convert::AsRef;
 use std::sync::mpsc;
 use std::sync::mpsc::{Sender, Receiver};
@@ -22,8 +24,7 @@ use gdk::{
 
     // the following two imports are for handling button clicks
     EventButton, 
-    BUTTON_PRESS_MASK,
-
+    BUTTON_PRESS_MASK, 
     // the following two imports are for handling drags
     EventMotion,
     BUTTON1_MOTION_MASK,
@@ -69,7 +70,7 @@ impl AsRef<DrawingArea> for DialogRenderer {
 }
 
 impl DialogRenderer {
-    pub fn new(event_builder : &mut EventManagerBuilder, style_scheme: Arc<RwLock<StyleScheme>>) -> DialogRenderer {
+    pub fn new((event_builder, gui_manager): (&mut EventManagerBuilder, &mut GuiManager), style_scheme: Arc<RwLock<StyleScheme>>) -> DialogRenderer {
         let mut draw_queue = Vec::new();
 
         draw_queue.push(DrawableContainer::new(Box::new(DialogView::new())));
@@ -77,6 +78,7 @@ impl DialogRenderer {
         let draw_queue : Arc<RwLock<Vec<DrawableContainer>>> = Arc::new(RwLock::new(draw_queue));
 
         let drawing_area = DrawingArea::new();
+        let drawable_id = gui_manager.register_widget(drawing_area.clone());
 
 
         let render_window = Arc::new(RwLock::new(
@@ -94,6 +96,7 @@ impl DialogRenderer {
 
         {
 
+                let sender = sender.clone();
                 let drawing_area_ref = drawing_area.clone(); 
                 drawing_area.connect_event(move |obj, event| { 
 
@@ -141,7 +144,7 @@ impl DialogRenderer {
 
 
                     // slightly annoyying - have to queue redraw here? not the most logical
-                    drawing_area_ref.queue_draw();
+                    // drawing_area_ref.queue_draw();
                 }
                 if let Ok(ref result) = event.clone().downcast::<EventButton>() {
                    println!("Could unwrap: {:?}", result.get_position()); 
@@ -246,13 +249,14 @@ impl DialogRenderer {
             });
         }
 
-        let (sender, receiver) : (Sender<DialogRendererMessage>,Receiver<DialogRendererMessage>) = mpsc::channel();
+        let (dialog_sender, receiver) : (Sender<DialogRendererMessage>,Receiver<DialogRendererMessage>) = mpsc::channel();
         
-        event_builder.set_renderer_channel(sender);
+        event_builder.set_renderer_channel(dialog_sender);
 
         let renderer_event_thread = {
             let drawing_area = drawing_area.clone();
             let render_window = render_window.clone();
+            let sender = sender.clone();
 
             thread::spawn(move || {
                for event in receiver.iter() {
@@ -266,6 +270,9 @@ impl DialogRenderer {
                             println!("pos : {:?}, {:?}", point, direction);
                             if let Ok(mut rw) = render_window.write() {
                                 rw.zoom_window(&point, direction, delta);
+                                sender.send(
+                                    GeneralMessage::Redraw(drawable_id.clone())
+                                );
                             }
  
                         }

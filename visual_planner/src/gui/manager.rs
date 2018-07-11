@@ -1,5 +1,6 @@
 use types::*;
 use event::message::gui::{GuiManagerMessage};
+use event::EventManagerBuilder;
 
 use std::sync::mpsc::{Receiver, Sender};
 use std::collections::HashMap;
@@ -18,8 +19,9 @@ pub struct GuiManager {
 
 impl GuiManager {
 
-    pub fn new() -> Self {
+    pub fn new(event_manager: &mut EventManagerBuilder) -> Self {
         let (sender, receiver) = ::std::sync::mpsc::channel();
+        event_manager.set_gui_channel(sender.clone());
         GuiManager {
             communication_channel: (receiver, sender),
             gui_widgets: HashMap::new(),

@@ -18,11 +18,4 @@ pub fn init() {
         panic!("ERROR: While initializing gtk - {}", err);    
     };
 }
-pub fn run<T: AsRef<Window>>(window : T) {
-    let window = window.as_ref();
-    window.show_all();
-    main();
-}
-
-
 

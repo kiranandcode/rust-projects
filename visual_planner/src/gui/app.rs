@@ -1,10 +1,14 @@
+use super::manager::GuiManager;
+
 use renderer::{
+    
     RenderWindow,
     StyleScheme
 };
 use renderer::dialog::DialogRenderer;
 
 use event::{EventManager, EventManagerBuilder};
+
 
 use std::convert::AsRef;
 use std::sync::{
@@ -77,13 +81,17 @@ pub struct Model {
 }
 
 impl App {
-    pub fn new(event_builder: &mut EventManagerBuilder) -> App {
+    pub fn run(&self) {
+        self.window.show_all();
+    }
+
+    pub fn new((event_builder, gui_manager): (&mut EventManagerBuilder, &mut GuiManager)) -> App {
         let style_context = StyleContext::new();
         let ref_style_context = Arc::new(RwLock::new(StyleScheme::from(&style_context)));
 
         let window = Window::new(WindowType::Toplevel);
         let header = Header::new();
-        let content = Content::new(event_builder, ref_style_context.clone());
+        let content = Content::new((event_builder, gui_manager), ref_style_context.clone());
 
         window.set_title("GopViz - Visualizer");
         window.set_wmclass("app-name", "Gopviz");
@@ -167,7 +175,7 @@ pub struct Content {
 }
 
 impl Content {
-    fn new(event_builder : &mut EventManagerBuilder, style_context: Arc<RwLock<StyleScheme>>) -> Self {
+    fn new((event_builder, gui_manager): (&mut EventManagerBuilder, &mut GuiManager), style_context: Arc<RwLock<StyleScheme>>) -> Self {
         let main_box = Box::new(Orientation::Vertical, 0);
             let menu_bar = MenuBar::new();
                 let menu = Menu::new();
@@ -199,7 +207,7 @@ impl Content {
 
 
                 let main_tabs = Notebook::new();
-                    let conversation_renderer = DialogRenderer::new(event_builder, style_context);
+                    let conversation_renderer = DialogRenderer::new((event_builder,gui_manager), style_context);
             
                     main_tabs.add(conversation_renderer.as_ref());
                     main_tabs.set_menu_label_text(conversation_renderer.as_ref(), "Dialog Editor");
