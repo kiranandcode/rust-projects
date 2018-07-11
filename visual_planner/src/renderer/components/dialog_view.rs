@@ -1,6 +1,10 @@
+
 use super::*;
 use types::*;
 use manager::components::DialogBox;
+
+
+use std::sync::{Arc, Mutex};
 
 pub struct DialogView {
     dialog_box: DialogBox,

@@ -1,4 +1,5 @@
 pub mod app;
+pub mod manager;
 
 pub use self::app::App;
 use renderer::{RenderWindow, StyleScheme};
@@ -9,6 +10,7 @@ use gtk::{
     main,            // used to start the gtk application
     init as gtk_init // must be called before any other calls to gtk frameworks
 };
+
 use std::convert::AsRef;
 
 pub fn init() {

@@ -71,7 +71,9 @@ impl AsRef<DrawingArea> for DialogRenderer {
 impl DialogRenderer {
     pub fn new(event_builder : &mut EventManagerBuilder, style_scheme: Arc<RwLock<StyleScheme>>) -> DialogRenderer {
         let mut draw_queue = Vec::new();
+
         draw_queue.push(DrawableContainer::new(Box::new(DialogView::new())));
+
         let draw_queue : Arc<RwLock<Vec<DrawableContainer>>> = Arc::new(RwLock::new(draw_queue));
 
         let drawing_area = DrawingArea::new();
@@ -251,6 +253,7 @@ impl DialogRenderer {
         let renderer_event_thread = {
             let drawing_area = drawing_area.clone();
             let render_window = render_window.clone();
+
             thread::spawn(move || {
                for event in receiver.iter() {
                    match event {
