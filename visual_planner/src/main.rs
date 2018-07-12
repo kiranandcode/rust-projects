@@ -1,3 +1,4 @@
+#![allow(dead_code)]
 extern crate cairo;
 extern crate gtk;
 extern crate gdk;

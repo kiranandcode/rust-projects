@@ -841,7 +841,13 @@ DragContextExtManual	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db
 DragProtocol	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/auto/enums.rs	/^pub enum DragProtocol {$/;"	g
 DragResult	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/enums.rs	/^pub enum DragResult {$/;"	g
 Drawable	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/renderer/components/mod.rs	/^pub trait Drawable {$/;"	t
+Drawable for BoxModel	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/manager/components/mod.rs	/^impl Drawable for BoxModel {$/;"	i
+Drawable for DecisionBox	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/manager/components/decision_box.rs	/^impl Drawable for DecisionBox {$/;"	i
+Drawable for DialogBox	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/manager/components/dialog_box.rs	/^impl Drawable for DialogBox {$/;"	i
 Drawable for DialogView	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/renderer/components/dialog_view.rs	/^impl Drawable for DialogView {$/;"	i
+Drawable for EntryBox	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/manager/components/entry_box.rs	/^impl Drawable for EntryBox {$/;"	i
+Drawable for StateChangeBox	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/manager/components/state_change_box.rs	/^impl Drawable for StateChangeBox {$/;"	i
+Drawable for VariableBox	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/manager/components/variable_box.rs	/^impl Drawable for VariableBox {$/;"	i
 DrawableContainer	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/renderer/components/mod.rs	/^impl DrawableContainer {$/;"	i
 DrawableContainer	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/renderer/components/mod.rs	/^pub struct DrawableContainer {$/;"	s
 DrawingArea	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/drawing_area.rs	/^    pub struct DrawingArea(Object<ffi::GtkDrawingArea>): Widget;$/;"	s
@@ -2542,7 +2548,7 @@ Model	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/manager/
 ModelButton	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/model_button.rs	/^    pub struct ModelButton(Object<ffi::GtkModelButton>): Button, Bin, Container, Widget, Actionable;$/;"	s
 ModelButton	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/model_button.rs	/^impl ModelButton {$/;"	i
 ModelButtonExt	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/model_button.rs	/^pub trait ModelButtonExt {$/;"	t
-ModelID	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/manager/mod.rs	/^pub struct ModelID(usize);$/;"	s
+ModelID	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/manager/mod.rs	/^pub struct ModelID(usize, Arc<Mutex<ModelManager>>);$/;"	s
 ModelManager	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/manager/mod.rs	/^impl ModelManager {$/;"	i
 ModelManager	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/manager/mod.rs	/^pub struct ModelManager {$/;"	s
 ModifierIntent	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/auto/enums.rs	/^pub enum ModifierIntent {$/;"	g
@@ -8364,6 +8370,12 @@ drag_unhighlight_row	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db
 drag_unhighlight_row	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/list_box.rs	/^    fn drag_unhighlight_row(&self);$/;"	f
 draw	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/widget.rs	/^    fn draw(&self, cr: &cairo::Context) {$/;"	f
 draw	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/widget.rs	/^    fn draw(&self, cr: &cairo::Context);$/;"	f
+draw	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/manager/components/decision_box.rs	/^    fn draw(&self, cr : &Context, style: &StyleScheme, window : &RenderWindow) {$/;"	f
+draw	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/manager/components/dialog_box.rs	/^    fn draw(&self, cr : &Context, style: &StyleScheme, window : &RenderWindow) {$/;"	f
+draw	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/manager/components/entry_box.rs	/^    fn draw(&self, cr : &Context, style: &StyleScheme, window : &RenderWindow) {$/;"	f
+draw	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/manager/components/mod.rs	/^    fn draw(&self, cr : &Context, style: &StyleScheme, window : &RenderWindow) {$/;"	f
+draw	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/manager/components/state_change_box.rs	/^    fn draw(&self, cr : &Context, style: &StyleScheme, window : &RenderWindow) {$/;"	f
+draw	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/manager/components/variable_box.rs	/^    fn draw(&self, cr : &Context, style: &StyleScheme, window : &RenderWindow) {$/;"	f
 draw	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/renderer/components/dialog_view.rs	/^    fn draw(&self, cr : &Context, style: &StyleScheme, window : &RenderWindow) {$/;"	f
 draw	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/renderer/components/mod.rs	/^    fn draw(&self, cr : &Context, style: &StyleScheme, window : &RenderWindow);$/;"	f
 draw	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/renderer/components/mod.rs	/^    pub fn draw(&self, cr : &Context, style: &StyleScheme, window : &RenderWindow) {$/;"	f
@@ -13510,8 +13522,6 @@ lookup_icon_for_scale	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299d
 lookup_icon_for_scale	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/icon_theme.rs	/^    fn lookup_icon_for_scale(&self, icon_name: &str, size: i32, scale: i32, flags: IconLookupFlags) -> Option<IconInfo>;$/;"	f
 lookup_icon_set	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/style_context.rs	/^    fn lookup_icon_set(&self, stock_id: &str) -> Option<IconSet> {$/;"	f
 lookup_icon_set	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/style_context.rs	/^    fn lookup_icon_set(&self, stock_id: &str) -> Option<IconSet>;$/;"	f
-lookup_id	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/manager/mod.rs	/^    pub fn lookup_id(&self, id: ModelID) -> &BoxModel {$/;"	f
-lookup_id_mut	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/manager/mod.rs	/^    pub fn lookup_id_mut(&mut self, id: ModelID) -> &mut BoxModel {$/;"	f
 lookup_item	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/recent_manager.rs	/^    fn lookup_item(&self, uri: &str) -> Result<Option<RecentInfo>, Error> {$/;"	f
 lookup_item	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/recent_manager.rs	/^    fn lookup_item(&self, uri: &str) -> Result<Option<RecentInfo>, Error>;$/;"	f
 lower	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/auto/window.rs	/^    fn lower(&self) {$/;"	f
@@ -14600,7 +14610,6 @@ retrieve_proxy_menu_item	/home/gopiandcode/.cargo/registry/src/github.com-1ecc62
 retrieve_proxy_menu_item	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/tool_item.rs	/^    fn retrieve_proxy_menu_item(&self) -> Option<Widget>;$/;"	f
 return_if_fail_warning	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/glib-0.3.1/src/auto/functions.rs	/^pub fn return_if_fail_warning<'a, 'b, P: Into<Option<&'a str>>, Q: Into<Option<&'b str>>>(log_domain: P, pretty_function: &str, expression: Q) {$/;"	f
 revealer	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/mod.rs	/^mod revealer;$/;"	m
-reverse_lookup	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/manager/mod.rs	/^    pub fn reverse_lookup(&self, model: &BoxModel) -> ModelID {$/;"	f
 rgb_to_hsv	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/functions.rs	/^pub fn rgb_to_hsv(r: f64, g: f64, b: f64) -> (f64, f64, f64) {$/;"	f
 rgba	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/lib.rs	/^mod rgba;$/;"	m
 rightanglebracket	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/enums.rs	/^    pub const rightanglebracket: Key = ffi::GDK_KEY_rightanglebracket as u32;$/;"	c

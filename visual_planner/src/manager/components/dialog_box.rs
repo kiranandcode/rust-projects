@@ -1,4 +1,13 @@
 use super::Model;
+use renderer::components::Drawable;
+use renderer::render_window::RenderWindow;
+use renderer::style_scheme::StyleScheme;
+use types::*;
+
+use std::sync::{Arc, Mutex};
+use cairo::Context;
+
+
 use types::*;
 
 #[derive(Debug, PartialEq, PartialOrd)]
@@ -21,3 +30,14 @@ impl DialogBox {
         &self.main_model.bounding_box
     }
 }
+
+
+impl Drawable for DialogBox {
+
+    fn draw(&self, cr : &Context, style: &StyleScheme, window : &RenderWindow) {
+
+        unimplemented!("Not Implemented!");
+    }
+
+}
+ 
