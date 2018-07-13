@@ -1,4 +1,5 @@
 use std::ops::{Add,Sub,Mul};
+
 // I've made coordiates their own type as I figure they'll be a cohesive unit in the system
 
 type WorldWidth = WorldUnit;

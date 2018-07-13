@@ -5,7 +5,9 @@ use style_scheme::StyleScheme;
 use render_window::RenderWindow;
 use types::*;
 
+use std::cmp::{Ordering, Ord};
 use std::sync::{Arc, Mutex};
+use std::collections::hash_map::HashMap;
 
 use cairo::Context;
 
@@ -15,7 +17,28 @@ pub trait Drawable {
 
 
 
+#[derive(Debug)]
 pub struct ComponentID(usize, Arc<Mutex<ModelManager>>);
+
+impl PartialEq for ComponentID {
+    fn eq(&self, other : &ComponentID) -> bool {
+        self.0 == other.0
+    }
+}
+impl PartialOrd for ComponentID {
+    fn partial_cmp(&self, other: &ComponentID) -> Option<Ordering> {
+        Some(self.0.cmp(&other.0))
+    }
+}
+
+impl Eq for ComponentID {}
+impl Ord for ComponentID {
+    fn cmp(&self, other: &ComponentID) -> Ordering {
+        self.0.cmp(&other.0)
+    }
+}
+
+
 
 pub enum ModelID {
     Component(ComponentID)
@@ -23,12 +46,12 @@ pub enum ModelID {
     
 
 
+#[derive(Debug)]
 pub struct ModelManager {
     /// stores the true value of the models
-    base_models: Vec<BoxModel>,
+    base_models: HashMap<usize, BoxModel>,
     /// Stores the temporary value of a model
-    temp_models: Vec<BoxModel>,
-    
+    temp_models: HashMap<usize, BoxModel>,
 }
 
 

@@ -914,6 +914,7 @@ EnumValue	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/glib
 EnumValue	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/glib-0.3.1/src/enums.rs	/^pub struct EnumValue(*const gobject_ffi::GEnumValue, EnumClass);$/;"	s
 Eogonek	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/enums.rs	/^    pub const Eogonek: Key = ffi::GDK_KEY_Eogonek as u32;$/;"	c
 Eq for Bytes	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/glib-0.3.1/src/bytes.rs	/^impl Eq for Bytes { }$/;"	i
+Eq for ComponentID	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/manager/mod.rs	/^impl Eq for ComponentID {}$/;"	i
 Eq for Date	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/glib-0.3.1/src/date.rs	/^impl Eq for Date {}$/;"	i
 Eq for DateTime	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/glib-0.3.1/src/auto/date_time.rs	/^impl Eq for DateTime {}$/;"	i
 Eq for EnumValue	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/glib-0.3.1/src/enums.rs	/^impl Eq for EnumValue {}$/;"	i
@@ -2616,6 +2617,7 @@ Open	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0
 OpenURL	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/enums.rs	/^    pub const OpenURL: Key = ffi::GDK_KEY_OpenURL as u32;$/;"	c
 Option	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/enums.rs	/^    pub const Option: Key = ffi::GDK_KEY_Option as u32;$/;"	c
 Ord for Bytes	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/glib-0.3.1/src/bytes.rs	/^impl Ord for Bytes {$/;"	i
+Ord for ComponentID	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/manager/mod.rs	/^impl Ord for ComponentID {$/;"	i
 Ord for Date	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/glib-0.3.1/src/date.rs	/^impl Ord for Date {$/;"	i
 Ord for DateTime	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/glib-0.3.1/src/auto/date_time.rs	/^impl Ord for DateTime {$/;"	i
 Ord for EnumValue	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/glib-0.3.1/src/enums.rs	/^impl Ord for EnumValue {$/;"	i
@@ -2671,6 +2673,7 @@ PartialEq	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/glib
 PartialEq	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/glib-0.3.1/src/variant_type.rs	/^        impl<'a, 'b> PartialEq<$lhs> for $rhs {$/;"	i
 PartialEq	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/glib-0.3.1/src/variant_type.rs	/^        impl<'a, 'b> PartialEq<$rhs> for $lhs {$/;"	i
 PartialEq for Bytes	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/glib-0.3.1/src/bytes.rs	/^impl PartialEq for Bytes {$/;"	i
+PartialEq for ComponentID	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/manager/mod.rs	/^impl PartialEq for ComponentID {$/;"	i
 PartialEq for Date	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/glib-0.3.1/src/date.rs	/^impl PartialEq for Date {$/;"	i
 PartialEq for DateTime	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/glib-0.3.1/src/auto/date_time.rs	/^impl PartialEq for DateTime {$/;"	i
 PartialEq for EnumValue	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/glib-0.3.1/src/enums.rs	/^impl PartialEq for EnumValue {$/;"	i
@@ -2686,6 +2689,7 @@ PartialEq for VariantType	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6
 PartialOrd	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/glib-0.3.1/src/bytes.rs	/^        impl<'a, 'b> PartialOrd<$lhs> for $rhs {$/;"	i
 PartialOrd	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/glib-0.3.1/src/bytes.rs	/^        impl<'a, 'b> PartialOrd<$rhs> for $lhs {$/;"	i
 PartialOrd for Bytes	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/glib-0.3.1/src/bytes.rs	/^impl PartialOrd for Bytes {$/;"	i
+PartialOrd for ComponentID	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/manager/mod.rs	/^impl PartialOrd for ComponentID {$/;"	i
 PartialOrd for Date	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/glib-0.3.1/src/date.rs	/^impl PartialOrd for Date {$/;"	i
 PartialOrd for DateTime	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/glib-0.3.1/src/auto/date_time.rs	/^impl PartialOrd for DateTime {$/;"	i
 PartialOrd for EnumValue	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/glib-0.3.1/src/enums.rs	/^impl PartialOrd for EnumValue {$/;"	i
@@ -5103,6 +5107,7 @@ cmp	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/glib-0.3.1
 cmp	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/glib-0.3.1/src/enums.rs	/^    fn cmp(&self, other: &Self) -> cmp::Ordering {$/;"	f
 cmp	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/text_iter.rs	/^    fn cmp(&self, other: &Self) -> cmp::Ordering {$/;"	f
 cmp	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/tree_path.rs	/^    fn cmp(&self, other: &Self) -> cmp::Ordering {$/;"	f
+cmp	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/manager/mod.rs	/^    fn cmp(&self, other: &ComponentID) -> Ordering {$/;"	f
 code	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/auto/enums.rs	/^    fn code(self) -> i32 {$/;"	f
 code	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/glib-0.3.1/src/auto/enums.rs	/^    fn code(self) -> i32 {$/;"	f
 code	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/glib-0.3.1/src/error.rs	/^    fn code(self) -> i32;$/;"	f
@@ -8499,6 +8504,7 @@ eq	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/glib-0.3.1/
 eq	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/paper_size.rs	/^    fn eq(&self, other: &Self) -> bool {$/;"	f
 eq	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/text_iter.rs	/^    fn eq(&self, other: &Self) -> bool {$/;"	f
 eq	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/tree_path.rs	/^    fn eq(&self, other: &Self) -> bool {$/;"	f
+eq	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/manager/mod.rs	/^    fn eq(&self, other : &ComponentID) -> bool {$/;"	f
 equal	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/enums.rs	/^    pub const equal: Key = ffi::GDK_KEY_equal as u32;$/;"	c
 equal	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/glib-0.3.1/src/date_time.rs	/^    pub fn equal(&self, other: &Self) -> bool {$/;"	f
 equal	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/glib-0.3.1/src/variant_type.rs	/^    unsafe fn equal<T, U>(ptr1: *const T, ptr2: *const U) -> bool {$/;"	f
@@ -12844,7 +12850,7 @@ handle_event	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/g
 handle_event	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/search_bar.rs	/^    fn handle_event(&self, event: &gdk::Event) -> bool;$/;"	f
 handle_event	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/search_entry.rs	/^    fn handle_event(&self, event: &gdk::Event) -> bool {$/;"	f
 handle_event	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/search_entry.rs	/^    fn handle_event(&self, event: &gdk::Event) -> bool;$/;"	f
-handle_message	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/input/dialog.rs	/^   pub fn handle_message(message: GeneralMessage) -> DialogRendererMessage {$/;"	f
+handle_message	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/input/dialog.rs	/^   pub fn handle_message(&mut self, message: GeneralMessage) -> Option<DialogRendererMessage> {$/;"	f
 has_application	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/recent_info.rs	/^    pub fn has_application(&self, app_name: &str) -> bool {$/;"	f
 has_class	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/style_context.rs	/^    fn has_class(&self, class_name: &str) -> bool {$/;"	f
 has_class	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/style_context.rs	/^    fn has_class(&self, class_name: &str) -> bool;$/;"	f
@@ -13842,6 +13848,7 @@ new	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/gui/app.rs
 new	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/gui/app.rs	/^    fn new() -> Header {$/;"	f
 new	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/gui/app.rs	/^    pub fn new((event_builder, gui_manager): (&mut EventManagerBuilder, &mut GuiManager)) -> App {$/;"	f
 new	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/gui/manager.rs	/^    pub fn new(event_manager: &mut EventManagerBuilder) -> Self {$/;"	f
+new	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/input/dialog.rs	/^    pub fn new() -> Self  {$/;"	f
 new	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/manager/components/dialog_box.rs	/^    pub fn new() -> Self {$/;"	f
 new	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/render_window.rs	/^    pub fn new(screen_width: ScreenUnit, screen_height: ScreenUnit) -> RenderWindow {$/;"	f
 new	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/renderer/dialog/mod.rs	/^    pub fn new((event_builder, gui_manager): (&mut EventManagerBuilder, &mut GuiManager), style_scheme: Arc<RwLock<StyleScheme>>) -> DialogRenderer {$/;"	f
@@ -14118,6 +14125,7 @@ partial_cmp	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gl
 partial_cmp	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/glib-0.3.1/src/enums.rs	/^    fn partial_cmp(&self, other: &Self) -> Option<cmp::Ordering> {$/;"	f
 partial_cmp	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/text_iter.rs	/^    fn partial_cmp(&self, other: &Self) -> Option<cmp::Ordering> {$/;"	f
 partial_cmp	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/tree_path.rs	/^    fn partial_cmp(&self, other: &Self) -> Option<cmp::Ordering> {$/;"	f
+partial_cmp	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/manager/mod.rs	/^    fn partial_cmp(&self, other: &ComponentID) -> Option<Ordering> {$/;"	f
 partialderivative	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gdk-0.6.0/src/enums.rs	/^    pub const partialderivative: Key = ffi::GDK_KEY_partialderivative as u32;$/;"	c
 paste_clipboard	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/editable.rs	/^    fn paste_clipboard(&self) {$/;"	f
 paste_clipboard	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/editable.rs	/^    fn paste_clipboard(&self);$/;"	f
@@ -17515,6 +17523,7 @@ starts_line	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gt
 starts_sentence	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/text_iter.rs	/^    pub fn starts_sentence(&self) -> bool {$/;"	f
 starts_tag	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/text_iter.rs	/^    pub fn starts_tag<'a, P: Into<Option<&'a TextTag>>>(&self, tag: P) -> bool {$/;"	f
 starts_word	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/text_iter.rs	/^    pub fn starts_word(&self) -> bool {$/;"	f
+state	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/main.rs	/^mod state;$/;"	m
 state_change_box	/home/gopiandcode/Documents/Rust/rust-projects/visual_planner/src/manager/components/mod.rs	/^mod state_change_box;$/;"	m
 state_is_running	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/style_context.rs	/^    fn state_is_running(&self, state: StateType) -> Option<f64> {$/;"	f
 state_is_running	/home/gopiandcode/.cargo/registry/src/github.com-1ecc6299db9ec823/gtk-0.2.0/src/auto/style_context.rs	/^    fn state_is_running(&self, state: StateType) -> Option<f64>;$/;"	f

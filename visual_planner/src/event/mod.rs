@@ -2,6 +2,7 @@ pub mod message;
 use self::message::GeneralMessage;
 use self::message::renderer::DialogRendererMessage;
 use self::message::gui::GuiManagerMessage;
+use input::dialog::DialogInputManager;
 use types::*;
 
 use std::sync::mpsc::{Sender, Receiver};
@@ -55,6 +56,7 @@ impl EventManagerBuilder {
             renderer_channel: Some(renderer_channel),
             gui_channel: Some(gui_channel),
             gdk_receiver,
+            dialog_input_manager: DialogInputManager::new()
         }
    }
 }
@@ -63,6 +65,7 @@ pub struct EventManager {
     gdk_receiver: Receiver<GeneralMessage>,
     renderer_channel: Option<Sender<message::renderer::DialogRendererMessage>>, 
     gui_channel: Option<Sender<message::gui::GuiManagerMessage>>, 
+    dialog_input_manager: DialogInputManager
     
 }
 
@@ -79,6 +82,8 @@ impl EventManager {
                 let gdk_receiver = event_manager.gdk_receiver;
                 let renderer_channel = event_manager.renderer_channel;
                 let gui_channel = event_manager.gui_channel;
+                let mut dialog_input_manager = event_manager.dialog_input_manager;
+
                 for event in gdk_receiver.iter() {
                     // println!("Got event {:?}", event);
 
@@ -88,15 +93,24 @@ impl EventManager {
                                 chnl.send(DialogRendererMessage::ResizeEvent(ScreenDimensions(width,height)));
                             }
                         }
+                        GeneralMessage::Redraw(id) => {
+                            if let Some(ref chnl) =  gui_channel {
+                                chnl.send(GuiManagerMessage::RedrawEvent(id));
+                            }
+                        }
                         GeneralMessage::Scroll(width, height, scroll_direction, delta) => {
                             if let Some(ref chnl) = renderer_channel {
                                 chnl.send(DialogRendererMessage::ScrollEvent(ScreenCoords(width,height), scroll_direction, delta));
                             }
                         }
-                        GeneralMessage::Redraw(id) => {
-                            if let Some(ref chnl) =  gui_channel {
-                                chnl.send(GuiManagerMessage::RedrawEvent(id));
+                        GeneralMessage::SetDialogInputState(msg) => {
+                            if let Some(ref chnl) = renderer_channel {
+                                if let Some(msg) = dialog_input_manager.handle_message(msg) {
+                                    chnl.send(msg);
+                                } 
+
                             }
+ 
                         }
                     }
                 }
