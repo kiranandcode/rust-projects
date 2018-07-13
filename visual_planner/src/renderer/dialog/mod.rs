@@ -1,13 +1,12 @@
-use types::*;
-use super::components::dialog_view::DialogView;
-use super::components::DrawableContainer;
 pub use super::{StyleScheme, RenderWindow};
 
+use types::*;
+use manager::ModelManager;
 use event::EventManagerBuilder;
 use event::message::renderer::DialogRendererMessage;
 use event::message::GeneralMessage;
-
 use gui::manager::GuiManager;
+
 
 use std::convert::AsRef;
 use std::sync::mpsc;
@@ -58,7 +57,7 @@ pub struct DialogRenderer {
    /// Mapping from screen space to world space
    render_window: Arc<RwLock<RenderWindow>>,
    /// List of things to be drawn 
-   draw_queue: Arc<RwLock<Vec<DrawableContainer>>>,
+   draw_queue: Vec<DrawableContainer>,
    // note: we need the rwlock as we don't know where the draw callback is called
    renderer_event_thread: JoinHandle<()>
 }

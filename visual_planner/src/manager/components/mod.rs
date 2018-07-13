@@ -12,14 +12,18 @@ pub use self::state_change_box::*;
 pub use self::entry_box::*;
 
 
-use renderer::components::Drawable;
-use renderer::style_scheme::StyleScheme;
-use renderer::render_window::RenderWindow;
+use style_scheme::StyleScheme;
+use render_window::RenderWindow;
 use types::*;
 
 use std::sync::{Arc, Mutex};
 
 use cairo::Context;
+
+
+pub trait Drawable {
+    fn draw(&self, cr : &Context, style: &StyleScheme, window : &RenderWindow);
+}
 
 
 #[derive(Debug, PartialEq, PartialOrd)]

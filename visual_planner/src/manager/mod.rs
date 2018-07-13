@@ -1,11 +1,26 @@
 pub mod components;
 
 use self::components::BoxModel;
+use style_scheme::StyleScheme;
+use render_window::RenderWindow;
+use types::*;
 
 use std::sync::{Arc, Mutex};
 
-pub struct ModelID(usize, Arc<Mutex<ModelManager>>);
+use cairo::Context;
 
+pub trait Drawable {
+    fn draw(&self, cr : &Context, style: &StyleScheme, window : &RenderWindow);
+}
+
+
+
+pub struct ComponentID(usize, Arc<Mutex<ModelManager>>);
+
+pub enum ModelID {
+    Component(ComponentID)
+}
+    
 
 
 pub struct ModelManager {

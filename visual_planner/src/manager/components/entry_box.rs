@@ -1,6 +1,8 @@
-use renderer::components::Drawable;
-use renderer::render_window::RenderWindow;
-use renderer::style_scheme::StyleScheme;
+use super::Model;
+
+use manager::{Drawable};
+use render_window::RenderWindow;
+use style_scheme::StyleScheme;
 use types::*;
 
 use std::sync::{Arc, Mutex};

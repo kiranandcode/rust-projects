@@ -9,6 +9,8 @@ mod gui;
 mod types;
 mod event;
 mod manager;
+mod render_window;
+mod style_scheme;
 
 use event::EventManager;
 use gui::App;

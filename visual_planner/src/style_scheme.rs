@@ -4,19 +4,19 @@ use gdk::RGBA;
 // used to retrieve the color scheme for the app
 pub struct StyleScheme {
     /// used for the main background of the system
-    pub (in renderer) bg: RGBA,          
+    pub  bg: RGBA,          
 
     /// used for the grid line colors
-    pub (in renderer) bg_mid: RGBA,      
+    pub  bg_mid: RGBA,      
 
     /// used for  border color
-    pub (in renderer) border: RGBA,
+    pub  border: RGBA,
 
     /// used for  the color of the box
-    pub (in renderer) dialog_color: RGBA,
+    pub  dialog_color: RGBA,
 
     /// used for text
-    pub (in renderer) dialog_box_text: RGBA,
+    pub  dialog_box_text: RGBA,
 }
 
 impl StyleScheme {
