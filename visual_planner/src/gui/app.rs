@@ -65,8 +65,19 @@ use gtk::{
     MenuItem,
     MenuItemExt,
     MenuShellExt,
+
+    Image,
+    ImageExt,
+
+    IconSize
 };
 
+
+fn tool_button_from_stock(name: &str, icon_name: &str) -> ToolButton {
+    let plus_img = Image::new_from_icon_name(icon_name, IconSize::SmallToolbar.into());
+    let zoom_out = ToolButton::new(Some(&plus_img), "Add");
+    zoom_out
+}
 
 /// Window containing a visualizer
 pub struct App {
@@ -192,8 +203,15 @@ impl Content {
 
                 menu_bar.append(&file_menu_item);
             let tool_bar = Toolbar::new();
-                let zoom_out = ToolButton::new_from_stock("gtk-zoom-in");
-                tool_bar.insert(&zoom_out,0);
+                let plus_img = Image::new_from_icon_name("list-add", IconSize::SmallToolbar.into());
+                let zoom_out = ToolButton::new(Some(&plus_img), "Add");
+                // let zoom_out = ToolButton::new_from_stock("gtk-zoom-in");
+                
+                let add_button = tool_button_from_stock("Add Node", "list-add");
+                tool_bar.insert(&add_button,0);
+
+                let edge_button = tool_button_from_stock("Add Edge", "document-edit-symbolic");
+                tool_bar.insert(&edge_button,0);
 
             let content_box = Box::new(Orientation::Horizontal, 0);
 

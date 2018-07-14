@@ -1,11 +1,11 @@
 ### Tasks
 - Support screen dragging motions
-    [x] - Setup states in dialoginputmanager
-    [X] - Create general variant to hold inputs
-    [X] - Send DialogRendererclick and motion events to event manager
-    [ ] - Configure match branch to forward links to the dialoginput manager
-    [ ] - Create dialog renderer message variant to represent renderwindow movement
-    [ ] - Configure dialoginputmanager to send correct movements on correct state
+    [x] - Setup states in dialoginputmanager 
+    [X] - Create general variant to hold inputs 
+    [X] - Send DialogRendererclick and motion events to event manager 
+    [X] - Configure match branch to forward links to the dialoginput manager 
+    [X] - Create dialog renderer message variant to represent renderwindow movement 
+    [X] - Configure dialoginputmanager to send correct movements on correct state 
 
 - Support creating boxes
     [ ] - setup states in dialog input manager
