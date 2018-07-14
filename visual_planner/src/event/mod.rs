@@ -2,7 +2,6 @@ pub mod message;
 use self::message::GeneralMessage;
 use self::message::renderer::DialogRendererMessage;
 use self::message::gui::GuiManagerMessage;
-use input::dialog::DialogInputManager;
 use types::*;
 
 use std::sync::mpsc::{Sender, Receiver};
@@ -11,6 +10,12 @@ use std::mem;
 use std::thread;
 
 use gdk::Event;
+
+#[derive(Debug, PartialEq, PartialOrd, Clone)]
+pub enum DialogInputState {
+    NORMAL,
+    NEW,
+}
 
 pub struct EventManagerBuilder {
     renderer_channel: Option<Sender<message::renderer::DialogRendererMessage>>, 
@@ -56,7 +61,7 @@ impl EventManagerBuilder {
             renderer_channel: Some(renderer_channel),
             gui_channel: Some(gui_channel),
             gdk_receiver,
-            dialog_input_manager: DialogInputManager::new()
+            dialog_input_state: DialogInputState::NORMAL
         }
    }
 }
@@ -65,7 +70,7 @@ pub struct EventManager {
     gdk_receiver: Receiver<GeneralMessage>,
     renderer_channel: Option<Sender<message::renderer::DialogRendererMessage>>, 
     gui_channel: Option<Sender<message::gui::GuiManagerMessage>>, 
-    dialog_input_manager: DialogInputManager
+    dialog_input_state: DialogInputState
     
 }
 
@@ -82,7 +87,7 @@ impl EventManager {
                 let gdk_receiver = event_manager.gdk_receiver;
                 let renderer_channel = event_manager.renderer_channel;
                 let gui_channel = event_manager.gui_channel;
-                let mut dialog_input_manager = event_manager.dialog_input_manager;
+                let mut dialog_input_state = event_manager.dialog_input_state;
 
                 for event in gdk_receiver.iter() {
                     // println!("Got event {:?}", event);
@@ -104,13 +109,7 @@ impl EventManager {
                             }
                         }
                         GeneralMessage::SetDialogInputState(msg) => {
-                            if let Some(ref chnl) = renderer_channel {
-                                if let Some(msg) = dialog_input_manager.handle_message(msg) {
-                                    chnl.send(msg);
-                                } 
-
-                            }
- 
+                            dialog_input_state = msg;
                         }
                     }
                 }

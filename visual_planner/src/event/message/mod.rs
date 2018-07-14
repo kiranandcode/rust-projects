@@ -1,7 +1,7 @@
 pub mod renderer;
 pub mod gui;
 
-use state::*;
+use super::DialogInputState;
 use types::*;
 
 /// A thread-safe wrapper for all messages sent 
@@ -10,5 +10,5 @@ pub enum GeneralMessage {
     RendererScreenResize(ScreenUnit, ScreenUnit),
     Scroll(ScreenUnit, ScreenUnit, ScrollDirection, f64),
     Redraw(GuiWidgetID),
-    SetDialogInputState(DialogInputManagerState)
+    SetDialogInputState(DialogInputState)
 }

@@ -10,6 +10,7 @@ pub use self::decision_box::*;
 pub use self::variable_box::*;
 pub use self::state_change_box::*;
 pub use self::entry_box::*;
+pub use super::Drawable;
 
 
 use style_scheme::StyleScheme;
@@ -19,11 +20,6 @@ use types::*;
 use std::sync::{Arc, Mutex};
 
 use cairo::Context;
-
-
-pub trait Drawable {
-    fn draw(&self, cr : &Context, style: &StyleScheme, window : &RenderWindow);
-}
 
 
 #[derive(Debug, PartialEq, PartialOrd)]

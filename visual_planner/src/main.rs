@@ -3,7 +3,6 @@ extern crate cairo;
 extern crate gtk;
 extern crate gdk;
 
-mod input;
 mod renderer;
 mod gui;
 mod types;
@@ -11,7 +10,6 @@ mod event;
 mod manager;
 mod render_window;
 mod style_scheme;
-mod state;
 
 use event::EventManager;
 use gui::App;

@@ -37,10 +37,10 @@ impl Drawable for DialogBox {
 
     fn draw(&self, cr : &Context, style: &StyleScheme, window : &RenderWindow) {
 
-        let bounding_box = self.model.bounding_box;
+        let bounding_box = self.main_model.bounding_box;
         let style_scheme =   style;
 
-        if window.is_bounding_box_onscreen(bounding_box) {
+        if window.is_bounding_box_onscreen(&bounding_box) {
             let ScreenCoords(ScreenUnit(upper_left_x), ScreenUnit(upper_left_y))  
                     = window.world_to_screen(&WorldCoords(bounding_box.0, bounding_box.1));
             let ScreenCoords(ScreenUnit(lower_left_x), ScreenUnit(lower_left_y))  
