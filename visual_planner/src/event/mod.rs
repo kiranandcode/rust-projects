@@ -98,19 +98,26 @@ impl EventManager {
                                 chnl.send(DialogRendererMessage::ResizeEvent(ScreenDimensions(width,height)));
                             }
                         }
+                        GeneralMessage::RendererScroll(width, height, scroll_direction, delta) => {
+                            if let Some(ref chnl) = renderer_channel {
+                                chnl.send(DialogRendererMessage::ScrollEvent(ScreenCoords(width,height), scroll_direction, delta));
+                            }
+                        }
+                        GeneralMessage::RendererClick(width, height) => {
+                            unimplemented!("Has not been implemented!");
+                        }
+                        GeneralMessage::RendererMotion(width, height) => {
+                            unimplemented!("Has not been implemented!");
+                        }
                         GeneralMessage::Redraw(id) => {
                             if let Some(ref chnl) =  gui_channel {
                                 chnl.send(GuiManagerMessage::RedrawEvent(id));
                             }
                         }
-                        GeneralMessage::Scroll(width, height, scroll_direction, delta) => {
-                            if let Some(ref chnl) = renderer_channel {
-                                chnl.send(DialogRendererMessage::ScrollEvent(ScreenCoords(width,height), scroll_direction, delta));
-                            }
-                        }
                         GeneralMessage::SetDialogInputState(msg) => {
                             dialog_input_state = msg;
                         }
+
                     }
                 }
                 println!("Event Manager main loop ended");

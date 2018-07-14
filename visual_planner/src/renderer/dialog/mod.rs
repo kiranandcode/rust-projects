@@ -132,7 +132,7 @@ impl DialogRenderer {
 
                     if let Some(dir) = direction {
                         sender.send(
-                            GeneralMessage::Scroll(
+                            GeneralMessage::RendererScroll(
                                 ScreenUnit(x as f64), 
                                 ScreenUnit(y as f64),
                                 dir,
@@ -147,9 +147,28 @@ impl DialogRenderer {
                 }
                 if let Ok(ref result) = event.clone().downcast::<EventButton>() {
                    println!("Could unwrap: {:?}", result.get_position()); 
+                    let (x, y) = result.get_position();
+                    sender.send(
+                        GeneralMessage::RendererClick(
+                            ScreenUnit(x as f64), 
+                            ScreenUnit(y as f64)
+                        )
+                    );
+ 
                 }
                 if let Ok(ref result) = event.clone().downcast::<EventMotion>() {
                    println!("Motion unwrap: {:?}", result.get_position()); 
+                   
+                    let (x, y) = result.get_position();
+
+                    sender.send(
+                        GeneralMessage::RendererMotion(
+                            ScreenUnit(x as f64), 
+                            ScreenUnit(y as f64)
+                        )
+                    );
+ 
+
                 } 
                 if let Ok(ref result) = event.clone().downcast::<EventConfigure>() {
                     let (width, height) = result.get_size();

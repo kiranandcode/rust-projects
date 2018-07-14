@@ -8,7 +8,9 @@ use types::*;
 #[derive(Debug,PartialEq,PartialOrd,Clone)]
 pub enum GeneralMessage {
     RendererScreenResize(ScreenUnit, ScreenUnit),
-    Scroll(ScreenUnit, ScreenUnit, ScrollDirection, f64),
+    RendererScroll(ScreenUnit, ScreenUnit, ScrollDirection, f64),
+    RendererClick(ScreenUnit, ScreenUnit),
+    RendererMotion(ScreenUnit, ScreenUnit),
     Redraw(GuiWidgetID),
-    SetDialogInputState(DialogInputState)
+    SetDialogInputState(DialogInputState),
 }
