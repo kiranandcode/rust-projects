@@ -3,6 +3,7 @@ mod decision_box;
 mod variable_box;
 mod state_change_box;
 mod entry_box;
+mod box_edge;
 
 
 pub use self::dialog_box::*;
@@ -10,7 +11,7 @@ pub use self::decision_box::*;
 pub use self::variable_box::*;
 pub use self::state_change_box::*;
 pub use self::entry_box::*;
-pub use super::Drawable;
+pub use self::box_edge::*;
 
 
 use style_scheme::StyleScheme;
@@ -34,11 +35,11 @@ pub enum BoxModel {
 
 /// Generic struct containing all components required to render a model
 #[derive(Debug, PartialEq, PartialOrd)]
-pub struct Model {
+pub struct BoxBase {
     pub (in manager) bounding_box: WorldBoundingBox,
 }
 
-impl Drawable for BoxModel {
+impl BoxModel {
 
     fn draw(&self, cr : &Context, style: &StyleScheme, window : &RenderWindow) {
         match self {

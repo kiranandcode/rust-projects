@@ -8,16 +8,16 @@ use std::sync::{Arc, Mutex};
 use cairo::Context;
 
 
-
-
 #[derive(Debug, PartialEq, PartialOrd)]
-pub struct VariableBox {
-
-
+pub struct BoxEdge {
+    from: usize,
+    to: usize,
+    points: Vec<WorldCoords>
 }
 
 
-impl VariableBox {
+impl BoxEdge {
+
 
     pub fn draw(&self, cr : &Context, style: &StyleScheme, window : &RenderWindow) {
 

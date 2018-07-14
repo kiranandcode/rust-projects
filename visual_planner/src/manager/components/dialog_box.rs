@@ -1,6 +1,5 @@
-use super::Model;
+use super::BoxBase;
 
-use manager::{Drawable};
 use render_window::RenderWindow;
 use style_scheme::StyleScheme;
 use types::*;
@@ -13,7 +12,7 @@ use types::*;
 
 #[derive(Debug, PartialEq, PartialOrd)]
 pub struct DialogBox {
-    main_model: Model
+    main_model: BoxBase
 
 }
 
@@ -22,7 +21,7 @@ impl DialogBox {
     pub fn new() -> Self {
         // TODO(Kiran): Fix this
         DialogBox {
-            main_model: Model {
+            main_model: BoxBase {
                 bounding_box: WorldBoundingBox(WorldUnit(0.0), WorldUnit(0.0), WorldUnit(50.0), WorldUnit(50.0))
             }
         }
@@ -33,11 +32,11 @@ impl DialogBox {
 }
 
 
-impl Drawable for DialogBox {
+impl DialogBox {
 
-    fn draw(&self, cr : &Context, style: &StyleScheme, window : &RenderWindow) {
+    pub fn draw(&self, cr : &Context, style: &StyleScheme, window : &RenderWindow) {
 
-        let bounding_box = self.main_model.bounding_box;
+        let bounding_box = &self.main_model.bounding_box;
         let style_scheme =   style;
 
         if window.is_bounding_box_onscreen(&bounding_box) {

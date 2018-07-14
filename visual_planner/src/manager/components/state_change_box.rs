@@ -1,6 +1,5 @@
-use super::Model;
+use super::BoxBase;
 
-use manager::{Drawable};
 use render_window::RenderWindow;
 use style_scheme::StyleScheme;
 use types::*;
@@ -17,9 +16,9 @@ pub struct StateChangeBox {
 }
 
 
-impl Drawable for StateChangeBox {
+impl StateChangeBox {
 
-    fn draw(&self, cr : &Context, style: &StyleScheme, window : &RenderWindow) {
+    pub fn draw(&self, cr : &Context, style: &StyleScheme, window : &RenderWindow) {
 
         unimplemented!("Not Implemented!");
     }

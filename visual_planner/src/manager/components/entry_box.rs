@@ -1,6 +1,5 @@
-use super::Model;
+use super::BoxBase;
 
-use manager::{Drawable};
 use render_window::RenderWindow;
 use style_scheme::StyleScheme;
 use types::*;
@@ -17,9 +16,9 @@ pub struct EntryBox {
 }
 
 
-impl Drawable for EntryBox {
+impl EntryBox {
 
-    fn draw(&self, cr : &Context, style: &StyleScheme, window : &RenderWindow) {
+    pub fn draw(&self, cr : &Context, style: &StyleScheme, window : &RenderWindow) {
 
         unimplemented!("Not Implemented!");
     }
