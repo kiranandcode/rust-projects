@@ -94,7 +94,6 @@ impl DialogRenderer {
         drawing_area.add_events(SCROLL_MASK.bits() as i32);
 
         {
-
                 let sender = sender.clone();
                 let drawing_area_ref = drawing_area.clone(); 
                 drawing_area.connect_event(move |obj, event| { 
@@ -292,7 +291,16 @@ impl DialogRenderer {
                                     GeneralMessage::Redraw(drawable_id.clone())
                                 );
                             }
- 
+                        },
+                        DialogRendererMessage::WindowMoveEvent(x,y) => {
+                            println!("dx dy: {:?}, {:?}", x, y);
+                            if let Ok(mut rw) = render_window.write() {
+                                rw.move_window(&x,&y);
+
+                                sender.send(
+                                    GeneralMessage::Redraw(drawable_id.clone())
+                                );
+                            }
                         }
                    }
                }

@@ -61,6 +61,29 @@ impl Mul for WorldUnit {
         WorldUnit(self.0 * other.0)
     }
 }
+impl Add for ScreenUnit {
+    type Output = ScreenUnit;
+    fn add(self, other : ScreenUnit) -> ScreenUnit {
+        ScreenUnit(self.0 + other.0)
+    }
+}
+
+impl Sub for ScreenUnit {
+    type Output = ScreenUnit;
+    fn sub(self, other : ScreenUnit) -> ScreenUnit {
+        ScreenUnit(self.0 - other.0)
+    }
+}
+
+impl Mul for ScreenUnit {
+    type Output = ScreenUnit;
+    fn mul(self, other : ScreenUnit) -> ScreenUnit {
+        ScreenUnit(self.0 * other.0)
+    }
+}
+
+
+
 
 /// Represents a rectangle in screen space - immovable, but can be rescaled
 #[derive(Debug, PartialEq, PartialOrd)]

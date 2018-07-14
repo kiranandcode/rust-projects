@@ -88,6 +88,7 @@ impl EventManager {
                 let renderer_channel = event_manager.renderer_channel;
                 let gui_channel = event_manager.gui_channel;
                 let mut dialog_input_state = event_manager.dialog_input_state;
+                let mut prev_input_pos : Option<ScreenCoords> = None;
 
                 for event in gdk_receiver.iter() {
                     // println!("Got event {:?}", event);
@@ -103,11 +104,40 @@ impl EventManager {
                                 chnl.send(DialogRendererMessage::ScrollEvent(ScreenCoords(width,height), scroll_direction, delta));
                             }
                         }
-                        GeneralMessage::RendererClick(width, height) => {
-                            unimplemented!("Has not been implemented!");
+                        GeneralMessage::RendererClick(x, y) => {
+                            // TODO(Kiran): Match on dialog state, and based on whether you hit something, change to selected
+                            prev_input_pos = None;
+
+                            match dialog_input_state {
+                                DialogInputState::NORMAL => (),
+                                _ => {
+                                    unimplemented!("Has not been implemented!");
+                                }
+                            }
                         }
-                        GeneralMessage::RendererMotion(width, height) => {
-                            unimplemented!("Has not been implemented!");
+                        GeneralMessage::RendererMotion(x, y) => {
+                            // TODO(Kiran): Match on dialog state, 
+                            // if normal, then move renderwindow, 
+                            // if selected move selected component
+                            match dialog_input_state {
+                                DialogInputState::NEW => (
+                                    // When in create new state, then dragging doesn't do anything???
+                                ),
+                                DialogInputState::NORMAL => {
+                                   if let Some(p_xy) = prev_input_pos.take() {
+                                       let ScreenCoords(px, py) = p_xy;
+                                       let dx =  px - x;
+                                       let dy =  py - y;
+
+                                        println!("dx,dy: {:?} {:?}", dx, dy);
+                                            if let Some(ref chnl) = renderer_channel {
+                                                chnl.send(DialogRendererMessage::WindowMoveEvent(dx, dy));
+                                            }
+                                        prev_input_pos = Some(ScreenCoords(x,y));
+                                   }  
+                                    prev_input_pos = Some(ScreenCoords(x,y));
+                                }
+                            }
                         }
                         GeneralMessage::Redraw(id) => {
                             if let Some(ref chnl) =  gui_channel {

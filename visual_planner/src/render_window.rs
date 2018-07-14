@@ -124,9 +124,44 @@ impl RenderWindow {
     }
 
  
+    pub fn world_to_screen_distance_x(&self, dist : &WorldUnit) -> ScreenUnit {
+        let world_window_width = (self.world_bounding_box.2).0;
+        let screen_window_width = (self.screen_bounding_box.0).0;
+        ScreenUnit(screen_window_width * (dist.0 / world_window_width))
+    }
+
+    pub fn world_to_screen_distance_y(&self, dist : &WorldUnit) -> ScreenUnit {
+        let world_window_width = (self.world_bounding_box.3).0;
+        let screen_window_width = (self.screen_bounding_box.1).0;
+        ScreenUnit(screen_window_width * (dist.0 / world_window_width))
+    }
+
+    pub fn screen_to_world_distance_x(&self, dist : &ScreenUnit) -> WorldUnit {
+        let world_window_width = (self.world_bounding_box.2).0;
+        let screen_window_width = (self.screen_bounding_box.0).0;
+        WorldUnit(world_window_width * (dist.0 / screen_window_width))
+    }
+
+    pub fn screen_to_world_distance_y(&self, dist : &ScreenUnit) -> WorldUnit {
+        let world_window_width = (self.world_bounding_box.3).0;
+        let screen_window_width = (self.screen_bounding_box.1).0;
+
+        WorldUnit(world_window_width * (dist.0 / screen_window_width))
+    }
+
+
+
+
 
     pub fn world_to_render(&self, world_coords: &WorldCoords) -> RenderCoords {
         self.screen_to_render(&self.world_to_screen(world_coords))
+    }
+
+    pub fn move_window(&mut self, x: &ScreenUnit, y: &ScreenUnit) {
+
+        let dx = self.screen_to_world_distance_x(x);
+        let dy = self.screen_to_world_distance_y(y);
+        self.world_bounding_box.move_box(dx, dy)
     }
 
     pub fn zoom_window(&mut self, center: &ScreenCoords, direction: ScrollDirection, mut delta: f64) {
