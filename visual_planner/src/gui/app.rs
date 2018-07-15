@@ -7,7 +7,8 @@ use renderer::{
 };
 use renderer::dialog::DialogRenderer;
 
-use event::{EventManager, EventManagerBuilder};
+use event::{EventManager, EventManagerBuilder, DialogInputState};
+use event::message::GeneralMessage;
 
 
 use std::convert::AsRef;
@@ -209,6 +210,12 @@ impl Content {
                 
                 let add_button = tool_button_from_stock("Add Node", "list-add");
                 tool_bar.insert(&add_button,0);
+                {
+                    let channel = event_builder.get_gdk_channel();
+                    add_button.connect_clicked(move |_| {
+                            channel.send( GeneralMessage::SetDialogInputState(DialogInputState::NEW));
+                    });
+                }
 
                 let edge_button = tool_button_from_stock("Add Edge", "document-edit-symbolic");
                 tool_bar.insert(&edge_button,0);

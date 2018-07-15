@@ -1,6 +1,7 @@
 use types::*;
 
 pub enum GuiManagerMessage {
-   RedrawEvent(GuiWidgetID) 
+   RedrawEvent(GuiWidgetID),
+   SetCursorEvent(GuiWidgetID, &'static str)
 }
 

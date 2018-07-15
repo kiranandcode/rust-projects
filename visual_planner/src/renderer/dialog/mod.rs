@@ -78,6 +78,7 @@ impl DialogRenderer {
 
         let drawing_area = DrawingArea::new();
         let drawable_id = gui_manager.register_widget(drawing_area.clone());
+        event_builder.set_dialog_widget_id(drawable_id.clone());
 
 
         let render_window = Arc::new(RwLock::new(
