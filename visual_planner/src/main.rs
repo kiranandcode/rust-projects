@@ -10,6 +10,7 @@ mod event;
 mod manager;
 mod render_window;
 mod style_scheme;
+mod state;
 
 use event::EventManager;
 use gui::App;

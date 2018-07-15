@@ -7,8 +7,9 @@ use renderer::{
 };
 use renderer::dialog::DialogRenderer;
 
-use event::{EventManager, EventManagerBuilder, DialogInputState};
+use event::{EventManager, EventManagerBuilder};
 use event::message::GeneralMessage;
+use state::*;
 
 
 use std::convert::AsRef;
