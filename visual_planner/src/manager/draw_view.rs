@@ -1,7 +1,7 @@
 use renderer::*;
 use types::*;
 use cairo::Context;
-use std::sync::{Arc, Mutex};
+use std::sync::{Arc, Mutex, MutexGuard};
 
 pub enum ModelChangeRequest {
     MoveTo(WorldCoords),
@@ -12,12 +12,35 @@ pub enum ModelChangeRequest {
 
 pub trait Drawable {
     fn draw(&self, cr : &Context, style: &StyleScheme, window : &RenderWindow); 
+    fn bounding_box(&self) -> &WorldBoundingBox;
+    fn id(&self) -> ModelID;
 }
 
 
-pub struct DrawViewLocked {
+pub struct DrawView {
     id: ModelID,
-    drawable: Arc<Mutex<Drawable>>,
+    drawable: Arc<Drawable>,
+}
+
+impl DrawView {
+    pub fn new(drawable: Arc<Drawable>) -> Self {
+        DrawView {
+            id: drawable.id(),
+            drawable
+        }
+    }
+
+    pub fn matches_id(&self, id: &ModelID) -> bool {
+        &self.id == id
+    }
+
+    pub fn draw(&self, cr : &Context, style: &StyleScheme, window : &RenderWindow) {
+                self.drawable.draw(cr, style, window);
+    }
+
+    pub fn is_onscreen(&self, window: &RenderWindow) -> bool {
+        window.is_bounding_box_onscreen(self.drawable.bounding_box())
+    }
 }
 
 
