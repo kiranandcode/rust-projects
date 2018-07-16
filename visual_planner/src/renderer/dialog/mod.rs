@@ -10,6 +10,7 @@ use event::EventManagerBuilder;
 use event::message::renderer::DialogRendererMessage;
 use event::message::GeneralMessage;
 use gui::manager::GuiManager;
+use manager::draw_view::DrawView;
 
 
 use std::convert::AsRef;
@@ -61,7 +62,7 @@ pub struct DialogRenderer {
    /// Mapping from screen space to world space
    render_window: Arc<RwLock<RenderWindow>>,
    /// List of things to be drawn 
-   draw_queue: Arc<RwLock<Vec<ModelID>>>,
+   draw_queue: Arc<RwLock<Vec<DrawView>>>,
    // note: we need the rwlock as we don't know where the draw callback is called
    renderer_event_thread: JoinHandle<()>,
 
@@ -83,7 +84,7 @@ impl DialogRenderer {
     pub fn new((event_builder, gui_manager): (&mut EventManagerBuilder, &mut GuiManager), style_scheme: Arc<RwLock<StyleScheme>>) -> DialogRenderer {
         let mut draw_queue = Vec::new();
         // draw_queue.push(DrawableContainer::new(Box::new(DialogView::new()))); 
-        let draw_queue : Arc<RwLock<Vec<ModelID>>> = Arc::new(RwLock::new(draw_queue));
+        let draw_queue : Arc<RwLock<Vec<DrawView>>> = Arc::new(RwLock::new(draw_queue));
 
         let drawing_area = DrawingArea::new();
         let drawable_id = gui_manager.register_widget(drawing_area.clone());

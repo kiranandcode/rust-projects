@@ -5,11 +5,16 @@ pub mod draw_view;
 use self::components::*;
 use self::id::*;
 
+use gui::manager::GuiManager;
+use event::EventManagerBuilder;
 use style_scheme::StyleScheme;
 use render_window::RenderWindow;
 use types::*;
 
 use std::collections::hash_map::HashMap;
+use std::thread;
+use std::sync::{Arc, Mutex};
+use std::sync::mpsc::{Sender, Receiver};
 
 use cairo::Context;
 
@@ -33,12 +38,14 @@ pub struct ModelManager {
     /// Stores the temporary value of a model
     temp_models: HashMap<usize, Model>,
 
-    boxe_models: Vec<(usize, BoxModel)>,
 }
 
 
 impl ModelManager {
 
+    pub fn new((event_builder, gui_manager): (&mut EventManagerBuilder, &mut GuiManager)) {
+
+    }
     // pub fn lookup_id(&self, id: ModelID) -> &BoxModel {
     //    &self.models[id.0]
     // }

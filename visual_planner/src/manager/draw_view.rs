@@ -2,8 +2,10 @@ use renderer::*;
 use types::*;
 use cairo::Context;
 use std::sync::{Arc, Mutex, MutexGuard};
+use std::ops::Deref;
 
 pub enum ModelChangeRequest {
+    CompleteMotion,
     MoveTo(WorldCoords),
     MoveBy(WorldUnit, WorldUnit),
     SetText(String),
@@ -12,7 +14,7 @@ pub enum ModelChangeRequest {
 
 pub trait Drawable {
     fn draw(&self, cr : &Context, style: &StyleScheme, window : &RenderWindow); 
-    fn bounding_box(&self) -> &WorldBoundingBox;
+    fn bounding_box(&self) -> MutexGuard<WorldBoundingBox>;
     fn id(&self) -> ModelID;
 }
 
@@ -39,7 +41,7 @@ impl DrawView {
     }
 
     pub fn is_onscreen(&self, window: &RenderWindow) -> bool {
-        window.is_bounding_box_onscreen(self.drawable.bounding_box())
+        window.is_bounding_box_onscreen(self.drawable.bounding_box().deref())
     }
 }
 

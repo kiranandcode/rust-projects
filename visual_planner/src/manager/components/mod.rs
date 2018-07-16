@@ -5,7 +5,7 @@ mod state_change_box;
 mod entry_box;
 mod box_edge;
 
-
+pub use super::id::*;
 pub use self::dialog_box::*;
 pub use self::decision_box::*;
 pub use self::variable_box::*;
@@ -34,9 +34,12 @@ pub enum BoxModel {
 
 
 /// Generic struct containing all components required to render a model
-#[derive(Debug, PartialEq, PartialOrd)]
+#[derive(Debug)]
 pub struct BoxBase {
-    pub (in manager) bounding_box: WorldBoundingBox,
+    pub (in manager) id: BoxID,
+    pub (in manager) bounding_box: Mutex<WorldBoundingBox>,
+    pub (in manager) in_edges: Vec<EdgeID>,
+    pub (in manager) out_edges: Vec<EdgeID>
 }
 
 impl BoxModel {
