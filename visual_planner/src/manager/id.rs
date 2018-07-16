@@ -5,10 +5,10 @@ use manager::components::*;
 use std::cmp::{Ordering, Ord};
 use std::sync::{Arc, Mutex};
 
-pub enum ModelID {
-    BoxID(BoxID),
-    EdgeID(EdgeID)
-}
+// pub enum ModelID {
+//     BoxID(BoxID),
+//     EdgeID(EdgeID)
+// }
  
 
 #[derive(Debug)]

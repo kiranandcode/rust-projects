@@ -1,9 +1,11 @@
+pub mod state;
 pub use super::{StyleScheme, RenderWindow};
 
 use types::*;
-use state::*;
+use ::state::*;
+
+use self::state::DialogStateManager;
 use manager::ModelManager;
-use manager::id::{ModelID};
 use event::EventManagerBuilder;
 use event::message::renderer::DialogRendererMessage;
 use event::message::GeneralMessage;
@@ -61,7 +63,12 @@ pub struct DialogRenderer {
    /// List of things to be drawn 
    draw_queue: Arc<RwLock<Vec<ModelID>>>,
    // note: we need the rwlock as we don't know where the draw callback is called
-   renderer_event_thread: JoinHandle<()>
+   renderer_event_thread: JoinHandle<()>,
+
+   state_manager: DialogStateManager,
+
+    // id for the drawing area
+    drawable_id: GuiWidgetID,
 }
 
 impl AsRef<DrawingArea> for DialogRenderer {
@@ -71,22 +78,30 @@ impl AsRef<DrawingArea> for DialogRenderer {
 }
 
 impl DialogRenderer {
+
+
     pub fn new((event_builder, gui_manager): (&mut EventManagerBuilder, &mut GuiManager), style_scheme: Arc<RwLock<StyleScheme>>) -> DialogRenderer {
         let mut draw_queue = Vec::new();
-        // draw_queue.push(DrawableContainer::new(Box::new(DialogView::new())));
-
+        // draw_queue.push(DrawableContainer::new(Box::new(DialogView::new()))); 
         let draw_queue : Arc<RwLock<Vec<ModelID>>> = Arc::new(RwLock::new(draw_queue));
 
         let drawing_area = DrawingArea::new();
         let drawable_id = gui_manager.register_widget(drawing_area.clone());
-
-
         let render_window = Arc::new(RwLock::new(
                 RenderWindow::new(
                     ScreenUnit(drawing_area.get_allocated_width() as f64), 
                     ScreenUnit(drawing_area.get_allocated_height() as f64)
                 )
         ));
+
+        let state_manager = {
+            let drawable_id = drawable_id.clone();
+            let render_window = render_window.clone();
+
+            DialogStateManager::new(drawable_id, render_window, event_builder)
+        };
+
+
 
         let sender : Sender<GeneralMessage> = event_builder.get_gdk_channel();
 
@@ -141,9 +156,6 @@ impl DialogRenderer {
                         );
                     }
 
-
-                    // slightly annoyying - have to queue redraw here? not the most logical
-                    // drawing_area_ref.queue_draw();
                 }
                 if let Ok(ref result) = event.clone().downcast::<EventButton>() {
                    println!("Could unwrap: {:?}", result.get_position()); 
@@ -241,7 +253,7 @@ impl DialogRenderer {
                     let ScreenCoords(ScreenUnit(x1), ScreenUnit(y1)) = render_window.world_to_screen(&point_1);
                     let ScreenCoords(ScreenUnit(x2), ScreenUnit(y2)) = render_window.world_to_screen(&point_2);
 
-                    cr.set_source_rgb(250.0/255.0, 224.0/255.0, 55.0/255.0);
+                    cr.set_source_rgba(style_scheme.bg_mid.red, style_scheme.bg_mid.green, style_scheme.bg_mid.blue, style_scheme.bg_mid.alpha);
                     cr.new_path();
                     cr.move_to(x1,y1);
                     cr.line_to(x2, y2);
@@ -269,7 +281,7 @@ impl DialogRenderer {
 
         let (dialog_sender, receiver) : (Sender<DialogRendererMessage>,Receiver<DialogRendererMessage>) = mpsc::channel();
         
-        event_builder.set_renderer_channel(dialog_sender);
+        event_builder.set_dialog_renderer_channel(dialog_sender);
 
         let renderer_event_thread = {
             let drawing_area = drawing_area.clone();
@@ -280,7 +292,6 @@ impl DialogRenderer {
 
             thread::spawn(move || {
 
-               let mut prev_input_pos : Option<ScreenCoords> = None;
 
                for event in receiver.iter() {
                    match event {
@@ -308,70 +319,7 @@ impl DialogRenderer {
                                 );
                             }
                         }
-                        DialogRendererMessage::ClickEvent(ScreenCoords(x,y)) => {
-                            // Every distinct drag event is distinguished by one
-                            // initializing click event, and then several motion
-                            // events. To avoid multiple distinct drags coalescing
-                            // into one single large drag (with a jump inbetween)
-                            // we have to reset the prev input pos each time we see a click
-                            prev_input_pos = None;
 
-                            match state {
-                                DialogInputState::NORMAL => (),
-                                _ => {
-                                    unimplemented!("Has not been implemented!");
-                                }
-                            }
-                            
-                        },
-                        DialogRendererMessage::MotionEvent(ScreenCoords(x,y)) => {
-                             // TODO(Kiran): Match on dialog state, 
-                            // if normal, then move renderwindow, 
-                            // if selected move selected component
-                            match state {
-                                DialogInputState::NEW => (
-                                    // When in create new state, then dragging doesn't do anything???
-                                ),
-                                DialogInputState::NORMAL => {
-                                   if let Some(p_xy) = prev_input_pos.take() {
-                                    if let Ok(mut rw) = render_window.write() {
-                                        let ScreenCoords(px, py) = p_xy;
-                                        let dx =  px - x;
-                                        let dy =  py - y;
-
-                                            println!("dx,dy: {:?} {:?}", dx, dy);
-                                                rw.move_window(&dx,&dy);
-
-                                            sender.send(GeneralMessage::Redraw(drawable_id.clone()));
-                                    }
-                                   }  
-                                    prev_input_pos = Some(ScreenCoords(x,y));
-                                }
-                            }
-                           
-                        },
-                        DialogRendererMessage::SetDialogState(msg) => {
-                            if state != msg {
-                                state = msg;
-                            } else {
-                                state = DialogInputState::NORMAL;
-                            }
-                            match state {
-                                DialogInputState::NORMAL => {
-                                    sender.send(
-                                        GeneralMessage::SetCursor(drawable_id.clone(), "default")
-                                    );
-
-                                }
-                                DialogInputState::NEW => {
-                                    sender.send(
-                                        GeneralMessage::SetCursor(drawable_id.clone(), "cell")
-                                    );
-                                }
-                            }
-                        
-
-                        },
 
                    }
                }
@@ -385,7 +333,9 @@ impl DialogRenderer {
             render_window, 
             draw_queue,
             style_scheme,
-            renderer_event_thread
+            renderer_event_thread,
+            state_manager,
+            drawable_id
         }
     }
 }

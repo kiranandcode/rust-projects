@@ -239,3 +239,6 @@ pub enum ScrollDirection {
 
 #[derive(Debug,PartialEq,Eq,PartialOrd,Clone,Copy,Hash)]
 pub struct GuiWidgetID(pub usize);
+
+#[derive(Debug,PartialEq,Eq,PartialOrd,Clone,Copy,Hash)]
+pub struct ModelID(pub usize);

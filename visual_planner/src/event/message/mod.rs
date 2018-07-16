@@ -13,5 +13,6 @@ pub enum GeneralMessage {
     RendererMotion(ScreenUnit, ScreenUnit),
     Redraw(GuiWidgetID),
     SetDialogInputState(DialogInputState),
-    SetCursor(GuiWidgetID, &'static str)
+    SetCursor(GuiWidgetID, &'static str),
+    WindowMove(ScreenUnit, ScreenUnit),
 }

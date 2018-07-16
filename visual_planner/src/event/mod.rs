@@ -1,6 +1,6 @@
 pub mod message;
 use self::message::GeneralMessage;
-use self::message::renderer::DialogRendererMessage;
+use self::message::renderer::{DialogRendererMessage, DialogStateMessage};
 use self::message::gui::GuiManagerMessage;
 use types::*;
 
@@ -14,18 +14,21 @@ use gdk::Event;
 
 
 pub struct EventManagerBuilder {
-    renderer_channel: Option<Sender<message::renderer::DialogRendererMessage>>, 
-    gui_channel: Option<Sender<message::gui::GuiManagerMessage>>,
     gdk_pair: (Receiver<GeneralMessage>, Sender<GeneralMessage>),
+    gui_channel: Option<Sender<message::gui::GuiManagerMessage>>,
+
+    dialog_renderer_channel: Option<Sender<message::renderer::DialogRendererMessage>>, 
+    dialog_state_channel: Option<Sender<message::renderer::DialogStateMessage>>,
 }
 
 impl EventManagerBuilder {
    pub fn new() -> Self {
        let (sender, receiver) = mpsc::channel();
         EventManagerBuilder {
-           renderer_channel: None,
            gui_channel: None,
            gdk_pair: (receiver, sender),
+           dialog_renderer_channel: None,
+           dialog_state_channel: None,
         }
    }
 
@@ -33,10 +36,17 @@ impl EventManagerBuilder {
         self.gdk_pair.1.clone()
    }
 
-   pub fn set_renderer_channel(&mut self, renderer_channel : Sender<message::renderer::DialogRendererMessage>) -> &mut Self {
-       self.renderer_channel = Some(renderer_channel);
+   pub fn set_dialog_renderer_channel(&mut self, renderer_channel : Sender<message::renderer::DialogRendererMessage>) -> &mut Self {
+       self.dialog_renderer_channel = Some(renderer_channel);
        self
    }
+
+   pub fn set_dialog_state_channel(&mut self, state_channel : Sender<message::renderer::DialogStateMessage>) -> &mut Self {
+       self.dialog_state_channel = Some(state_channel);
+       self
+   }
+
+
 
    pub fn set_gui_channel(&mut self, gui_channel: Sender<message::gui::GuiManagerMessage>) -> &mut Self {
         self.gui_channel = Some(gui_channel);
@@ -47,24 +57,30 @@ impl EventManagerBuilder {
 
         let (gdk_receiver, _) = self.gdk_pair;
 
-        let renderer_channel = self.renderer_channel
-                        .expect("Err: EventManagerBuilder::Build - can not build an event manager without a renderer_channel");
+        let dialog_renderer_channel = self.dialog_renderer_channel
+                        .expect("Err: EventManagerBuilder::Build - can not build an event manager without a dialog_renderer_channel");
+
+        let dialog_state_channel = self.dialog_state_channel
+                        .expect("Err: EventManagerBuilder::Build - can not build an event manager without a dialog_state_channel");
 
         let gui_channel = self.gui_channel
                         .expect("Err: EventManagerBuilder::Build - can not build an event manager without a gui_channel");
 
         EventManager {
-            renderer_channel: Some(renderer_channel),
             gui_channel: Some(gui_channel),
             gdk_receiver,
+            dialog_renderer_channel: Some(dialog_renderer_channel),
+            dialog_state_channel: Some(dialog_state_channel),
         }
    }
 }
 
 pub struct EventManager {
     gdk_receiver: Receiver<GeneralMessage>,
-    renderer_channel: Option<Sender<message::renderer::DialogRendererMessage>>, 
     gui_channel: Option<Sender<message::gui::GuiManagerMessage>>, 
+
+    dialog_renderer_channel: Option<Sender<message::renderer::DialogRendererMessage>>, 
+    dialog_state_channel: Option<Sender<message::renderer::DialogStateMessage>>,
 }
 
 
@@ -78,8 +94,10 @@ impl EventManager {
             thread::spawn(move || {
                 // main loop, recieve gdk events, send to corresponding components
                 let gdk_receiver = event_manager.gdk_receiver;
-                let renderer_channel = event_manager.renderer_channel;
                 let gui_channel = event_manager.gui_channel;
+
+                let dialog_renderer_channel = event_manager.dialog_renderer_channel;
+                let dialog_state_channel = event_manager.dialog_state_channel;
 
 
 
@@ -87,46 +105,60 @@ impl EventManager {
                     // println!("Got event {:?}", event);
 
                     match event {
+
+                        // Renderer Channel
                         GeneralMessage::RendererScreenResize(width, height) =>  {
-                            if let Some(ref chnl) = renderer_channel {
+                            if let Some(ref chnl) = dialog_renderer_channel {
                                 chnl.send(DialogRendererMessage::ResizeEvent(ScreenDimensions(width,height)));
                             }
                         }
                         GeneralMessage::RendererScroll(width, height, scroll_direction, delta) => {
-                            if let Some(ref chnl) = renderer_channel {
+                            if let Some(ref chnl) = dialog_renderer_channel {
                                     chnl.send(DialogRendererMessage::ScrollEvent(ScreenCoords(width,height), scroll_direction, delta));
                             }
                         }
+                        GeneralMessage::WindowMove(x, y) => {
+                            if let Some(ref chnl) = dialog_renderer_channel {
+                                    chnl.send(DialogRendererMessage::WindowMoveEvent(x,y));
+                            }
+                        }
+
+
+
+                        // State Channel
                         GeneralMessage::RendererClick(x, y) => {
                             // TODO(Kiran): Match on dialog state, and based on whether you hit something, change to selected
-                            if let Some(ref chnl) = renderer_channel {
+                            if let Some(ref chnl) = dialog_state_channel {
                                     chnl.send(
-                                        DialogRendererMessage::ClickEvent(ScreenCoords(x,y))
+                                        DialogStateMessage::ClickEvent(ScreenCoords(x,y))
                                     );
                             }
                         }
                         GeneralMessage::RendererMotion(x, y) => {
-                            if let Some(ref chnl) = renderer_channel {
+                            if let Some(ref chnl) = dialog_state_channel {
                                     chnl.send(
-                                        DialogRendererMessage::MotionEvent(ScreenCoords(x,y))
+                                        DialogStateMessage::MotionEvent(ScreenCoords(x,y))
                                     );
                             }
  
                         }
+                        GeneralMessage::SetDialogInputState(msg) => {
+                             if let Some(ref chnl) =  dialog_state_channel {
+                                 chnl.send(DialogStateMessage::SetDialogState(msg));
+                            }
+                            
+                        }
+
+                
+                        // GUI Channel
                         GeneralMessage::Redraw(id) => {
                             if let Some(ref chnl) =  gui_channel {
                                 chnl.send(GuiManagerMessage::RedrawEvent(id));
                             }
                         }
-                        GeneralMessage::SetDialogInputState(msg) => {
-                             if let Some(ref chnl) =  renderer_channel {
-                                 chnl.send(DialogRendererMessage::SetDialogState(msg));
-                            }
-                            
-                        }
                         GeneralMessage::SetCursor(id, cursor_name) => {
                             if let Some(ref chnl) = gui_channel {
-                                chnl.send(GuiManagerMessage::SetCursorEvent(id, cursor_name));
+                                chnl.send(GuiManagerMessage::SetCursorEvent(id, cursor_name)); 
                             }
                         }
 

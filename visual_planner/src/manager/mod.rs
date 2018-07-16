@@ -1,5 +1,6 @@
 pub mod components;
 pub mod id;
+pub mod draw_view;
 
 use self::components::*;
 use self::id::*;
