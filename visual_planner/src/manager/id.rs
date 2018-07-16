@@ -11,10 +11,10 @@ use std::sync::{Arc, Mutex};
 // }
  
 
-#[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Clone)]
+#[derive(Debug,PartialEq,Eq,PartialOrd,Clone,Copy,Hash)]
 pub struct BoxID(usize);
 
 
-#[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Clone)]
+#[derive(Debug,PartialEq,Eq,PartialOrd,Clone,Copy,Hash)]
 pub struct EdgeID(usize);
 

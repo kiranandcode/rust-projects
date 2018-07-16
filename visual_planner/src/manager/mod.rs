@@ -23,11 +23,7 @@ use cairo::Context;
 
 
    
-#[derive(Debug)]
-pub enum Model {
-    BoxModel(BoxModel),
-    BoxEdge(BoxEdge)
-}
+
 
 
 #[derive(Debug)]
