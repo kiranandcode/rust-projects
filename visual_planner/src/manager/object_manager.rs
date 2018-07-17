@@ -1,13 +1,13 @@
 use undo::{Modifiable, Modification};
+use types::*;
 
+use std::convert::From;
 use std::collections::hash_map::HashMap;
 use std::ops::AddAssign;
 use std::thread;
 use std::sync::{Arc, Mutex};
 use std::sync::mpsc::{Sender, Receiver};
 use std::hash::Hash;
-
-
 
 #[derive(Debug)]
 pub struct ObjectManager<K,V> 
@@ -46,13 +46,16 @@ impl<K,V> ObjectManager<K, V>
             true_object.update_state(object)
         }
 
-        pub fn register_model(&mut self, object: V) -> (K, Modification) {
+        pub fn register_model<F>(&mut self, constructor: F) -> (K, Modification)
+            where F : FnOnce(K) -> V {
             let old_id = self.id_gen.clone();
             self.id_gen += 1;
 
+            let object = constructor(old_id.clone());
+
             // insert into model and temp
-            self.base.insert(old_id, object.clone());
-            self.temp.insert(old_id, object);
+            self.base.insert(old_id.clone(), object.clone());
+            self.temp.insert(old_id.clone(), object);
 
             (old_id, Modification::New)
         }

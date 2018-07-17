@@ -25,7 +25,6 @@ use cairo::Context;
 
 
 
-
 #[derive(Debug)]
 pub struct ModelManager {
     box_models: Arc<ObjectManager<BoxID, BoxModel>>,
@@ -48,7 +47,6 @@ impl ModelManager {
             let box_models = box_models.clone();
             let edge_models = edge_models.clone();
             let channel = channel;
-            let sender = sender;
             
 
             thread::spawn(move || {

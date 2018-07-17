@@ -17,3 +17,4 @@ impl Modifiable for EdgeModel {
         Modification::Deleted
     }
 }
+

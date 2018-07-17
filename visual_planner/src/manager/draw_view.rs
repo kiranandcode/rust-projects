@@ -14,7 +14,7 @@ pub enum ModelChangeRequest {
 
 pub trait Drawable {
     fn draw(&self, cr : &Context, style: &StyleScheme, window : &RenderWindow); 
-    fn bounding_box(&self) -> MutexGuard<WorldBoundingBox>;
+    fn bounding_box(&self) -> Option<MutexGuard<WorldBoundingBox>>;
     fn id(&self) -> ModelID;
 }
 
@@ -41,7 +41,11 @@ impl DrawView {
     }
 
     pub fn is_onscreen(&self, window: &RenderWindow) -> bool {
-        window.is_bounding_box_onscreen(self.drawable.bounding_box().deref())
+        if let Some(guard) = self.drawable.bounding_box() {
+            window.is_bounding_box_onscreen(guard.deref())
+        } else {
+            false
+        }
     }
 }
 
