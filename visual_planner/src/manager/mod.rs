@@ -1,9 +1,11 @@
 pub mod components;
 pub mod draw_view;
+mod object_manager;
 
 
 use self::components::edge::EdgeModel;
 use self::components::boxes::BoxModel;
+use self::object_manager::ObjectManager;
 use gui::manager::GuiManager;
 use event::EventManagerBuilder;
 use style_scheme::StyleScheme;
@@ -20,45 +22,6 @@ use std::hash::Hash;
 use cairo::Context;
 
 
-#[derive(Debug)]
-pub struct ObjectManager<K,V> 
-    where K : Eq  + Clone + Hash + Default + AddAssign<usize>,
-          V : Clone {
-    id_gen:  K,
-    /// stores the true value of the models
-    base: HashMap<K,V>,
-    /// Stores the temporary value of a model
-    temp: HashMap<K,V>,
-}
-
-impl<K,V> ObjectManager<K, V> 
-    where K : Eq + Clone + Hash + Default + AddAssign<usize>, 
-          V : Clone {
-        pub fn new() -> Self {
-            ObjectManager {
-                id_gen: K::default(),
-                base: HashMap::new(),
-                temp: HashMap::new(),
-            }
-        }
-
-        pub fn delete_model(&mut self, id: K) {
-            
-        }
-
-        pub fn commit_changes(&mut self, id: K) {
-
-        }
-
-        pub fn register_model(&mut self, object: V) -> K {
-            let old_id = self.id_gen.clone();
-            self.id_gen += 1;
-
-            // insert into model and temp
-
-            old_id
-        }
-}
 
 
 #[derive(Debug)]

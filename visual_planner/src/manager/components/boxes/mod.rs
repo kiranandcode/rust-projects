@@ -12,6 +12,7 @@ pub use self::state_change_box::*;
 pub use self::entry_box::*;
 
 
+use undo::{Modifiable, Modification};
 use style_scheme::StyleScheme;
 use render_window::RenderWindow;
 use types::*;
@@ -31,11 +32,21 @@ pub (in manager) enum BoxModel {
     EntryModel(Arc<EntryBox>),
 }
 
+
+impl Modifiable for BoxModel {
+    fn update_state(&mut self, other: &Self) -> Modification {
+        // TODO: Implement this
+        Modification::Deleted
+    }
+}
+
+
 /// Generic struct containing all components required to render a model
 #[derive(Debug)]
 pub struct BoxBase {
     pub (in manager) id: BoxID,
     pub (in manager) bounding_box: Mutex<WorldBoundingBox>,
 }
+
 
 

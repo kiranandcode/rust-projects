@@ -11,6 +11,7 @@ mod manager;
 mod render_window;
 mod style_scheme;
 mod state;
+mod undo;
 
 use event::EventManager;
 use gui::App;
