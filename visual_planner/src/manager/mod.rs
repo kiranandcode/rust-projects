@@ -1,6 +1,6 @@
 pub mod components;
 pub mod draw_view;
-mod object_manager;
+pub mod object_manager;
 
 
 use self::components::edge::EdgeModel;

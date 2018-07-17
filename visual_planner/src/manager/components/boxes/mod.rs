@@ -34,12 +34,24 @@ pub enum BoxConstructor {
 
 
 #[derive(Debug, Clone)]
-pub (in manager) enum BoxModel {
+pub enum BoxModel {
     DialogModel(Arc<DialogBox>),
     DecisionModel(Arc<DecisionBox>),
     VariableModel(Arc<VariableBox>),
     StateChangeModel(Arc<StateChangeBox>),
     EntryModel(Arc<EntryBox>),
+}
+
+impl BoxModel {
+    pub fn to_drawable(&self) -> Arc<Drawable> {
+        match self {
+            BoxModel::DialogModel(value) => value.clone(),
+            BoxModel::DecisionModel(value) => value.clone(),
+            BoxModel::VariableModel(value) => value.clone(),
+            BoxModel::StateChangeModel(value) => value.clone(),
+            BoxModel::EntryModel(value) => value.clone(),
+        }
+    }
 }
 
 

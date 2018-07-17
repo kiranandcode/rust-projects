@@ -3,6 +3,8 @@ use super::BoxBase;
 use render_window::RenderWindow;
 use style_scheme::StyleScheme;
 use manager::draw_view::Drawable;
+use manager::object_manager::ObjectManager;
+use manager::components::boxes::BoxModel;
 use types::*;
 
 use std::sync::{Arc, Mutex, MutexGuard};
@@ -27,6 +29,17 @@ impl DialogBox {
     //         }
     //     }
     // }
+
+    pub fn new<F>(manager: &mut ObjectManager<BoxID, BoxModel>) {
+            manager.register_model(|id| {
+                BoxModel::DialogModel(Arc::new(DialogBox {
+                    main_model: BoxBase {
+                            id,
+                            bounding_box: Mutex::new(WorldBoundingBox(WorldUnit(0.0), WorldUnit(0.0), WorldUnit(100.0), WorldUnit(100.0))),
+                    }
+                }))
+            });
+        } 
 }
 
 impl Drawable for DialogBox {

@@ -50,6 +50,7 @@ impl DrawView {
 }
 
 
+
 // click event constructed in dialog renderer
 // click event sent to event bus
 // event bus sends click event to dialog renderer
