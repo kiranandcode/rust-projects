@@ -15,6 +15,7 @@ use types::*;
 use std::collections::hash_map::HashMap;
 use std::ops::AddAssign;
 use std::thread;
+use std::thread::{JoinHandle};
 use std::sync::{Arc, Mutex};
 use std::sync::mpsc::{Sender, Receiver};
 use std::hash::Hash;
@@ -26,16 +27,38 @@ use cairo::Context;
 
 #[derive(Debug)]
 pub struct ModelManager {
-    box_models: ObjectManager<BoxID, BoxModel>,
-    edge_models: ObjectManager<EdgeID, EdgeModel>,
-
+    box_models: Arc<ObjectManager<BoxID, BoxModel>>,
+    edge_models: Arc<ObjectManager<EdgeID, EdgeModel>>,
+    manager_thread_handle: JoinHandle<()>
 }
 
 
 impl ModelManager {
 
-    pub fn new((event_builder, gui_manager): (&mut EventManagerBuilder, &mut GuiManager)) {
+    pub fn new((event_builder, gui_manager): (&mut EventManagerBuilder, &mut GuiManager)) -> Self {
+        let box_models = Arc::new(ObjectManager::new());
+        let edge_models = Arc::new(ObjectManager::new());
 
+        let channel = event_builder.get_gdk_channel();
+
+
+
+        let manager_thread_handle = {
+            let box_models = box_models.clone();
+            let edge_models = edge_models.clone();
+            let channel = channel;
+            
+
+            thread::spawn(move || {
+
+            })
+        };
+
+        ModelManager {
+            box_models,
+            edge_models,
+            manager_thread_handle
+        }
     }
     // pub fn lookup_id(&self, id: ModelID) -> &BoxModel {
     //    &self.models[id.0]

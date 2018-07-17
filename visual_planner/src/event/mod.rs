@@ -19,6 +19,8 @@ pub struct EventManagerBuilder {
 
     dialog_renderer_channel: Option<Sender<message::renderer::DialogRendererMessage>>, 
     dialog_state_channel: Option<Sender<message::renderer::DialogStateMessage>>,
+
+    model_manager_channel: Option<Sender<message::manager::ModelManagerMessage>>,
 }
 
 impl EventManagerBuilder {
@@ -27,8 +29,11 @@ impl EventManagerBuilder {
         EventManagerBuilder {
            gui_channel: None,
            gdk_pair: (receiver, sender),
+
            dialog_renderer_channel: None,
            dialog_state_channel: None,
+
+           model_manager_channel: None
         }
    }
 
@@ -43,6 +48,11 @@ impl EventManagerBuilder {
 
    pub fn set_dialog_state_channel(&mut self, state_channel : Sender<message::renderer::DialogStateMessage>) -> &mut Self {
        self.dialog_state_channel = Some(state_channel);
+       self
+   }
+
+   pub fn set_model_manager_channel(&mut self, model_channel: Sender<message::manager::ModelManagerMessage>) -> &mut Self {
+       self.model_manager_channel = Some(model_channel);
        self
    }
 
@@ -65,12 +75,16 @@ impl EventManagerBuilder {
 
         let gui_channel = self.gui_channel
                         .expect("Err: EventManagerBuilder::Build - can not build an event manager without a gui_channel");
+        
+        let model_channel = self.model_manager_channel
+                        .expect("Err: EventManagerBuilder::Build - can not build an event manager without a model_channel");
 
         EventManager {
             gui_channel: Some(gui_channel),
             gdk_receiver,
             dialog_renderer_channel: Some(dialog_renderer_channel),
             dialog_state_channel: Some(dialog_state_channel),
+            model_manager_channel: Some(model_channel)
         }
    }
 }
@@ -81,6 +95,7 @@ pub struct EventManager {
 
     dialog_renderer_channel: Option<Sender<message::renderer::DialogRendererMessage>>, 
     dialog_state_channel: Option<Sender<message::renderer::DialogStateMessage>>,
+    model_manager_channel: Option<Sender<message::manager::ModelManagerMessage>>,
 }
 
 
@@ -161,6 +176,10 @@ impl EventManager {
                                 chnl.send(GuiManagerMessage::SetCursorEvent(id, cursor_name)); 
                             }
                         }
+
+
+
+                        // Manager Channel
 
                     }
                 }

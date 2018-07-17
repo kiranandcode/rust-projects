@@ -1,5 +1,6 @@
 pub mod renderer;
 pub mod gui;
+pub mod manager;
 
 use state::DialogInputState;
 use types::*;
