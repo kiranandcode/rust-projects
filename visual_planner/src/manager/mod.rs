@@ -17,6 +17,7 @@ use std::ops::AddAssign;
 use std::thread;
 use std::thread::{JoinHandle};
 use std::sync::{Arc, Mutex};
+use std::sync::mpsc;
 use std::sync::mpsc::{Sender, Receiver};
 use std::hash::Hash;
 
@@ -38,18 +39,25 @@ impl ModelManager {
     pub fn new((event_builder, gui_manager): (&mut EventManagerBuilder, &mut GuiManager)) -> Self {
         let box_models = Arc::new(ObjectManager::new());
         let edge_models = Arc::new(ObjectManager::new());
+        let (sender, receiver) = mpsc::channel();
 
         let channel = event_builder.get_gdk_channel();
-
-
+        event_builder.set_model_manager_channel(sender);
 
         let manager_thread_handle = {
             let box_models = box_models.clone();
             let edge_models = edge_models.clone();
             let channel = channel;
+            let sender = sender;
             
 
             thread::spawn(move || {
+
+                for event in receiver.iter() {
+                    match event {
+
+                    }
+                }
 
             })
         };
