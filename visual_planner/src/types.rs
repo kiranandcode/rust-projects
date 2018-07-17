@@ -1,5 +1,5 @@
-use std::ops::{Add,Sub,Mul};
-use manager::id;
+use std::ops::{Add,Sub,Mul, AddAssign};
+
 
 // I've made coordiates their own type as I figure they'll be a cohesive unit in the system
 
@@ -241,8 +241,31 @@ pub enum ScrollDirection {
 #[derive(Debug,PartialEq,Eq,PartialOrd,Clone,Copy,Hash)]
 pub struct GuiWidgetID(pub usize);
 
+#[derive(Debug,PartialEq,Eq,PartialOrd,Clone,Copy,Hash, Default)]
+pub struct BoxID(usize);
+
+#[derive(Debug,PartialEq,Eq,PartialOrd,Clone,Copy,Hash, Default)]
+pub struct EdgeID(usize);
+
+impl AddAssign<usize> for BoxID {
+
+   fn add_assign(&mut self, rhs: usize) {
+       self.0 += rhs;
+   }
+}
+
+impl AddAssign<usize> for EdgeID {
+
+   fn add_assign(&mut self, rhs: usize) {
+       self.0 += rhs;
+   }
+}
+
+
+
+
 #[derive(Debug,PartialEq,Eq,PartialOrd,Clone,Copy,Hash)]
 pub enum ModelID {
-    Box(::manager::id::BoxID),
-    Edge(::manager::id::EdgeID)
+    Box(BoxID),
+    Edge(EdgeID)
 }

@@ -21,24 +21,20 @@ use std::sync::{Arc, Mutex};
 use cairo::Context;
 
 
-#[derive(Debug, PartialEq, PartialOrd)]
-pub enum BoxType {
-    DialogModel,
-    DecisionModel,
-    VariableModel,
-    StateChangeModel,
-    EntryModel,
-}
 
-trait Box {
-    fn try_cast<T>(&self, box_type: BoxType) -> Option<T>;
+#[derive(Debug, PartialEq, PartialOrd, Clone)]
+pub (in manager) enum BoxModel {
+    DialogModel(Arc<DialogBox>),
+    DecisionModel(Arc<DecisionBox>),
+    VariableModel(Arc<VariableBox>),
+    StateChangeModel(Arc<StateChangeBox>),
+    EntryModel(Arc<EntryBox>),
 }
 
 /// Generic struct containing all components required to render a model
 #[derive(Debug)]
 pub struct BoxBase {
     pub (in manager) id: BoxID,
-    pub (in manager) box_type: BoxType,
     pub (in manager) bounding_box: Mutex<WorldBoundingBox>,
 }
 
