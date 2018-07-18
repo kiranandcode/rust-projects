@@ -4,7 +4,7 @@ pub mod variable_box;
 pub mod state_change_box;
 pub mod entry_box;
 
-pub use super::*;
+pub use super::ToDrawable;
 pub use self::dialog_box::*;
 pub use self::decision_box::*;
 pub use self::variable_box::*;
@@ -42,8 +42,8 @@ pub enum BoxModel {
     EntryModel(Arc<EntryBox>),
 }
 
-impl BoxModel {
-    pub fn to_drawable(&self) -> Arc<Drawable> {
+impl ToDrawable for BoxModel {
+    fn to_drawable(&self) -> Arc<Drawable> {
         match self {
             BoxModel::DialogModel(value) => value.clone(),
             BoxModel::DecisionModel(value) => value.clone(),

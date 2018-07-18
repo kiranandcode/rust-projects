@@ -116,6 +116,7 @@ pub struct WorldBoundingBox(pub WorldX, pub WorldY, pub WorldWidth, pub WorldHei
 
 impl WorldBoundingBox {
 
+
     pub fn point_within_bounds(&self, point : &WorldCoords) -> bool {
        let self_x = (self.0);
         let self_y = (self.1);
@@ -183,6 +184,29 @@ impl WorldBoundingBox {
         self.3 = new_height;
         println!("Box is now {:?}", self);
     }
+
+
+    pub fn new_between(point_a : WorldCoords, point_b : WorldCoords) -> Self {
+        let (lower_x, upper_x) = if point_a.0 > point_b.0 {(point_b.0, point_a.0)} else {(point_a.0, point_b.0)} ;
+        let (lower_y, upper_y) = if point_a.1 > point_b.1 {(point_b.1, point_a.1)} else {(point_a.1, point_b.1)} ;
+
+        let width = upper_x - lower_x;
+        let height = upper_y - lower_y;
+
+         WorldBoundingBox(lower_x, lower_y, width, height)
+
+    }
+
+    pub fn new(&mut self, point : WorldCoords, width: WorldWidth, height: WorldHeight) -> Self {
+         WorldBoundingBox(point.0, point.1, width, height)
+    }
+
+    pub fn new_centered_at(&mut self, point : WorldCoords, width: WorldWidth, height: WorldHeight) -> Self {
+         WorldBoundingBox(WorldUnit((point.0).0 - width.0/2.0), WorldUnit((point.1).0 - height.0/2.0), width, height)
+    }
+
+
+
 
     pub fn set_box_between(&mut self, point_a : WorldCoords, point_b : WorldCoords) {
         let (lower_x, upper_x) = if point_a.0 > point_b.0 {(point_b.0, point_a.0)} else {(point_a.0, point_b.0)} ;

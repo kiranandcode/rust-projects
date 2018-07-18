@@ -6,6 +6,7 @@ use manager::draw_view::Drawable;
 use manager::object_manager::ObjectManager;
 use manager::components::boxes::BoxModel;
 use types::*;
+use undo::*;
 
 use std::sync::{Arc, Mutex, MutexGuard};
 use cairo::Context;
@@ -30,7 +31,7 @@ impl DialogBox {
     //     }
     // }
 
-    pub fn new<F>(manager: &mut ObjectManager<BoxID, BoxModel>) {
+    pub fn new<F>(manager: &mut ObjectManager<BoxID, BoxModel>) -> (BoxID, Arc<Drawable>, Modification) {
             manager.register_model(|id| {
                 BoxModel::DialogModel(Arc::new(DialogBox {
                     main_model: BoxBase {
@@ -38,7 +39,7 @@ impl DialogBox {
                             bounding_box: Mutex::new(WorldBoundingBox(WorldUnit(0.0), WorldUnit(0.0), WorldUnit(100.0), WorldUnit(100.0))),
                     }
                 }))
-            });
+            })
         } 
 }
 

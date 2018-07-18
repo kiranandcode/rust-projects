@@ -1,6 +1,9 @@
 use undo::{Modifiable, Modification};
 use types::*;
 
+use manager::components::ToDrawable;
+use manager::draw_view::Drawable;
+
 use std::convert::From;
 use std::collections::hash_map::HashMap;
 use std::ops::AddAssign;
@@ -12,7 +15,7 @@ use std::hash::Hash;
 #[derive(Debug)]
 pub struct ObjectManager<K,V> 
     where K : Eq  + Clone + Hash + Default + AddAssign<usize>,
-          V : Clone + Modifiable {
+          V : Clone + Modifiable + ToDrawable {
     id_gen:  K,
     /// stores the true value of the models
     base: HashMap<K,V>,
@@ -22,7 +25,7 @@ pub struct ObjectManager<K,V>
 
 impl<K,V> ObjectManager<K, V> 
     where K : Eq + Clone + Hash + Default + AddAssign<usize>, 
-          V : Clone + Modifiable {
+          V : Clone + Modifiable + ToDrawable {
         pub fn new() -> Self {
             ObjectManager {
                 id_gen: K::default(),
@@ -46,7 +49,7 @@ impl<K,V> ObjectManager<K, V>
             true_object.update_state(object)
         }
 
-        pub fn register_model<F>(&mut self, constructor: F) -> (K, Modification)
+        pub fn register_model<F>(&mut self, constructor: F) -> (K, Arc<Drawable>, Modification)
             where F : FnOnce(K) -> V {
             let old_id = self.id_gen.clone();
             self.id_gen += 1;
@@ -54,10 +57,10 @@ impl<K,V> ObjectManager<K, V>
             let object = constructor(old_id.clone());
 
             // insert into model and temp
-            self.base.insert(old_id.clone(), object.clone());
-            self.temp.insert(old_id.clone(), object);
+            self.base.entry(old_id.clone()).or_insert(object.clone());
+            let drawable = self.temp.entry(old_id.clone()).or_insert(object).to_drawable();
 
-            (old_id, Modification::New)
+            (old_id, drawable, Modification::New)
         }
 
         pub fn lookup(&self, id: &K) -> Option<&V> {
