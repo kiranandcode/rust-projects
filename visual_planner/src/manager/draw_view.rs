@@ -1,6 +1,8 @@
 use renderer::*;
 use types::*;
 use cairo::Context;
+
+use std::fmt::{Debug, Formatter, Error};
 use std::sync::{Arc, Mutex, MutexGuard};
 use std::ops::Deref;
 
@@ -12,7 +14,7 @@ pub enum ModelChangeRequest {
     SetSelected,
 }
 
-pub trait Drawable {
+pub trait Drawable: Sync + Send {
     fn draw(&self, cr : &Context, style: &StyleScheme, window : &RenderWindow); 
     fn bounding_box(&self) -> Option<MutexGuard<WorldBoundingBox>>;
     fn id(&self) -> ModelID;
@@ -49,6 +51,11 @@ impl DrawView {
     }
 }
 
+impl Debug for Drawable {
+    fn fmt(&self, formatter: &mut Formatter) -> Result<(), Error> {
+        write!(formatter, "Drawable: {:?}, {:?}", self.id(), self.bounding_box())
+    }
+}
 
 
 // click event constructed in dialog renderer

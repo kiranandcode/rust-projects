@@ -197,11 +197,11 @@ impl WorldBoundingBox {
 
     }
 
-    pub fn new(&mut self, point : WorldCoords, width: WorldWidth, height: WorldHeight) -> Self {
+    pub fn new(point : WorldCoords, width: WorldWidth, height: WorldHeight) -> Self {
          WorldBoundingBox(point.0, point.1, width, height)
     }
 
-    pub fn new_centered_at(&mut self, point : WorldCoords, width: WorldWidth, height: WorldHeight) -> Self {
+    pub fn new_centered_at(point : WorldCoords, width: WorldWidth, height: WorldHeight) -> Self {
          WorldBoundingBox(WorldUnit((point.0).0 - width.0/2.0), WorldUnit((point.1).0 - height.0/2.0), width, height)
     }
 

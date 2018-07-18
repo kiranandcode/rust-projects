@@ -137,6 +137,11 @@ impl EventManager {
                                     chnl.send(DialogRendererMessage::WindowMoveEvent(x,y));
                             }
                         }
+                        GeneralMessage::ConstructResult(drawable) => {
+                                if let Some(ref chnl) = dialog_renderer_channel {
+                                    chnl.send(DialogRendererMessage::RegisterDrawable(drawable));
+                                }
+                        }
 
 
 
@@ -180,7 +185,6 @@ impl EventManager {
 
 
                         // Manager Channel
-
                     }
                 }
                 println!("Event Manager main loop ended");

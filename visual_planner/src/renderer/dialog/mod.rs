@@ -273,7 +273,7 @@ impl DialogRenderer {
                 // 2. ask drawables to draw themselves
 
                 for drawable in draw_queue.iter() {
-                    // drawable.draw(cr, &style_scheme, &render_window);
+                    drawable.draw(cr, &style_scheme, &render_window);
                 }
 
                 Inhibit(false)
@@ -290,6 +290,7 @@ impl DialogRenderer {
             let sender = sender.clone();
             let mut state = DialogInputState::NORMAL;
             let drawable_id = drawable_id;
+            let draw_queue = draw_queue.clone();
 
             thread::spawn(move || {
 
@@ -320,8 +321,11 @@ impl DialogRenderer {
                                 );
                             }
                         }
-
-
+                        DialogRendererMessage::RegisterDrawable(drawable) => {
+                            let drawable = DrawView::new(drawable);
+                            let mut draw_queue = draw_queue.write().unwrap();
+                            draw_queue.push(drawable);
+                        }
                    }
                }
             })

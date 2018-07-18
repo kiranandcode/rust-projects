@@ -24,7 +24,7 @@ use cairo::Context;
 
 #[derive(Debug, PartialEq, PartialOrd, Clone)]
 pub enum BoxConstructor {
-    DialogModel,
+    DialogModel(WorldCoords),
     DecisionModel,
     VariableModel,
     StateChangeModel,

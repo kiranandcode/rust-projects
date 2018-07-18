@@ -4,9 +4,11 @@ pub mod manager;
 
 use state::DialogInputState;
 use types::*;
+use manager::draw_view::Drawable;
+use std::sync::Arc;
 
 /// A thread-safe wrapper for all messages sent 
-#[derive(Debug,PartialEq,PartialOrd,Clone)]
+#[derive(Debug,Clone)]
 pub enum GeneralMessage {
     RendererScreenResize(ScreenUnit, ScreenUnit),
     RendererScroll(ScreenUnit, ScreenUnit, ScrollDirection, f64),
@@ -16,4 +18,5 @@ pub enum GeneralMessage {
     SetDialogInputState(DialogInputState),
     SetCursor(GuiWidgetID, &'static str),
     WindowMove(ScreenUnit, ScreenUnit),
+    ConstructResult(Arc<Drawable>)
 }

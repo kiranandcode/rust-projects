@@ -31,12 +31,13 @@ impl DialogBox {
     //     }
     // }
 
-    pub fn new<F>(manager: &mut ObjectManager<BoxID, BoxModel>) -> (BoxID, Arc<Drawable>, Modification) {
+    pub fn new(center: WorldCoords, manager: &mut ObjectManager<BoxID, BoxModel>) -> (BoxID, Arc<Drawable>, Modification) {
             manager.register_model(|id| {
                 BoxModel::DialogModel(Arc::new(DialogBox {
                     main_model: BoxBase {
                             id,
-                            bounding_box: Mutex::new(WorldBoundingBox(WorldUnit(0.0), WorldUnit(0.0), WorldUnit(100.0), WorldUnit(100.0))),
+                            // bounding_box: Mutex::new(WorldBoundingBox(WorldUnit(0.0), WorldUnit(0.0), WorldUnit(100.0), WorldUnit(100.0))),
+                            bounding_box: Mutex::new(WorldBoundingBox::new_centered_at(center, WorldUnit(200.0), WorldUnit(50.0))),
                     }
                 }))
             })
