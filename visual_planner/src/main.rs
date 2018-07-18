@@ -16,6 +16,7 @@ mod undo;
 use event::EventManager;
 use gui::App;
 use gui::manager::GuiManager;
+use manager::ModelManager;
 use gtk::{Settings, SettingsExt, StyleContext, StyleContextExt};
 
 
@@ -27,6 +28,7 @@ fn main() {
 
     let mut event_builder = EventManager::new();
     let mut gui_manager = GuiManager::new(&mut event_builder);
+    let model_manager = ModelManager::new((&mut event_builder, &mut gui_manager));
 
     let app = App::new((&mut event_builder, &mut gui_manager));
 

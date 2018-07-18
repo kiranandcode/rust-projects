@@ -1,8 +1,12 @@
 use types::*;
 use state::*;
+
 use event::{EventManagerBuilder};
 use event::message::renderer::DialogStateMessage;
 use event::message::GeneralMessage;
+
+use manager::components::BoxConstructor;
+
 use render_window::RenderWindow;
 
 use std::thread;
@@ -33,7 +37,7 @@ impl DialogStateManager {
             for event in receiver.iter() {
 
                 match event {
-                    DialogStateMessage::ClickEvent(ScreenCoords(x,y)) => {
+                    DialogStateMessage::ClickEvent(coords) => {
                         // Every distinct drag event is distinguished by one
                         // initializing click event, and then several motion
                         // events. To avoid multiple distinct drags coalescing
@@ -43,8 +47,13 @@ impl DialogStateManager {
 
                         match state {
                             DialogInputState::NORMAL => (),
-                            _ => {
-                                unimplemented!("Has not been implemented!");
+                            DialogInputState::NEW => {
+                                let mut render_view = render_window.read().unwrap();
+                                let coords = render_view.screen_to_world(&coords);
+
+                                chnl.send(GeneralMessage::BoxConstructRequest(
+                                    BoxConstructor::DialogModel(coords)
+                                ));
                             }
                         }
                         

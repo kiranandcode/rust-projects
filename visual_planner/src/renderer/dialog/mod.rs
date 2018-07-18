@@ -325,6 +325,10 @@ impl DialogRenderer {
                             let drawable = DrawView::new(drawable);
                             let mut draw_queue = draw_queue.write().unwrap();
                             draw_queue.push(drawable);
+
+                            sender.send(
+                                GeneralMessage::Redraw(drawable_id.clone())
+                            );
                         }
                    }
                }

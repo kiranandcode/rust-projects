@@ -1,4 +1,5 @@
 pub mod message;
+use self::message::manager::ModelManagerMessage;
 use self::message::GeneralMessage;
 use self::message::renderer::{DialogRendererMessage, DialogStateMessage};
 use self::message::gui::GuiManagerMessage;
@@ -113,6 +114,7 @@ impl EventManager {
 
                 let dialog_renderer_channel = event_manager.dialog_renderer_channel;
                 let dialog_state_channel = event_manager.dialog_state_channel;
+                let model_manager_channel = event_manager.model_manager_channel;
 
 
 
@@ -185,6 +187,11 @@ impl EventManager {
 
 
                         // Manager Channel
+                        GeneralMessage::BoxConstructRequest(constructor) => {
+                            if let Some(ref chnl) = model_manager_channel {
+                                chnl.send(ModelManagerMessage::BoxConstruct(constructor));
+                            }
+                        }
                     }
                 }
                 println!("Event Manager main loop ended");

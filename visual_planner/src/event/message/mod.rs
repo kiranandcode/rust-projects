@@ -3,8 +3,11 @@ pub mod gui;
 pub mod manager;
 
 use state::DialogInputState;
-use types::*;
 use manager::draw_view::Drawable;
+use manager::components::boxes::BoxConstructor;
+use types::*;
+
+
 use std::sync::Arc;
 
 /// A thread-safe wrapper for all messages sent 
@@ -18,5 +21,6 @@ pub enum GeneralMessage {
     SetDialogInputState(DialogInputState),
     SetCursor(GuiWidgetID, &'static str),
     WindowMove(ScreenUnit, ScreenUnit),
+    BoxConstructRequest(BoxConstructor),
     ConstructResult(Arc<Drawable>)
 }
