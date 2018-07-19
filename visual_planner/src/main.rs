@@ -13,6 +13,7 @@ mod style_scheme;
 mod state;
 mod undo;
 
+use gtk::Continue;
 use event::EventManager;
 use gui::App;
 use gui::manager::GuiManager;
@@ -39,9 +40,11 @@ fn main() {
     app.run();
 
 
-    loop {
+    gtk::idle_add(move || {
         gui_manager.run_iteration();
-        ::gtk::main_iteration();
-    }
-    println!("Fin");
+
+        Continue(true)
+    });
+
+    gtk::main();
 }
