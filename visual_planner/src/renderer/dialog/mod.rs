@@ -24,6 +24,7 @@ use std::sync::{
 
 use gdk::{
     EventMask, 
+    Event,
     EventType, 
 
     // the following two imports are for handling button clicks
@@ -52,6 +53,7 @@ use gtk::{
     main_quit,           // end the app
     StyleContext         // used for initializing the stylescheme
 };
+use cairo::Context;
 
 
 pub struct DialogRenderer {
@@ -113,8 +115,48 @@ impl DialogRenderer {
         {
                 let sender = sender.clone();
                 let drawing_area_ref = drawing_area.clone(); 
-                drawing_area.connect_event(move |obj, event| { 
+                drawing_area.connect_event(move |obj, event| handle_drawing_area_events(event, || sender.clone()));
+        }
 
+
+        {
+            let draw_queue = draw_queue.clone();
+            let style_scheme = style_scheme.clone();
+            let render_window = render_window.clone();
+            drawing_area.connect_draw(move |_, cr| handle_drawing_area_draw(cr,  || style_scheme.clone(), || render_window.clone(), || draw_queue.clone()));
+        }
+
+        let (dialog_sender, receiver) : (Sender<DialogRendererMessage>,Receiver<DialogRendererMessage>) = mpsc::channel();
+        
+        event_builder.set_dialog_renderer_channel(dialog_sender);
+
+        let renderer_event_thread = {
+            let render_window = render_window.clone();
+            let sender = sender.clone();
+            let draw_queue = draw_queue.clone();
+
+            thread::spawn(move || dialog_renderer_message_handler(receiver, sender, render_window, drawable_id, draw_queue))
+        };
+
+
+
+        DialogRenderer {
+            container: drawing_area,
+            render_window, 
+            draw_queue,
+            style_scheme,
+            renderer_event_thread,
+            state_manager,
+            drawable_id
+        }
+    }
+}
+
+
+
+fn handle_drawing_area_events<F>(event : &Event, sender: F) -> Inhibit
+    where F : Fn() -> Sender<GeneralMessage> {
+            let sender = sender();
                 if let Ok(ref result) = event.clone().downcast::<EventScroll>() {
                     let (x, y) = result.get_position();
                     let mut delta = 1.0;
@@ -159,7 +201,6 @@ impl DialogRenderer {
 
                 }
                 if let Ok(ref result) = event.clone().downcast::<EventButton>() {
-                   println!("Could unwrap: {:?}", result.get_position()); 
                     let (x, y) = result.get_position();
                     sender.send(
                         GeneralMessage::RendererClick(
@@ -170,7 +211,6 @@ impl DialogRenderer {
  
                 }
                 if let Ok(ref result) = event.clone().downcast::<EventMotion>() {
-                   println!("Motion unwrap: {:?}", result.get_position()); 
                    
                     let (x, y) = result.get_position();
 
@@ -195,21 +235,21 @@ impl DialogRenderer {
                 }
                 
                 Inhibit(false) 
+}
 
-            });
-        }
+fn handle_drawing_area_draw<F,G,H>(cr : &Context, style_scheme : F, render_window : G, draw_queue : H) -> Inhibit 
+    where F : Fn() -> Arc<RwLock<StyleScheme>>,
+          G : Fn() -> Arc<RwLock<RenderWindow>>,
+          H : Fn() -> Arc<RwLock<Vec<DrawView>>>
+    {
+            let style_scheme = style_scheme();
+            let render_window = render_window();
+            let draw_queue = draw_queue();
 
-
-        {
-            let draw_queue = draw_queue.clone();
-            let style_scheme = style_scheme.clone();
-            let render_window = render_window.clone();
-            drawing_area.connect_draw(move |_, cr| {
                 let style_scheme = style_scheme.read().unwrap();
                 let render_window = render_window.read().unwrap();
                 let draw_queue = draw_queue.read().unwrap();
 
-                println!("Color: {:?}", style_scheme.bg.red);
                 cr.set_source_rgba(style_scheme.bg.red, style_scheme.bg.green, style_scheme.bg.blue, style_scheme.bg.alpha);
                 cr.paint();
 
@@ -276,23 +316,10 @@ impl DialogRenderer {
                     drawable.draw(cr, &style_scheme, &render_window);
                 }
 
-                Inhibit(false)
-            });
-        }
+            Inhibit(false)
+}
 
-        let (dialog_sender, receiver) : (Sender<DialogRendererMessage>,Receiver<DialogRendererMessage>) = mpsc::channel();
-        
-        event_builder.set_dialog_renderer_channel(dialog_sender);
-
-        let renderer_event_thread = {
-            let drawing_area = drawing_area.clone();
-            let render_window = render_window.clone();
-            let sender = sender.clone();
-            let mut state = DialogInputState::NORMAL;
-            let drawable_id = drawable_id;
-            let draw_queue = draw_queue.clone();
-
-            thread::spawn(move || {
+fn dialog_renderer_message_handler(receiver : Receiver<DialogRendererMessage>, sender : Sender<GeneralMessage>, render_window : Arc<RwLock<RenderWindow>>, drawable_id : GuiWidgetID, draw_queue : Arc<RwLock<Vec<DrawView>>>) {
 
 
                for event in receiver.iter() {
@@ -303,7 +330,6 @@ impl DialogRenderer {
                             }
                         },
                         DialogRendererMessage::ScrollEvent(point, direction, delta) => {
-                            println!("pos : {:?}, {:?}", point, direction);
                             if let Ok(mut rw) = render_window.write() {
                                 rw.zoom_window(&point, direction, delta);
                                 sender.send(
@@ -312,7 +338,6 @@ impl DialogRenderer {
                             }
                         },
                         DialogRendererMessage::WindowMoveEvent(x,y) => {
-                            println!("dx dy: {:?}, {:?}", x, y);
                             if let Ok(mut rw) = render_window.write() {
                                 rw.move_window(&x,&y);
 
@@ -332,67 +357,4 @@ impl DialogRenderer {
                         }
                    }
                }
-            })
-        };
-
-
-
-        DialogRenderer {
-            container: drawing_area,
-            render_window, 
-            draw_queue,
-            style_scheme,
-            renderer_event_thread,
-            state_manager,
-            drawable_id
-        }
-    }
-}
-
-
-// reference cr drawing code:
-//
-//cr.set_dash(&[3., 2., 1.], 1.); 
-
-// cr.scale(500f64, 500f64);
-
-// cr.set_source_rgb(250.0/255.0, 224.0/255.0, 55.0/255.0);
-// cr.paint();
-
-// cr.set_line_width(0.05);
-
-// cr.set_source_rgb(0.3, 0.3, 0.3);
-// cr.rectangle(0.0, 0.0, 1.0, 1.0);
-// cr.stroke();
-
-// cr.set_line_width(0.03);
-
-
-// cr.arc(0.5, 0.5, 0.4, 0.0, ::std::f64::consts::PI * 2.);
-// cr.stroke();
-
-
-// let mouth_top = 0.68;
-// let mouth_width = 0.38;
-// let mouth_dx = 0.10;
-// let mouth_dy = 0.10;
-
-
-// cr.move_to(0.50 - mouth_width/2.0, mouth_top);
-// cr.curve_to(0.50 - mouth_dx,     mouth_top + mouth_dy,
-//             0.50 + mouth_dx,     mouth_top + mouth_dy,
-//             0.50 + mouth_width/2.0, mouth_top);
-
-// cr.stroke();
-
-// let eye_y = 0.38;
-// let eye_dx = 0.15;
-
-// cr.arc(0.5 - eye_dx, eye_y, 0.05, 0.0, ::std::f64::consts::PI * 2.);
-// cr.fill();
-
-// cr.arc(0.5 + eye_dx, eye_y, 0.05, 0.0, ::std::f64::consts::PI * 2.);
-// cr.fill();
-//
-
-
+            }
