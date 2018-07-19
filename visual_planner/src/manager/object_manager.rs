@@ -6,11 +6,13 @@ use manager::draw_view::Drawable;
 
 use std::convert::From;
 use std::collections::hash_map::HashMap;
+use std::collections::hash_map::Values;
 use std::ops::AddAssign;
 use std::thread;
 use std::sync::{Arc, Mutex};
 use std::sync::mpsc::{Sender, Receiver};
 use std::hash::Hash;
+
 
 #[derive(Debug)]
 pub struct ObjectManager<K,V> 
@@ -69,6 +71,14 @@ impl<K,V> ObjectManager<K, V>
 
         pub fn lookup_mut(&mut self, id: &K) -> Option<&mut V> {
             self.temp.get_mut(id)
+        }
+
+        pub fn temp_values(&self) -> Values<K,V> {
+            self.temp.values()
+        }
+
+        pub fn values(&self) -> Values<K,V> {
+            self.base.values()
         }
 
 }

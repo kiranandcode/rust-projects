@@ -11,8 +11,10 @@ use undo::*;
 use std::sync::{Arc, Mutex, MutexGuard};
 use cairo::Context;
 
-
 use types::*;
+
+pub const DIALOG_BOX_WIDTH : WorldUnit = WorldUnit(200.0);
+pub const DIALOG_BOX_HEIGHT : WorldUnit = WorldUnit(50.0);
 
 #[derive(Debug)]
 pub struct DialogBox {
@@ -37,7 +39,7 @@ impl DialogBox {
                     main_model: BoxBase {
                             id,
                             // bounding_box: Mutex::new(WorldBoundingBox(WorldUnit(0.0), WorldUnit(0.0), WorldUnit(100.0), WorldUnit(100.0))),
-                            bounding_box: Mutex::new(WorldBoundingBox::new_centered_at(center, WorldUnit(200.0), WorldUnit(50.0))),
+                            bounding_box: Mutex::new(WorldBoundingBox::new_centered_at(center, DIALOG_BOX_WIDTH, DIALOG_BOX_HEIGHT)),
                     }
                 }))
             })

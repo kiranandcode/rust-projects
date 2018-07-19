@@ -24,7 +24,25 @@
             "problemMatcher": [
                 "$rustc"
             ]
-        }
+        },
+         {
+            "type": "shell",
+            "presentation": {
+                "echo": false,
+                "reveal": "never",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": false 
+            },
+            "label": "build tags",
+            "command": "ctags",
+            "args": [
+                "--tag-relative",
+                "--extra=f",
+                "-R",
+                "."
+            ],
+       }
  
     ]
 }

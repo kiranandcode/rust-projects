@@ -28,7 +28,6 @@ use std::hash::Hash;
 use cairo::Context;
 
 
-
 #[derive(Debug)]
 pub struct ModelManager {
     box_models: Arc<Mutex<ObjectManager<BoxID, BoxModel>>>,
@@ -60,8 +59,12 @@ impl ModelManager {
                            ModelManagerMessage::BoxConstruct(constructor_msg) => {
                                let result = match constructor_msg {
                                    BoxConstructor::DialogModel(center) => {
-                                      if let Ok(ref mut  manager) = box_models.lock()  {
+                                      if let (Ok(ref mut  manager), Ok(ref mut edge_manager)) = (box_models.lock(), edge_models.lock())  {
+                                          let bounding_box = WorldBoundingBox::new_centered_at(center.clone(), DIALOG_BOX_WIDTH, DIALOG_BOX_HEIGHT);
                                           let (id, drawable, modification) = DialogBox::new(center, manager);
+                                          // TODO: check drawing coordinates do not intersect with other components
+
+
                                           Some(drawable)
                                       } else {
                                        None

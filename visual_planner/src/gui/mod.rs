@@ -12,10 +12,17 @@ use gtk::{
 };
 
 use std::convert::AsRef;
+use gdk;
 
 pub fn init() {
+    gdk::init();
+    gdk::threads_init();
+    gdk::threads_enter();
+    // TODO: Check: http://antipastohw.pbworks.com/w/page/27640084/BeagleBoard%20GTK%20Development#PongBall
+    
     if let Err(err) = gtk_init() {
         panic!("ERROR: While initializing gtk - {}", err);    
     };
+    
 }
 

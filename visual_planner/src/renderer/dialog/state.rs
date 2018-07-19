@@ -37,7 +37,7 @@ impl DialogStateManager {
             for event in receiver.iter() {
 
                 match event {
-                    DialogStateMessage::ClickEvent(coords) => {
+                DialogStateMessage::ClickEvent(coords) => {
                         // Every distinct drag event is distinguished by one
                         // initializing click event, and then several motion
                         // events. To avoid multiple distinct drags coalescing
@@ -54,6 +54,7 @@ impl DialogStateManager {
                                 chnl.send(GeneralMessage::BoxConstructRequest(
                                     BoxConstructor::DialogModel(coords)
                                 ));
+                                chnl.send(GeneralMessage::SetDialogInputState(DialogInputState::NORMAL));
                             }
                         }
                         
