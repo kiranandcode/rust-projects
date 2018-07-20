@@ -177,12 +177,12 @@ impl WorldBoundingBox {
         let new_height = self.3 * sy;
         let new_x = (self.0 - point.0) * sx + point.0;
         let new_y = (self.1 - point.1) * sy + point.1;
-        println!("Box was {:?}", self);
+        // println!("Box was {:?}", self);
         self.0 = new_x;
         self.1 = new_y;
         self.2 = new_width;
         self.3 = new_height;
-        println!("Box is now {:?}", self);
+        // println!("Box is now {:?}", self);
     }
 
 

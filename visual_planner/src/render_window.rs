@@ -46,7 +46,7 @@ impl RenderWindow {
         let y = -height/2.0;
         let dimensions = ScreenDimensions(screen_width, screen_height);
 
-        println!("At creation xywh is {:?}, {:?}, {:?}, {:?}", x,y,width,height);
+        // println!("At creation xywh is {:?}, {:?}, {:?}, {:?}", x,y,width,height);
         RenderWindow {
             world_bounding_box: WorldBoundingBox(WorldUnit(x), WorldUnit(y), WorldUnit(width), WorldUnit(height)),
             render_window_scale: 0,
@@ -165,7 +165,7 @@ impl RenderWindow {
     }
 
     pub fn zoom_window(&mut self, center: &ScreenCoords, direction: ScrollDirection, mut delta: f64) {
-        println!("I am being asked to scale you!, delta: {}", delta);
+        // println!("I am being asked to scale you!, delta: {}", delta);
 
         let point = self.screen_to_world(center);
         // self.render_window_scale = self.render_window_scale + WorldUnit(delta);

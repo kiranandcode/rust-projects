@@ -56,7 +56,7 @@ impl GuiManager {
                     }
                 }
                 GuiManagerMessage::SetCursorEvent(guiID, cursor_type) => {
-                    println!("Got setcursor event {:?} {:?}", guiID, cursor_type);
+                    // println!("Got setcursor event {:?} {:?}", guiID, cursor_type);
                     if let Some(GuiEntity::Widget(ref widget)) = self.gui_widgets.get(&guiID) {
                         // Screen::get_default().map(|scr| {
                             widget.get_window().map(|wnd| {
