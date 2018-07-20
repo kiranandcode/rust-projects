@@ -42,8 +42,8 @@ impl DrawView {
                 self.drawable.draw(cr, style, window);
     }
 
-    pub fn bounding_box(&self) -> Option<MutexGuard<WorldBoundingBox>> {
-        self.drawable.bounding_box()
+    pub fn bounding_box(&self) -> Option<WorldBoundingBox> {
+        self.drawable.bounding_box().map(|guard| guard.clone())
     }
 
     pub fn is_onscreen(&self, window: &RenderWindow) -> bool {

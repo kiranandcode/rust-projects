@@ -263,6 +263,7 @@ impl DialogRenderer {
             let render_window = render_window.clone();
             let sender = sender.clone();
             let draw_queue = draw_queue.clone();
+            let style_scheme = style_scheme.clone();
 
             // thread::spawn(move || dialog_renderer_message_handler(receiver, sender, render_window, drawable_id, draw_queue))
             thread::spawn(move || {
@@ -279,10 +280,10 @@ impl DialogRenderer {
 
                             // Only one writer is allowed at a time, so as we no longer need to modify the shared state, 
                             // let's get a read only reference instead
-                            if let (Ok(ref rw), Ok(ref draw_queue)) = (render_window.read(), draw_queue.read()) {
+                            if let (Ok(ref rw), Ok(ref draw_queue), Ok(ref style_scheme)) = (render_window.read(), draw_queue.read(), style_scheme.read()) {
                                 // now, redraw the entire screen as the entire screen has been invalidated.
                                 let bounding_box = rw.world_bounding_box();  
-                                let ((data, width, height, stride), (x, y)) = render_screen(draw_queue, rw, bounding_box);
+                                let ((data, width, height, stride), (x, y)) = render_screen(draw_queue, rw, bounding_box, style_scheme);
                                 buffer_sender.send(((data, width, height, stride), (x, y)));
                             }
                         },
@@ -295,10 +296,10 @@ impl DialogRenderer {
 
                             // Only one writer is allowed at a time, so as we no longer need to modify the shared state, 
                             // let's get a read only reference instead
-                            if let (Ok(ref rw), Ok(ref draw_queue)) = (render_window.read(), draw_queue.read()) {
+                            if let (Ok(ref rw), Ok(ref draw_queue), Ok(ref style_scheme)) = (render_window.read(), draw_queue.read(), style_scheme.read()) {
                                 // now, redraw the entire screen as the entire screen has been invalidated.
                                 let bounding_box = rw.world_bounding_box();  
-                                let ((data, width, height, stride), (x, y)) = render_screen(draw_queue, rw, bounding_box);
+                                let ((data, width, height, stride), (x, y)) = render_screen(draw_queue, rw, bounding_box, style_scheme);
                                 buffer_sender.send(((data, width, height, stride), (x, y)));
  
 
@@ -315,10 +316,10 @@ impl DialogRenderer {
 
                             // Only one writer is allowed at a time, so as we no longer need to modify the shared state, 
                             // let's get a read only reference instead
-                            if let (Ok(ref rw), Ok(ref draw_queue)) = (render_window.read(), draw_queue.read()) {
+                            if let (Ok(ref rw), Ok(ref draw_queue), Ok(ref style_scheme)) = (render_window.read(), draw_queue.read(), style_scheme.read()) {
                                 // now, redraw the entire screen as the entire screen has been invalidated.
                                 let bounding_box = rw.world_bounding_box();  
-                                let ((data, width, height, stride), (x, y)) = render_screen(draw_queue, rw, bounding_box);
+                                let ((data, width, height, stride), (x, y)) = render_screen(draw_queue, rw, bounding_box, style_scheme);
                                 buffer_sender.send(((data, width, height, stride), (x, y)));
                             }
 
@@ -333,10 +334,10 @@ impl DialogRenderer {
 
 
                             // now, get a read only copy of the relevant components
-                            if let (Ok(ref rw), Ok(ref draw_queue)) = (render_window.read(), draw_queue.read()) {
+                            if let (Ok(ref rw), Ok(ref draw_queue), Ok(ref style_scheme)) = (render_window.read(), draw_queue.read(), style_scheme.read()) {
                                 if let Some(ref bounding_box) = draw_queue.last().and_then(|draw_view| draw_view.bounding_box()) {
                                     // this time, we only need to redraw the area in which the new object has been placed
-                                    let ((data, width, height, stride), (x, y)) = render_screen(draw_queue, rw, bounding_box);
+                                    let ((data, width, height, stride), (x, y)) = render_screen(draw_queue, rw, bounding_box, style_scheme);
                                     buffer_sender.send(((data, width, height, stride), (x, y)));
                                 }
                             }
@@ -363,7 +364,7 @@ impl DialogRenderer {
             let mut invalidated_regions = Vec::with_capacity(10);
 
             // called at 30 fps
-            ::gtk::timeout_add(33, move || {
+            ::gtk::timeout_add(10, move || {
 
                     invalidated_regions.clear();
 
@@ -423,8 +424,89 @@ fn generate_buffer(width : i32 , height : i32) -> (Vec<u8>, i32) {
 
 /// Given a bounding box representing the invalidated region, draws the world for that region, and
 /// produces a package that can be sent  to the refresh thread to update the invalidated region
-fn render_screen(draw_queue: &Vec<DrawView>, render_window: &RenderWindow, invalidated_region: &WorldBoundingBox) -> ((Box<[u8]>, i32, i32, i32), (f64, f64)) {
-    unimplemented!("TODO: Implement this dumbo");
+fn render_screen(draw_queue: &Vec<DrawView>, render_window: &RenderWindow, invalidated_region: &WorldBoundingBox, style_scheme: &StyleScheme) -> ((Box<[u8]>, i32, i32, i32), (f64, f64)) {
+
+    let bounding_box = invalidated_region; 
+    let (ScreenUnit(x), ScreenUnit(y), ScreenDimensions(ScreenUnit(w), ScreenUnit(h))) = render_window.world_bounding_box_to_screen(&bounding_box);
+    let mut surface = ImageSurface::create(Format::Rgb24, w as i32, h as i32).expect("Could not create image surface");
+
+    {
+        let cr = Context::new(&surface);
+        let render_window = RenderWindow::new_from_parts(bounding_box.0, bounding_box.1, bounding_box.2, bounding_box.3, ScreenUnit(w), ScreenUnit(h));
+        
+        cr.set_source_rgba(style_scheme.bg.red, style_scheme.bg.green, style_scheme.bg.blue, style_scheme.bg.alpha);
+        cr.paint();
+
+
+        let start_x = (bounding_box.0).0; 
+        let start_y = (bounding_box.1).0; 
+
+        let end_x = (bounding_box.0 + bounding_box.2).0;
+        let end_y = (bounding_box.1 + bounding_box.3).0;
+
+        let mut x = 100.0 *  (start_x / 100.0).floor();
+        let mut y = 100.0 *  (start_y / 100.0).floor();
+
+        let mut point_1 = WorldCoords(WorldUnit(x), WorldUnit(start_y));
+        let mut point_2 = WorldCoords(WorldUnit(x), WorldUnit(end_y));
+
+        // cr.set_line_width(0.03);
+        while x < end_x {
+            point_1.0 = WorldUnit(x);
+            point_2.0 = WorldUnit(x);
+
+            let ScreenCoords(ScreenUnit(x1), ScreenUnit(y1)) = render_window.world_to_screen(&point_1);
+            let ScreenCoords(ScreenUnit(x2), ScreenUnit(y2)) = render_window.world_to_screen(&point_2);
+
+            cr.set_source_rgba(style_scheme.bg_mid.red, style_scheme.bg_mid.green, style_scheme.bg_mid.blue, style_scheme.bg_mid.alpha);
+            cr.new_path();
+            cr.move_to(x1,y1);
+            cr.line_to(x2, y2);
+            cr.close_path();
+            cr.stroke();
+            x += 100.0;
+        }
+
+        let mut point_1 = WorldCoords(WorldUnit(start_x), WorldUnit(y));
+        let mut point_2 = WorldCoords(WorldUnit(end_x), WorldUnit(y));
+
+        while y < end_y {
+            point_1.1 = WorldUnit(y);
+            point_2.1 = WorldUnit(y);
+
+            let ScreenCoords(ScreenUnit(x1), ScreenUnit(y1)) = render_window.world_to_screen(&point_1);
+            let ScreenCoords(ScreenUnit(x2), ScreenUnit(y2)) = render_window.world_to_screen(&point_2);
+
+            cr.set_source_rgba(style_scheme.bg_mid.red, style_scheme.bg_mid.green, style_scheme.bg_mid.blue, style_scheme.bg_mid.alpha);
+            cr.new_path();
+            cr.move_to(x1,y1);
+            cr.line_to(x2, y2);
+            cr.close_path();
+            cr.stroke();
+            y += 100.0;
+        }
+
+        // main draw loop here
+        // 1. draw background
+
+        // cr.rectangle(0.0, 0.0, 1.0, 1.0);
+        // cr.stroke();
+
+        // 2. ask drawables to draw themselves
+
+        for drawable in draw_queue.iter() {
+            // if drawable.is_onscreen(&render_window) {
+                drawable.draw(&cr, &style_scheme, &render_window);
+            // }
+        }
+
+
+    }
+
+    let data = surface.get_data().expect("Could not retrieve buffer data").to_vec().into_boxed_slice();
+    let stride = surface.get_stride();
+
+    ((data, w as i32, h as i32, stride), (x, y))
 }
 
 

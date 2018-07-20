@@ -110,7 +110,7 @@ impl Drawable for BoxBase {
     }
 
     fn bounding_box(&self) -> Option<MutexGuard<WorldBoundingBox>> {
-        self.bounding_box.lock().ok()
+        self.bounding_box.try_lock().ok()
     }
 
 
