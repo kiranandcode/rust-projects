@@ -270,36 +270,78 @@ impl DialogRenderer {
 
                for event in receiver.iter() {
                    match event {
+                       // on getting a resize event, we need to redraw the entire screen, 
                         DialogRendererMessage::ResizeEvent(dimensions) => {
                             if let Ok(mut rw) = render_window.write() {
+                                // first update the shared state - the render_window
                                 rw.update_screen_dimensions(dimensions);
+                            }
+
+                            // Only one writer is allowed at a time, so as we no longer need to modify the shared state, 
+                            // let's get a read only reference instead
+                            if let (Ok(ref rw), Ok(ref draw_queue)) = (render_window.read(), draw_queue.read()) {
+                                // now, redraw the entire screen as the entire screen has been invalidated.
+                                let bounding_box = rw.world_bounding_box();  
+                                let ((data, width, height, stride), (x, y)) = render_screen(draw_queue, rw, bounding_box);
+                                buffer_sender.send(((data, width, height, stride), (x, y)));
                             }
                         },
                         DialogRendererMessage::ScrollEvent(point, direction, delta) => {
                             if let Ok(mut rw) = render_window.write() {
+                                // first update the shared state, the render_window
                                 rw.zoom_window(&point, direction, delta);
-                                sender.send(
-                                    GeneralMessage::Redraw(drawable_id.clone())
-                                );
+
+                            }
+
+                            // Only one writer is allowed at a time, so as we no longer need to modify the shared state, 
+                            // let's get a read only reference instead
+                            if let (Ok(ref rw), Ok(ref draw_queue)) = (render_window.read(), draw_queue.read()) {
+                                // now, redraw the entire screen as the entire screen has been invalidated.
+                                let bounding_box = rw.world_bounding_box();  
+                                let ((data, width, height, stride), (x, y)) = render_screen(draw_queue, rw, bounding_box);
+                                buffer_sender.send(((data, width, height, stride), (x, y)));
+ 
+
+                                // sender.send(
+                                //     GeneralMessage::Redraw(drawable_id.clone())
+                                // );
                             }
                         },
                         DialogRendererMessage::WindowMoveEvent(x,y) => {
                             if let Ok(mut rw) = render_window.write() {
+                                // update the shared state
                                 rw.move_window(&x,&y);
-
-                                sender.send(
-                                    GeneralMessage::Redraw(drawable_id.clone())
-                                );
                             }
+
+                            // Only one writer is allowed at a time, so as we no longer need to modify the shared state, 
+                            // let's get a read only reference instead
+                            if let (Ok(ref rw), Ok(ref draw_queue)) = (render_window.read(), draw_queue.read()) {
+                                // now, redraw the entire screen as the entire screen has been invalidated.
+                                let bounding_box = rw.world_bounding_box();  
+                                let ((data, width, height, stride), (x, y)) = render_screen(draw_queue, rw, bounding_box);
+                                buffer_sender.send(((data, width, height, stride), (x, y)));
+                            }
+
                         }
                         DialogRendererMessage::RegisterDrawable(drawable) => {
                             let drawable = DrawView::new(drawable);
-                            let mut draw_queue = draw_queue.write().unwrap();
-                            draw_queue.push(drawable);
 
-                            sender.send(
-                                GeneralMessage::Redraw(drawable_id.clone())
-                            );
+                            // first, update the shared state - important for the dialog state
+                            if let Ok(mut draw_queue) = draw_queue.write() {
+                                draw_queue.push(drawable);
+                            }
+
+
+                            // now, get a read only copy of the relevant components
+                            if let (Ok(ref rw), Ok(ref draw_queue)) = (render_window.read(), draw_queue.read()) {
+                                if let Some(ref bounding_box) = draw_queue.last().and_then(|draw_view| draw_view.bounding_box()) {
+                                    // this time, we only need to redraw the area in which the new object has been placed
+                                    let ((data, width, height, stride), (x, y)) = render_screen(draw_queue, rw, bounding_box);
+                                    buffer_sender.send(((data, width, height, stride), (x, y)));
+                                }
+                            }
+
+
                         }
                    }
                }
@@ -376,6 +418,13 @@ fn generate_buffer(width : i32 , height : i32) -> (Vec<u8>, i32) {
     let buf = image.get_data().expect("Could not retrieve image buffer from surface").to_vec();
 
     (buf, image.get_stride())
+}
+
+
+/// Given a bounding box representing the invalidated region, draws the world for that region, and
+/// produces a package that can be sent  to the refresh thread to update the invalidated region
+fn render_screen(draw_queue: &Vec<DrawView>, render_window: &RenderWindow, invalidated_region: &WorldBoundingBox) -> ((Box<[u8]>, i32, i32, i32), (f64, f64)) {
+    unimplemented!("TODO: Implement this dumbo");
 }
 
 

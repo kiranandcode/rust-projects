@@ -111,7 +111,7 @@ impl ScreenDimensions {
 }
 
 /// Represents a rectangle in world space - can be moved and scaled freely
-#[derive(Debug, PartialEq, PartialOrd)]
+#[derive(Debug, PartialEq, PartialOrd, Clone)]
 pub struct WorldBoundingBox(pub WorldX, pub WorldY, pub WorldWidth, pub WorldHeight);
 
 impl WorldBoundingBox {
