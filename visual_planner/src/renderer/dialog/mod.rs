@@ -309,6 +309,7 @@ impl DialogRenderer {
                             }
                         },
                         DialogRendererMessage::WindowMoveEvent(x,y) => {
+
                             if let Ok(mut rw) = render_window.write() {
                                 // update the shared state
                                 rw.move_window(&x,&y);
@@ -361,12 +362,12 @@ impl DialogRenderer {
             let drawing_area = drawing_area.clone();
 
             // Small reusable buffer for the refresh thread.
-            let mut invalidated_regions = Vec::with_capacity(10);
+            // let mut invalidated_regions = Vec::with_capacity(10);
 
             // called at 30 fps
             ::gtk::timeout_add(10, move || {
 
-                    invalidated_regions.clear();
+                    // invalidated_regions.clear();
 
                     // get a reference to the main drawing buffer - note: this is thread safe, as all gtk functions are called from the same thread
                     // so there are no race conditions.
@@ -374,22 +375,51 @@ impl DialogRenderer {
                     let cr = Context::new(&*draw_buffer);
 
                     // grab any drawn surfaces that have been sent by the worker thread
-                    for ((data, width, height, stride), (x, y)) in buffer_receiver.try_iter() {
-                        if let Ok(surface) = ImageSurface::create_for_data(data, |data| {}, Format::Rgb24, width, height, stride) {
-                            cr.set_source_surface(&surface, x as f64, y);
-                            cr.paint();
-                            
+                    let requests = buffer_receiver.try_iter().collect::<Vec<((Box<[u8]>, i32, i32, i32), (f64, f64))>>();
 
-                            // Note: the following is needed to ensure that the surface is dropped ASAP and isn't held around by the context
-                            cr.set_source_rgb(0.0, 0.0, 0.0);
-                            invalidated_regions.push((x as i32, y as i32, width as i32, height as i32));
+                    if requests.len() > 0 {
+                        let mut max = None;
+                        let mut i = 0;
+                        while i < requests.len() {
+                            if let Some((x,y,w,h)) = max {
+                                let (o_x, o_y, o_w, o_h) = ((requests[i].1).0, (requests[i].1).1, (requests[i].0).1, (requests[i].0).2);
+                                let (o_x, o_y, o_w, o_h) = (o_x as f64, o_y as f64, o_w as f64, o_h as f64);
+
+
+                                let n_x  = if o_x < x { o_x } else { x };
+                                let n_y  = if o_y < y { o_y } else { y };
+                                let n_w = (if o_x + o_w > x + w { o_x + o_w } else {x + w}) - n_x;
+                                let n_h = (if o_y + o_h > y + h { o_y + o_h } else {y + h}) - n_y;
+
+                                max = Some((n_x, n_y, n_w, n_h));
+
+                            } else {
+                                max = Some(((requests[i].1).0, (requests[i].1).1, (requests[i].0).1 as f64, (requests[i].0).2 as f64));
+                            }
+                           i += 1; 
                         }
-                    }
 
-                    for (x,y, width, height) in invalidated_regions.iter() {
-                        drawing_area.queue_draw_area(*x, *y, *width, *height);
-                    }
+                        
+                        for ((data, width, height, stride), (x, y)) in  requests {
+                            if let Ok(surface) = ImageSurface::create_for_data(data, |data| {}, Format::Rgb24, width, height, stride) {
+                                cr.set_source_surface(&surface, x as f64, y);
+                                cr.paint();
+                                
 
+                                // Note: the following is needed to ensure that the surface is dropped ASAP and isn't held around by the context
+                                cr.set_source_rgb(0.0, 0.0, 0.0);
+                                // invalidated_regions.push((x as i32, y as i32, width as i32, height as i32));
+                            }
+                        }
+
+                        // for (x,y, width, height) in invalidated_regions.iter() {
+                        //     drawing_area.queue_draw_area(*x, *y, *width, *height);
+                        // }
+                        if let Some((x,y,w,h)) = max {
+                            drawing_area.queue_draw_area(x as i32,y as i32,w as i32,h as i32);
+                        }
+
+                    }
                 Continue(true)
             });
         }

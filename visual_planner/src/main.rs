@@ -19,6 +19,7 @@ use gui::App;
 use gui::manager::GuiManager;
 use manager::ModelManager;
 use gtk::{Settings, SettingsExt, StyleContext, StyleContextExt};
+use std::fs::File;
 
 
 fn main() {
@@ -47,4 +48,6 @@ fn main() {
     });
 
     gtk::main();
+
+
 }
