@@ -87,7 +87,7 @@ impl Mul for ScreenUnit {
 
 
 /// Represents a rectangle in screen space - immovable, but can be rescaled
-#[derive(Debug, PartialEq, PartialOrd)]
+#[derive(Debug, PartialEq, PartialOrd, Clone)]
 pub struct ScreenDimensions(pub ScreenWidth, pub ScreenHeight);
 impl ScreenDimensions {
     pub fn set_width(&mut self, width : ScreenWidth) {

@@ -114,6 +114,8 @@ impl DialogRenderer {
 
 
 
+        // This channel will be used by the whole system to send info to the worker thread.
+        let (dialog_sender, receiver) : (Sender<DialogRendererMessage>,Receiver<DialogRendererMessage>) = mpsc::channel();
 
 
         let state_manager = {
@@ -161,6 +163,13 @@ impl DialogRenderer {
         {
                 let draw_buffer = draw_buffer.clone();
                 let sender = sender.clone();
+                let dialog_sender = dialog_sender.clone();
+                let drawing_area_ref = drawing_area.clone();
+                let render_window = render_window.clone();
+                let draw_queue = draw_queue.clone();
+                let style_scheme = style_scheme.clone();
+
+
 
                 drawing_area.connect_event(move |obj, event| {
                     if let Ok(ref result) = event.clone().downcast::<EventScroll>() {
@@ -212,26 +221,56 @@ impl DialogRenderer {
                         sender.send( GeneralMessage::RendererMotion( ScreenUnit(x as f64), ScreenUnit(y as f64)));
                     } 
 
+                    // on resize event - it's slightly expensive as it tries to do a screen draw on the main thread.
                     if let Ok(ref result) = event.clone().downcast::<EventConfigure>() {
                         let (width, height) = result.get_size();
+                        let mut draw_buffer = draw_buffer.borrow_mut();
+                        let dimensions = ScreenDimensions(ScreenUnit(width as f64), ScreenUnit(height as f64));
 
-                        *(draw_buffer.borrow_mut()) = ImageSurface::create(Format::Rgb24, width as i32, height as i32).expect("Could not create an image buffer");
 
 
-                        // TODO: Remove this.
-                        sender.send( GeneralMessage::RendererScreenResize( ScreenUnit(width as f64), ScreenUnit(height as f64)));
+                        // when a resize event occurs, as it isn't necassarily connected to the refresh cycle (we need to send the request to 
+                        // the worker thread, and then wait for the refresh callback to be called to update the main buffer), which leads to a 
+                        // brief black screens this is sufficient - but I don't settle for that trash.
+                        // so, to avoid this, whenever a resize occurs, I'm going to try and bypass the refresh cycle, and (slightly expensively)
+                        // redraw the screen from the update screen
+                        let update_success = if let (Ok(ref mut rw), Ok(ref draw_queue), Ok(ref style_scheme)) = (render_window.try_write(), draw_queue.try_read(), style_scheme.try_read()) {
+                            // first update the shared state - the render_window
+                            rw.update_screen_dimensions(dimensions.clone());
+
+
+                            let bounding_box = rw.world_bounding_box();  
+                            let ((data, width, height, stride), (x, y)) = render_screen(draw_queue, rw, bounding_box, style_scheme);
+                            if let Ok(surface) = ImageSurface::create_for_data(data, |data| {}, Format::Rgb24, width, height, stride) {
+                                *draw_buffer = surface;
+                                drawing_area_ref.queue_draw();
+                                true
+                            } else {
+                                false
+                            }
+                        } else {
+                            false
+                        };
+        
+                        if !update_success {
+                            *draw_buffer = ImageSurface::create(Format::Rgb24, width as i32, height as i32).expect("Could not create an image buffer");
+                        }
+
+                        // now, send the resize event straight to the worker thread for instant updates.
+                        dialog_sender.send(DialogRendererMessage::ResizeEvent(dimensions)).expect("Didn't get anything");
+
 
                     }
-                    
-                    Inhibit(false) 
-                });
-        }
+                            
+                            Inhibit(false) 
+                        });
+                }
 
 
 
-        // GTK Drawing handler - called whenever gtk needs to redraw anything 
-        // we are passed a cr context that has already been clipped to the region that needs to be drawn. 
-        // this callback simply fills the region that needs to be painted with the corresponding data in the main buffer.
+                // GTK Drawing handler - called whenever gtk needs to redraw anything 
+                // we are passed a cr context that has already been clipped to the region that needs to be drawn. 
+                // this callback simply fills the region that needs to be painted with the corresponding data in the main buffer.
         // the buffer would have been drawn to already by the worker thread, and updated by the 30fps refresh callback.
         {
             let draw_buffer = draw_buffer.clone();
@@ -248,7 +287,6 @@ impl DialogRenderer {
             });
         }
 
-        let (dialog_sender, receiver) : (Sender<DialogRendererMessage>,Receiver<DialogRendererMessage>) = mpsc::channel();
         
         event_builder.set_dialog_renderer_channel(dialog_sender);
 
@@ -261,7 +299,6 @@ impl DialogRenderer {
 
         let renderer_event_thread = {
             let render_window = render_window.clone();
-            let sender = sender.clone();
             let draw_queue = draw_queue.clone();
             let style_scheme = style_scheme.clone();
 
@@ -342,8 +379,19 @@ impl DialogRenderer {
                                     buffer_sender.send(((data, width, height, stride), (x, y)));
                                 }
                             }
-
-
+                        }
+                        // whenever a visual component changes, we get a redraw request
+                        DialogRendererMessage::RedrawRequest(bounding_box) => {
+                            // first we need to check whether the updated region actually intersects the world area
+                            if let Ok(ref rw) = render_window.read() {
+                                // if it does, do the expensive call of catching a reference to the draw queue and the style scheme to do the update
+                                if WorldBoundingBox::check_intersect(&bounding_box, rw.world_bounding_box()) {
+                                    if let (Ok(ref draw_queue), Ok(ref style_scheme)) = ( draw_queue.read(), style_scheme.read()) {
+                                        let ((data, width, height, stride), (x, y)) = render_screen(draw_queue, rw, &bounding_box, style_scheme);
+                                        buffer_sender.send(((data, width, height, stride), (x, y)));
+                                    }
+                                }
+                            }
                         }
                    }
                }
@@ -365,7 +413,7 @@ impl DialogRenderer {
             // let mut invalidated_regions = Vec::with_capacity(10);
 
             // called at 30 fps
-            ::gtk::timeout_add(10, move || {
+            ::gtk::timeout_add(1000/60, move || {
 
                     // invalidated_regions.clear();
 
@@ -380,6 +428,9 @@ impl DialogRenderer {
                     if requests.len() > 0 {
                         let mut max = None;
                         let mut i = 0;
+
+                        // as an optimization, we're going to preprocess the draw queue.
+                        // first, we're going to find the smallest area that encompasses all things that need to be draw
                         while i < requests.len() {
                             if let Some((x,y,w,h)) = max {
                                 let (o_x, o_y, o_w, o_h) = ((requests[i].1).0, (requests[i].1).1, (requests[i].0).1, (requests[i].0).2);
@@ -540,207 +591,3 @@ fn render_screen(draw_queue: &Vec<DrawView>, render_window: &RenderWindow, inval
 }
 
 
-fn handle_drawing_area_events<F>(event : &Event, sender: F) -> Inhibit
-    where F : Fn() -> Sender<GeneralMessage> {
-            let sender = sender();
-                if let Ok(ref result) = event.clone().downcast::<EventScroll>() {
-                    let (x, y) = result.get_position();
-                    let mut delta = 1.0;
-
-                    let direction = result.get_direction();
-
-                    let direction = match direction {
-                        ::gdk::ScrollDirection::Up => {
-                            delta = 1.0/1.1;     
-                            Some(ScrollDirection::Up)
-                        }
-                        ::gdk::ScrollDirection::Down => {
-                            delta = 1.1;    
-                            Some(ScrollDirection::Down)
-                        },
-                        ::gdk::ScrollDirection::Smooth => {
-                            let (x, y) = result.get_delta();
-                            
-                            if x > 0.0 {
-                                delta = 1.0/1.1;
-                                Some(ScrollDirection::Up)
-                            } else {
-                                delta = 1.1;
-                                Some(ScrollDirection::Down)
-                            }
-                        }
-                        _ => {
-                            None
-                        }
-                    };
-
-                    if let Some(dir) = direction {
-                        sender.send(
-                            GeneralMessage::RendererScroll(
-                                ScreenUnit(x as f64), 
-                                ScreenUnit(y as f64),
-                                dir,
-                                delta
-                            )
-                        );
-                    }
-
-                }
-                if let Ok(ref result) = event.clone().downcast::<EventButton>() {
-                    let (x, y) = result.get_position();
-                    sender.send(
-                        GeneralMessage::RendererClick(
-                            ScreenUnit(x as f64), 
-                            ScreenUnit(y as f64)
-                        )
-                    );
- 
-                }
-                if let Ok(ref result) = event.clone().downcast::<EventMotion>() {
-                   
-                    let (x, y) = result.get_position();
-
-                    sender.send(
-                        GeneralMessage::RendererMotion(
-                            ScreenUnit(x as f64), 
-                            ScreenUnit(y as f64)
-                        )
-                    );
- 
-
-                } 
-                if let Ok(ref result) = event.clone().downcast::<EventConfigure>() {
-                    let (width, height) = result.get_size();
-
-                    sender.send(
-                        GeneralMessage::RendererScreenResize(
-                            ScreenUnit(width as f64), 
-                            ScreenUnit(height as f64)
-                        )
-                    );
-                }
-                
-                Inhibit(false) 
-}
-
-fn handle_drawing_area_draw<F,G,H>(cr : &Context, style_scheme : F, render_window : G, draw_queue : H) -> Inhibit 
-    where F : Fn() -> Arc<RwLock<StyleScheme>>,
-          G : Fn() -> Arc<RwLock<RenderWindow>>,
-          H : Fn() -> Arc<RwLock<Vec<DrawView>>>
-    {
-            let style_scheme = style_scheme();
-            let render_window = render_window();
-            let draw_queue = draw_queue();
-
-                let style_scheme = style_scheme.read().unwrap();
-                let render_window = render_window.read().unwrap();
-                let draw_queue = draw_queue.read().unwrap();
-
-                cr.set_source_rgba(style_scheme.bg.red, style_scheme.bg.green, style_scheme.bg.blue, style_scheme.bg.alpha);
-                cr.paint();
-
-                let bounding_box = render_window.world_bounding_box();
-
-                let start_x = (bounding_box.0).0; 
-                let start_y = (bounding_box.1).0; 
-
-                let end_x = (bounding_box.0 + bounding_box.2).0;
-                let end_y = (bounding_box.1 + bounding_box.3).0;
-
-                let mut x = 100.0 *  (start_x / 100.0).floor();
-                let mut y = 100.0 *  (start_y / 100.0).floor();
-
-                let mut point_1 = WorldCoords(WorldUnit(x), WorldUnit(start_y));
-                let mut point_2 = WorldCoords(WorldUnit(x), WorldUnit(end_y));
-
-                // cr.set_line_width(0.03);
-                while x < end_x {
-                    point_1.0 = WorldUnit(x);
-                    point_2.0 = WorldUnit(x);
-
-                    let ScreenCoords(ScreenUnit(x1), ScreenUnit(y1)) = render_window.world_to_screen(&point_1);
-                    let ScreenCoords(ScreenUnit(x2), ScreenUnit(y2)) = render_window.world_to_screen(&point_2);
-
-                    cr.set_source_rgba(style_scheme.bg_mid.red, style_scheme.bg_mid.green, style_scheme.bg_mid.blue, style_scheme.bg_mid.alpha);
-                    cr.new_path();
-                    cr.move_to(x1,y1);
-                    cr.line_to(x2, y2);
-                    cr.close_path();
-                    cr.stroke();
-                    x += 100.0;
-                }
-
-                let mut point_1 = WorldCoords(WorldUnit(start_x), WorldUnit(y));
-                let mut point_2 = WorldCoords(WorldUnit(end_x), WorldUnit(y));
-
-                while y < end_y {
-                    point_1.1 = WorldUnit(y);
-                    point_2.1 = WorldUnit(y);
-
-                    let ScreenCoords(ScreenUnit(x1), ScreenUnit(y1)) = render_window.world_to_screen(&point_1);
-                    let ScreenCoords(ScreenUnit(x2), ScreenUnit(y2)) = render_window.world_to_screen(&point_2);
-
-                    cr.set_source_rgba(style_scheme.bg_mid.red, style_scheme.bg_mid.green, style_scheme.bg_mid.blue, style_scheme.bg_mid.alpha);
-                    cr.new_path();
-                    cr.move_to(x1,y1);
-                    cr.line_to(x2, y2);
-                    cr.close_path();
-                    cr.stroke();
-                    y += 100.0;
-                }
- 
-
-                // main draw loop here
-                // 1. draw background
-
-                cr.rectangle(0.0, 0.0, 1.0, 1.0);
-                cr.stroke();
-
-                // 2. ask drawables to draw themselves
-
-                for drawable in draw_queue.iter() {
-                    drawable.draw(cr, &style_scheme, &render_window);
-                }
-
-            Inhibit(false)
-}
-
-fn dialog_renderer_message_handler(receiver : Receiver<DialogRendererMessage>, sender : Sender<GeneralMessage>, render_window : Arc<RwLock<RenderWindow>>, drawable_id : GuiWidgetID, draw_queue : Arc<RwLock<Vec<DrawView>>>) {
-
-
-               for event in receiver.iter() {
-                   match event {
-                        DialogRendererMessage::ResizeEvent(dimensions) => {
-                            if let Ok(mut rw) = render_window.write() {
-                                rw.update_screen_dimensions(dimensions);
-                            }
-                        },
-                        DialogRendererMessage::ScrollEvent(point, direction, delta) => {
-                            if let Ok(mut rw) = render_window.write() {
-                                rw.zoom_window(&point, direction, delta);
-                                sender.send(
-                                    GeneralMessage::Redraw(drawable_id.clone())
-                                );
-                            }
-                        },
-                        DialogRendererMessage::WindowMoveEvent(x,y) => {
-                            if let Ok(mut rw) = render_window.write() {
-                                rw.move_window(&x,&y);
-
-                                sender.send(
-                                    GeneralMessage::Redraw(drawable_id.clone())
-                                );
-                            }
-                        }
-                        DialogRendererMessage::RegisterDrawable(drawable) => {
-                            let drawable = DrawView::new(drawable);
-                            let mut draw_queue = draw_queue.write().unwrap();
-                            draw_queue.push(drawable);
-
-                            sender.send(
-                                GeneralMessage::Redraw(drawable_id.clone())
-                            );
-                        }
-                   }
-               }
-            }
