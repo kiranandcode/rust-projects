@@ -60,6 +60,7 @@ use gtk::{
     main_quit,           // end the app
     StyleContext,         // used for initializing the stylescheme
 };
+use rayon;
 use cairo::Context;
 
 
@@ -79,6 +80,8 @@ pub struct DialogRenderer {
 
     // id for the drawing area
     drawable_id: GuiWidgetID,
+
+    renderer_pool: Arc<rayon::ThreadPool>, 
 }
 
 impl AsRef<DrawingArea> for DialogRenderer {
@@ -268,9 +271,9 @@ impl DialogRenderer {
 
 
 
-                // GTK Drawing handler - called whenever gtk needs to redraw anything 
-                // we are passed a cr context that has already been clipped to the region that needs to be drawn. 
-                // this callback simply fills the region that needs to be painted with the corresponding data in the main buffer.
+        // GTK Drawing handler - called whenever gtk needs to redraw anything 
+        // we are passed a cr context that has already been clipped to the region that needs to be drawn. 
+        // this callback simply fills the region that needs to be painted with the corresponding data in the main buffer.
         // the buffer would have been drawn to already by the worker thread, and updated by the 30fps refresh callback.
         {
             let draw_buffer = draw_buffer.clone();
@@ -290,7 +293,10 @@ impl DialogRenderer {
         
         event_builder.set_dialog_renderer_channel(dialog_sender);
 
-
+        let renderer_pool = {
+            let thread_pool = rayon::ThreadPoolBuilder::new().num_threads(8).build().unwrap();
+            Arc::new(thread_pool)
+        };
 
         // Worker Drawing thread
         // This thread is the real workhorse of this system.
@@ -301,8 +307,8 @@ impl DialogRenderer {
             let render_window = render_window.clone();
             let draw_queue = draw_queue.clone();
             let style_scheme = style_scheme.clone();
+            let renderer_pool = renderer_pool.clone();
 
-            // thread::spawn(move || dialog_renderer_message_handler(receiver, sender, render_window, drawable_id, draw_queue))
             thread::spawn(move || {
 
 
@@ -315,14 +321,32 @@ impl DialogRenderer {
                                 rw.update_screen_dimensions(dimensions);
                             }
 
-                            // Only one writer is allowed at a time, so as we no longer need to modify the shared state, 
-                            // let's get a read only reference instead
-                            if let (Ok(ref rw), Ok(ref draw_queue), Ok(ref style_scheme)) = (render_window.read(), draw_queue.read(), style_scheme.read()) {
-                                // now, redraw the entire screen as the entire screen has been invalidated.
-                                let bounding_box = rw.world_bounding_box();  
-                                let ((data, width, height, stride), (x, y)) = render_screen(draw_queue, rw, bounding_box, style_scheme);
-                                buffer_sender.send(((data, width, height, stride), (x, y)));
+                            // send the drawing task to the thread pool to be executed.
+                            {
+                                let render_window = render_window.clone();
+                                let draw_queue = draw_queue.clone();
+                                let style_scheme = style_scheme.clone();
+                                let buffer_sender = buffer_sender.clone();
+
+                                renderer_pool.install(move|| {
+
+                                    if let (Ok(ref rw), Ok(ref draw_queue), Ok(ref style_scheme)) = (render_window.try_read(), draw_queue.try_read(), style_scheme.try_read()) {
+                                    // now, redraw the entire screen as the entire screen has been invalidated.
+                                        let ((data, width, height, stride), (x, y)) = {
+                                            let bounding_box = rw.world_bounding_box();  
+                                            render_screen(draw_queue.clone(), rw.clone(), &bounding_box, style_scheme)
+
+                                        };
+                                        buffer_sender.send(((data, width, height, stride), (x, y)));
+                                    }
+                                    buffer_sender.clone();
+
+                                });
                             }
+
+
+
+
                         },
                         DialogRendererMessage::ScrollEvent(point, direction, delta) => {
                             if let Ok(mut rw) = render_window.write() {
@@ -333,18 +357,33 @@ impl DialogRenderer {
 
                             // Only one writer is allowed at a time, so as we no longer need to modify the shared state, 
                             // let's get a read only reference instead
-                            if let (Ok(ref rw), Ok(ref draw_queue), Ok(ref style_scheme)) = (render_window.read(), draw_queue.read(), style_scheme.read()) {
-                                // now, redraw the entire screen as the entire screen has been invalidated.
-                                let bounding_box = rw.world_bounding_box();  
-                                let ((data, width, height, stride), (x, y)) = render_screen(draw_queue, rw, bounding_box, style_scheme);
-                                buffer_sender.send(((data, width, height, stride), (x, y)));
- 
 
-                                // sender.send(
-                                //     GeneralMessage::Redraw(drawable_id.clone())
-                                // );
+                            // send the drawing task to the thread pool to be executed.
+                            {
+                                let render_window = render_window.clone();
+                                let draw_queue = draw_queue.clone();
+                                let style_scheme = style_scheme.clone();
+                                let buffer_sender = buffer_sender.clone();
+
+                                renderer_pool.install(move|| {
+
+                                    if let (Ok(ref rw), Ok(ref draw_queue), Ok(ref style_scheme)) = (render_window.try_read(), draw_queue.try_read(), style_scheme.try_read()) {
+                                    // now, redraw the entire screen as the entire screen has been invalidated.
+                                        let ((data, width, height, stride), (x, y)) = {
+                                            let bounding_box = rw.world_bounding_box();  
+                                            render_screen(draw_queue.clone(), rw.clone(), &bounding_box, style_scheme)
+
+                                        };
+                                        buffer_sender.send(((data, width, height, stride), (x, y)));
+                                    }
+                                    buffer_sender.clone();
+
+                                });
                             }
-                        },
+
+
+
+                       },
                         DialogRendererMessage::WindowMoveEvent(x,y) => {
 
                             if let Ok(mut rw) = render_window.write() {
@@ -354,44 +393,86 @@ impl DialogRenderer {
 
                             // Only one writer is allowed at a time, so as we no longer need to modify the shared state, 
                             // let's get a read only reference instead
-                            if let (Ok(ref rw), Ok(ref draw_queue), Ok(ref style_scheme)) = (render_window.read(), draw_queue.read(), style_scheme.read()) {
-                                // now, redraw the entire screen as the entire screen has been invalidated.
-                                let bounding_box = rw.world_bounding_box();  
-                                let ((data, width, height, stride), (x, y)) = render_screen(draw_queue, rw, bounding_box, style_scheme);
-                                buffer_sender.send(((data, width, height, stride), (x, y)));
-                            }
+                            // spawn a child thread to do the hard work and send the result
+                                {
+                                    let render_window = render_window.clone();
+                                    let draw_queue = draw_queue.clone();
+                                    let style_scheme = style_scheme.clone();
+                                    let buffer_sender = buffer_sender.clone();
+
+                                    renderer_pool.install(move|| {
+
+                                        if let (Ok(ref rw), Ok(ref draw_queue), Ok(ref style_scheme)) = (render_window.try_read(), draw_queue.try_read(), style_scheme.try_read()) {
+                                        // now, redraw the entire screen as the entire screen has been invalidated.
+                                            let ((data, width, height, stride), (x, y)) = {
+                                                let bounding_box = rw.world_bounding_box();  
+                                                render_screen(draw_queue.clone(), rw.clone(), &bounding_box, style_scheme)
+
+                                            };
+                                            buffer_sender.send(((data, width, height, stride), (x, y)));
+                                        }
+                                        buffer_sender.clone();
+
+                                    });
+                                }
 
                         }
                         DialogRendererMessage::RegisterDrawable(drawable) => {
                             let drawable = DrawView::new(drawable);
 
+                            let bounding_box = drawable.bounding_box().unwrap();
                             // first, update the shared state - important for the dialog state
                             if let Ok(mut draw_queue) = draw_queue.write() {
                                 draw_queue.push(drawable);
                             }
 
+                            // send off the draw task to the worker thread.
+                            {
+                                let render_window = render_window.clone();
+                                let draw_queue = draw_queue.clone();
+                                let style_scheme = style_scheme.clone();
+                                let buffer_sender = buffer_sender.clone();
+                                let bounding_box = bounding_box;
 
-                            // now, get a read only copy of the relevant components
-                            if let (Ok(ref rw), Ok(ref draw_queue), Ok(ref style_scheme)) = (render_window.read(), draw_queue.read(), style_scheme.read()) {
-                                if let Some(ref bounding_box) = draw_queue.last().and_then(|draw_view| draw_view.bounding_box()) {
-                                    // this time, we only need to redraw the area in which the new object has been placed
-                                    let ((data, width, height, stride), (x, y)) = render_screen(draw_queue, rw, bounding_box, style_scheme);
-                                    buffer_sender.send(((data, width, height, stride), (x, y)));
-                                }
+                                renderer_pool.install(move|| {
+
+                                    if let (Ok(ref rw), Ok(ref draw_queue), Ok(ref style_scheme)) = (render_window.read(), draw_queue.read(), style_scheme.read()) {
+                                            // this time, we only need to redraw the area in which the new object has been placed
+                                            let ((data, width, height, stride), (x, y)) = render_screen(draw_queue, rw, &bounding_box, style_scheme);
+                                            buffer_sender.send(((data, width, height, stride), (x, y)));
+                                    }
+                                    buffer_sender.clone();
+                                });
                             }
                         }
                         // whenever a visual component changes, we get a redraw request
                         DialogRendererMessage::RedrawRequest(bounding_box) => {
+                            let mut needs_update = false;
                             // first we need to check whether the updated region actually intersects the world area
                             if let Ok(ref rw) = render_window.read() {
                                 // if it does, do the expensive call of catching a reference to the draw queue and the style scheme to do the update
-                                if WorldBoundingBox::check_intersect(&bounding_box, rw.world_bounding_box()) {
-                                    if let (Ok(ref draw_queue), Ok(ref style_scheme)) = ( draw_queue.read(), style_scheme.read()) {
-                                        let ((data, width, height, stride), (x, y)) = render_screen(draw_queue, rw, &bounding_box, style_scheme);
-                                        buffer_sender.send(((data, width, height, stride), (x, y)));
-                                    }
-                                }
+                                needs_update =  WorldBoundingBox::check_intersect(&bounding_box, rw.world_bounding_box());
                             }
+
+                            // send off the draw task to the worker thread.
+                            if needs_update {
+                                let render_window = render_window.clone();
+                                let draw_queue = draw_queue.clone();
+                                let style_scheme = style_scheme.clone();
+                                let buffer_sender = buffer_sender.clone();
+                                let bounding_box = bounding_box;
+
+                                renderer_pool.install(move|| {
+
+                                    if let (Ok(ref rw), Ok(ref draw_queue), Ok(ref style_scheme)) = (render_window.read(), draw_queue.read(), style_scheme.read()) {
+                                            // this time, we only need to redraw the area in which the new object has been placed
+                                            let ((data, width, height, stride), (x, y)) = render_screen(draw_queue, rw, &bounding_box, style_scheme);
+                                            buffer_sender.send(((data, width, height, stride), (x, y)));
+                                    }
+                                    buffer_sender.clone();
+                                });
+                            }
+
                         }
                    }
                }
@@ -423,15 +504,14 @@ impl DialogRenderer {
                     let cr = Context::new(&*draw_buffer);
 
                     // grab any drawn surfaces that have been sent by the worker thread
-                    let requests = buffer_receiver.try_iter().collect::<Vec<((Box<[u8]>, i32, i32, i32), (f64, f64))>>();
+                    let mut requests = buffer_receiver.try_iter().collect::<Vec<((Box<[u8]>, i32, i32, i32), (f64, f64))>>();
 
                     if requests.len() > 0 {
                         let mut max = None;
-                        let mut i = 0;
 
                         // as an optimization, we're going to preprocess the draw queue.
-                        // first, we're going to find the smallest area that encompasses all things that need to be draw
-                        while i < requests.len() {
+                        for i in 0..requests.len() {
+                            // first, we're going to find the smallest area that encompasses all things that need to be draw
                             if let Some((x,y,w,h)) = max {
                                 let (o_x, o_y, o_w, o_h) = ((requests[i].1).0, (requests[i].1).1, (requests[i].0).1, (requests[i].0).2);
                                 let (o_x, o_y, o_w, o_h) = (o_x as f64, o_y as f64, o_w as f64, o_h as f64);
@@ -447,7 +527,45 @@ impl DialogRenderer {
                             } else {
                                 max = Some(((requests[i].1).0, (requests[i].1).1, (requests[i].0).1 as f64, (requests[i].0).2 as f64));
                             }
-                           i += 1; 
+
+
+                        }
+
+                        if requests.len() > 5 {
+                            // next, we're going to remove any redundant parts
+                            // O(n^2) algorithm to remove any sub-components
+                            let mut i = 0;
+                            while i < requests.len() {
+                                let mut removed_item = false;
+                                let (x, y, w, h) = ((requests[i].1).0 as f64, (requests[i].1).1 as f64, (requests[i].0).1 as f64, (requests[i].0).2 as f64);
+                                let mut j = i + 1;
+                                while j < requests.len() {
+                                    let mut internal_removed_item = false;
+                                    let (o_x, o_y, o_w, o_h) = ((requests[j].1).0, (requests[j].1).1 as f64, (requests[j].0).1 as f64, (requests[j].0).2 as f64);
+
+                                    // if box j is within box i, then remove box j
+                                    if (o_x >= x) && ((o_x + w) <= (x + w)) && (o_y >= y) && ((o_y + h) <= (y + h)) {
+                                        requests.remove(j);
+                                        internal_removed_item = true;
+                                    }
+                                    // if box i is within box j, then remove box i, also set x, y, z to w
+                                    if (o_x <= x) && ((o_x + w) >= (x + w)) && (o_y <= y) && ((o_y + h) >= (y + h)) {
+                                        requests.remove(i);
+                                        removed_item = true;
+                                        break;
+                                    }
+
+                                    if !internal_removed_item {
+                                        j += 1;                                
+                                    }
+                                }
+
+                                if !removed_item {
+                                    i += 1; 
+                                }
+                            }
+
+
                         }
 
                         
@@ -484,7 +602,8 @@ impl DialogRenderer {
             style_scheme,
             renderer_event_thread,
             state_manager,
-            drawable_id
+            drawable_id,
+            renderer_pool
         }
     }
 }

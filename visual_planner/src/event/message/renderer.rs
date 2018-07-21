@@ -3,6 +3,7 @@ use state::*;
 use std::sync::Arc;
 use manager::draw_view::Drawable;
 
+#[derive(Debug,Clone)]
 pub enum DialogRendererMessage {
     ResizeEvent(ScreenDimensions),
     ScrollEvent(ScreenCoords, ScrollDirection, f64),

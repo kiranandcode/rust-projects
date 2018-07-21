@@ -2,6 +2,7 @@
 extern crate cairo;
 extern crate gtk;
 extern crate gdk;
+extern crate rayon;
 
 mod renderer;
 mod gui;

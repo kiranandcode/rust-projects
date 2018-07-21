@@ -34,6 +34,7 @@ impl DialogStateManager {
             let mut prev_input_pos : Option<ScreenCoords> = None;
             let mut state = DialogInputState::NORMAL;
 
+            
             for event in receiver.iter() {
 
                 match event {
@@ -60,6 +61,7 @@ impl DialogStateManager {
                         
                     },
                     DialogStateMessage::MotionEvent(ScreenCoords(x,y)) => {
+
                             // TODO(Kiran): Match on dialog state, 
                         // if normal, then move renderwindow, 
                         // if selected move selected component
@@ -73,7 +75,9 @@ impl DialogStateManager {
                                     let ScreenCoords(px, py) = p_xy;
                                     let dx =  px - x;
                                     let dy =  py - y;
-                                    chnl.send(GeneralMessage::WindowMove(dx,dy));
+
+                                    let msg = GeneralMessage::WindowMove(dx,dy);
+                                    chnl.send(msg);
                                 }  
                                 prev_input_pos = Some(ScreenCoords(x,y));
                             }
@@ -105,6 +109,10 @@ impl DialogStateManager {
                 }
 
             }
+
+
+            
+            
         });
 
 

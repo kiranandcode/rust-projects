@@ -21,7 +21,7 @@ type RenderX = RenderUnit;
 type RenderY = RenderUnit;
 
 
-const MAX_ZOOM_OUT : i32 = -100;
+const MAX_ZOOM_OUT : i32 = -10;
 const MAX_ZOOM_IN  : i32 = 10;
 
 /// Represents a mapping between a virtual window in worldspace to the screen
