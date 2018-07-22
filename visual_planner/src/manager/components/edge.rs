@@ -1,5 +1,5 @@
 use types::*;
-use super::ToDrawable;
+use super::{ToDrawable, DrawPriority};
 use style_scheme::StyleScheme;
 use render_window::RenderWindow;
 use manager::draw_view::Drawable;
@@ -13,6 +13,13 @@ use cairo::Context;
 
 #[derive(Debug, Clone)]
 pub struct EdgeModel(Arc<EdgeModelInternal>);
+
+
+impl EdgeModel {
+    pub fn update(&self, current_time: &CurrentTime, delta_time: &DeltaTime) -> Option<WorldBoundingBox> {
+        self.0.update(current_time, delta_time)
+    }
+}
 
 impl Modifiable for EdgeModel {
     fn update_state(&mut self, other: &Self) -> Modification {
@@ -42,10 +49,18 @@ pub struct EdgeModelInternal {
     bounding_box: Mutex<WorldBoundingBox>
 }
 
+impl EdgeModelInternal {
+    pub fn update(&self, current_time: &CurrentTime, delta_time: &DeltaTime) -> Option<WorldBoundingBox> {
+        None
+    }
+}
 
 
 
 impl Drawable for EdgeModelInternal {
+    fn priority(&self) -> DrawPriority {
+        DrawPriority::Low
+    }
     fn draw(&self, cr : &Context, style: &StyleScheme, window : &RenderWindow) {
         // DEBUG Drawing
         if let Ok(bounding_box) = self.bounding_box.lock() {

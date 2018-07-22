@@ -4,7 +4,7 @@ pub mod variable_box;
 pub mod state_change_box;
 pub mod entry_box;
 
-pub use super::ToDrawable;
+pub use super::*;
 pub use self::dialog_box::*;
 pub use self::decision_box::*;
 pub use self::variable_box::*;
@@ -42,6 +42,19 @@ pub enum BoxModel {
     EntryModel(Arc<EntryBox>),
 }
 
+impl BoxModel {
+    pub fn update(&self, current_time: &CurrentTime, delta_time: &DeltaTime) -> Option<WorldBoundingBox> {
+        match self {
+            BoxModel::DialogModel(value) => value.update(current_time, delta_time),
+            BoxModel::DecisionModel(value) => value.update(current_time, delta_time),
+            BoxModel::VariableModel(value) => value.update(current_time, delta_time),
+            BoxModel::StateChangeModel(value) => value.update(current_time, delta_time),
+            BoxModel::EntryModel(value) => value.update(current_time, delta_time),
+        }
+ 
+    }
+}
+
 impl ToDrawable for BoxModel {
     fn to_drawable(&self) -> Arc<Drawable> {
         match self {
@@ -74,6 +87,10 @@ pub struct BoxBase {
 
 
 impl Drawable for BoxBase {
+    fn priority(&self) -> DrawPriority {
+        DrawPriority::Medium
+    }
+
     fn draw(&self, cr : &Context, style: &StyleScheme, window : &RenderWindow) {
         // DEBUG Drawing
         if let Ok(bounding_box) = self.bounding_box.lock() {

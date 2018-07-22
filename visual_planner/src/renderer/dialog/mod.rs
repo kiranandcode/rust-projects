@@ -15,7 +15,7 @@ use event::message::GeneralMessage;
 use gui::manager::GuiManager;
 use manager::draw_view::DrawView;
 
-
+use std::time::{SystemTime, Duration, UNIX_EPOCH};
 use std::convert::AsRef;
 use std::sync::mpsc;
 use std::sync::mpsc::{Sender, Receiver};
@@ -492,11 +492,25 @@ impl DialogRenderer {
 
             // Small reusable buffer for the refresh thread.
             // let mut invalidated_regions = Vec::with_capacity(10);
+            let mut last_time = {
+                let start = SystemTime::now();
+                let since_the_epoch = start.duration_since(UNIX_EPOCH).expect("Time Error");
+                ((since_the_epoch.as_secs() * 1000) as f64) + (since_the_epoch.subsec_nanos() as f64 / 1_000_000.0)
+            };
 
             // called at 30 fps
             ::gtk::timeout_add(1000/60, move || {
 
-                    // invalidated_regions.clear();
+                    /// On each frame redraw, we update the timer
+                    let current_time = {
+                        let start = SystemTime::now();
+                        let since_the_epoch = start.duration_since(UNIX_EPOCH).expect("Time Error");
+                        ((since_the_epoch.as_secs() * 1000) as f64) + (since_the_epoch.subsec_nanos() as f64 / 1_000_000.0)
+                    };
+                    let elapsed_time = last_time - current_time;
+                    last_time = current_time;
+                    sender.send(GeneralMessage::DialogTimer(TimeUnit(current_time), TimeUnit(elapsed_time)));
+
 
                     // get a reference to the main drawing buffer - note: this is thread safe, as all gtk functions are called from the same thread
                     // so there are no race conditions.

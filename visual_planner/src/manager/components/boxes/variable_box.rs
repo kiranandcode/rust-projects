@@ -1,4 +1,4 @@
-use super::BoxBase;
+use super::*;
 
 use render_window::RenderWindow;
 use style_scheme::StyleScheme;
@@ -16,10 +16,20 @@ pub struct VariableBox {
     main_model: BoxBase
 }
 
+impl VariableBox {
 
+    pub fn update(&self, current_time: &CurrentTime, delta_time: &DeltaTime) -> Option<WorldBoundingBox> {
+        None
+    }
+}
 
 
 impl Drawable for VariableBox {
+    fn priority(&self) -> DrawPriority {
+        self.main_model.priority()
+    }
+ 
+
     fn draw(&self, cr : &Context, style: &StyleScheme, window : &RenderWindow) {
         unimplemented!("Not Implemented!");
     } 

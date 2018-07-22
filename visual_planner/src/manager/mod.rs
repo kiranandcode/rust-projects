@@ -30,8 +30,8 @@ use cairo::Context;
 
 #[derive(Debug)]
 pub struct ModelManager {
-    box_models: Arc<Mutex<ObjectManager<BoxID, BoxModel>>>,
-    edge_models: Arc<Mutex<ObjectManager<EdgeID, EdgeModel>>>,
+    // box_models: ObjectManager<BoxID, BoxModel>,
+    // edge_models: ObjectManager<EdgeID, EdgeModel>,
     manager_thread_handle: JoinHandle<()>
 }
 
@@ -39,36 +39,30 @@ pub struct ModelManager {
 impl ModelManager {
 
     pub fn new((event_builder, gui_manager): (&mut EventManagerBuilder, &mut GuiManager)) -> Self {
-        let box_models = Arc::new(Mutex::new(ObjectManager::new()));
-        let edge_models = Arc::new(Mutex::new(ObjectManager::new()));
         let (sender, receiver) = mpsc::channel();
 
         let channel = event_builder.get_gdk_channel();
         event_builder.set_model_manager_channel(sender);
 
         let manager_thread_handle = {
-            let box_models = box_models.clone();
-            let edge_models = edge_models.clone();
             let channel = channel;
             
 
             thread::spawn(move || {
+                let mut box_models :ObjectManager<BoxID, BoxModel> = ObjectManager::new();
+                let mut edge_models :ObjectManager<EdgeID, EdgeModel> = ObjectManager::new();
 
                 for event in receiver.iter() {
                     match event {
                            ModelManagerMessage::BoxConstruct(constructor_msg) => {
                                let result = match constructor_msg {
                                    BoxConstructor::DialogModel(center) => {
-                                      if let (Ok(ref mut  manager), Ok(ref mut edge_manager)) = (box_models.lock(), edge_models.lock())  {
-                                          let bounding_box = WorldBoundingBox::new_centered_at(center.clone(), DIALOG_BOX_WIDTH, DIALOG_BOX_HEIGHT);
-                                          let (id, drawable, modification) = DialogBox::new(center, manager);
+                                        let bounding_box = WorldBoundingBox::new_centered_at(center.clone(), DIALOG_BOX_WIDTH, DIALOG_BOX_HEIGHT);
+                                        let (id, drawable, modification) = DialogBox::new(center, &mut box_models);
                                           // TODO: check drawing coordinates do not intersect with other components
 
 
-                                          Some(drawable)
-                                      } else {
-                                       None
-                                      }
+                                        Some(drawable)
                                    } 
                                    _ => None
                                };
@@ -77,6 +71,59 @@ impl ModelManager {
                                    channel.send(GeneralMessage::ConstructResult(drawable));
                                }
                            } 
+
+                            // This event is triggered by the timer (effectively the 10ms timeout in the dialog renderer)
+                            // the model manager should propagate the update request to all of it's components, allowing
+                            // those that want to update themselves to do so.
+                            // the model manager should update all components, and send back a bounding box to indicate the 
+                            // region that has changed
+                           ModelManagerMessage::DialogUpdate(current_time, delta_time) => {
+                               // the following bounding box acts as an accumulator to 
+                               // produce a single bounding box encompassing all changes
+                               let mut bounding_box : Option<WorldBoundingBox> = None;
+
+                               // the following list contains all components which may have moved, and thus need to be checked for colissions
+                               // TODO: Possibly reserve a capacity in advance?
+                               let mut updated_components = Vec::new();
+
+                               for (id, updatable) in box_models.temp_iter() {
+                                   updatable.update(&current_time, &delta_time).map(|new_box| {
+                                      // if it returns a bounding box, it may have changed position.
+                                      // this means we need to queue it for colission checking
+                                       updated_components.push(id.clone());
+
+                                       if let Some(ref mut bbox) = bounding_box.take() {
+                                           bbox.union(&new_box);
+                                       } else {
+                                           bounding_box = Some(new_box);
+                                       }
+                                   });
+                               }
+
+                               // now we want to go through the updated components
+                                for i in 0..updated_components.len() {
+                                    for j in i..updated_components.len() {
+                                        // check if i,j are intersecting, and modify if so,
+                                        unimplemented!("Implemented state change");
+                                    }
+                                }
+
+
+                               for updateable in edge_models.temp_values() {
+                                   updateable.update(&current_time, &delta_time).map(|new_box| {
+                                    if let Some(ref mut bbox) = bounding_box.take() {
+                                        bbox.union(&new_box);
+                                    } else {
+                                        bounding_box = Some(new_box);
+                                    }
+                                   });
+ 
+                               }
+
+                                if let Some(bbox) = bounding_box.take() {
+                                   channel.send(GeneralMessage::DialogRedraw(bbox));
+                                }
+                           }
                     }
                 }
 
@@ -84,8 +131,8 @@ impl ModelManager {
         };
 
         ModelManager {
-            box_models,
-            edge_models,
+            // box_models,
+            // edge_models,
             manager_thread_handle
         }
     }

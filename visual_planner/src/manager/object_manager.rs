@@ -5,8 +5,7 @@ use manager::components::ToDrawable;
 use manager::draw_view::Drawable;
 
 use std::convert::From;
-use std::collections::hash_map::HashMap;
-use std::collections::hash_map::Values;
+use std::collections::hash_map::{HashMap, Values, Iter, IterMut};
 use std::ops::AddAssign;
 use std::thread;
 use std::sync::{Arc, Mutex};
@@ -80,6 +79,24 @@ impl<K,V> ObjectManager<K, V>
         pub fn values(&self) -> Values<K,V> {
             self.base.values()
         }
+
+        pub fn temp_iter(&self) -> Iter<K,V> {
+            self.temp.iter()
+        }
+
+        pub fn temp_iter_mut(&mut self) -> IterMut<K,V> {
+            self.temp.iter_mut()
+        }
+
+        pub fn iter(&self) -> Iter<K,V> {
+            self.base.iter()
+        }
+
+        pub fn iter_mut(&mut self) -> IterMut<K,V> {
+            self.base.iter_mut()
+        }
+
+
 
 }
 

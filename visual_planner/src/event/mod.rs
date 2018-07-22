@@ -122,7 +122,12 @@ impl EventManager {
                     // println!("Got event {:?}", event);
 
                     match event {
-
+                        GeneralMessage::DialogTimer(current_time, delta_time) => {
+                            // TODO: Implement this
+                            if let Some(ref chnl) = model_manager_channel {
+                                chnl.send(ModelManagerMessage::DialogUpdate(current_time, delta_time));
+                            }
+                        }
                         // Renderer Channel
                         GeneralMessage::RendererScreenResize(width, height) =>  {
                             if let Some(ref chnl) = dialog_renderer_channel {
@@ -173,9 +178,9 @@ impl EventManager {
 
                 
                         // GUI Channel
-                        GeneralMessage::Redraw(id) => {
-                            if let Some(ref chnl) =  gui_channel {
-                                chnl.send(GuiManagerMessage::RedrawEvent(id));
+                        GeneralMessage::DialogRedraw(bounding_box) => {
+                            if let Some(ref chnl) =  dialog_renderer_channel {
+                                chnl.send(DialogRendererMessage::RedrawRequest(bounding_box));
                             }
                         }
                         GeneralMessage::SetCursor(id, cursor_name) => {

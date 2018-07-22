@@ -17,10 +17,11 @@ pub enum GeneralMessage {
     RendererScroll(ScreenUnit, ScreenUnit, ScrollDirection, f64),
     RendererClick(ScreenUnit, ScreenUnit),
     RendererMotion(ScreenUnit, ScreenUnit),
-    Redraw(GuiWidgetID),
+    DialogRedraw(WorldBoundingBox),
     SetDialogInputState(DialogInputState),
     SetCursor(GuiWidgetID, &'static str),
     WindowMove(ScreenUnit, ScreenUnit),
     BoxConstructRequest(BoxConstructor),
-    ConstructResult(Arc<Drawable>)
+    ConstructResult(Arc<Drawable>),
+    DialogTimer(CurrentTime,DeltaTime)
 }

@@ -1,4 +1,4 @@
-use super::BoxBase;
+use super::*;
 
 use render_window::RenderWindow;
 use style_scheme::StyleScheme;
@@ -18,7 +18,8 @@ pub const DIALOG_BOX_HEIGHT : WorldUnit = WorldUnit(50.0);
 
 #[derive(Debug)]
 pub struct DialogBox {
-    main_model: BoxBase
+    main_model: BoxBase,
+    speach: Mutex<String>,
 
 }
 
@@ -40,13 +41,23 @@ impl DialogBox {
                             id,
                             // bounding_box: Mutex::new(WorldBoundingBox(WorldUnit(0.0), WorldUnit(0.0), WorldUnit(100.0), WorldUnit(100.0))),
                             bounding_box: Mutex::new(WorldBoundingBox::new_centered_at(center, DIALOG_BOX_WIDTH, DIALOG_BOX_HEIGHT)),
-                    }
+                    },
+                    speach: Mutex::new(String::new())
                 }))
             })
         } 
+
+
+    pub fn update(&self, current_time: &CurrentTime, delta_time: &DeltaTime) -> Option<WorldBoundingBox> {
+        None
+    }
 }
 
 impl Drawable for DialogBox {
+    fn priority(&self) -> DrawPriority {
+        self.main_model.priority()
+    }
+ 
     fn bounding_box(&self) -> Option<MutexGuard<WorldBoundingBox>> {
         self.main_model.bounding_box()
     }
