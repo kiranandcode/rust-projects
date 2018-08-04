@@ -190,6 +190,10 @@ impl RenderWindow {
         self.world_bounding_box.move_box(dx, dy)
     }
 
+    pub fn center_window_around(&mut self, point: WorldCoords) {
+        self.world_bounding_box.center_around(point);
+    }
+
     pub fn zoom_window(&mut self, center: &ScreenCoords, direction: ScrollDirection, mut delta: f64) {
         // println!("I am being asked to scale you!, delta: {}", delta);
 

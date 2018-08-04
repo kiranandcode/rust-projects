@@ -15,6 +15,7 @@ use gdk::EventMask;
 pub struct ComponentRenderer<T: Component> {
     render_window: RefCell<RenderWindow>,
     handle_drag: RefCell<bool>,
+    in_drag: RefCell<bool>,
     last_pos: RefCell<Option<ScreenCoords>>,
     drawing_area: gtk::DrawingArea,
     renderer: Rc<T>
@@ -27,7 +28,7 @@ pub struct ComponentRenderer<T: Component> {
 impl<T:Component + 'static> ComponentRenderer<T> {
 
     pub fn new_component_renderer() -> Rc<ComponentRenderer<T>>  {
-        let renderer = T::new();
+        let renderer : T = Default::default();
         let drawing_area = ComponentRenderer::<T>::generate_drawing_area();
         let renderer = Rc::new(renderer);
         let self_rc = Rc::new(
@@ -35,12 +36,14 @@ impl<T:Component + 'static> ComponentRenderer<T> {
                 render_window: RefCell::new(RenderWindow::new(ScreenUnit(200.0), ScreenUnit(200.0))),
                 handle_drag: RefCell::new(true),
                 last_pos: RefCell::new(None),
+                in_drag: RefCell::new(false),
                 drawing_area: drawing_area.clone(),
                 renderer: renderer.clone()
             }
         );
 
         self_rc.renderer.register_renderer(renderer, self_rc.clone());
+        self_rc.renderer.on_setup();
 
 
         ComponentRenderer::connect_events(&self_rc, drawing_area);
@@ -55,8 +58,13 @@ impl<T:Component + 'static> ComponentRenderer<T> {
     fn generate_drawing_area() -> gtk::DrawingArea {
         let drawing_area = gtk::DrawingArea::new();
         let event_mask = gdk::POINTER_MOTION_MASK
-            | gdk::BUTTON_PRESS_MASK | gdk::BUTTON_RELEASE_MASK
-            | gdk::KEY_PRESS_MASK | gdk::KEY_RELEASE_MASK;
+            | gdk::BUTTON1_MOTION_MASK
+            | gdk::BUTTON_PRESS_MASK
+            | gdk::BUTTON_MOTION_MASK
+            | gdk::BUTTON_RELEASE_MASK
+            | gdk::KEY_PRESS_MASK
+            | gdk::KEY_RELEASE_MASK
+            | gdk::TOUCH_MASK;
 
         drawing_area.set_can_focus(true);
         drawing_area.add_events(event_mask.bits() as i32);
@@ -121,7 +129,7 @@ impl<T:Component + 'static> ComponentRenderer<T> {
 /// - - - - - - - - - - - - - - - - - - - - -
 ///                 Actions
 /// - - - - - - - - - - - - - - - - - - - - -
-impl<T:Component> ComponentRenderer<T> {
+impl<T:Component + 'static> ComponentRenderer<T> {
 
     fn on_layout(&self, drawing_area: &gtk::DrawingArea, layout: &gtk::Allocation) {
         let mut rw = self.render_window.borrow_mut();
@@ -145,6 +153,10 @@ impl<T:Component> ComponentRenderer<T> {
             _ => unreachable!()
         };
 
+        if button_press_type == ButtonEventType::Click {
+            *self.in_drag.borrow_mut() = true;
+        }
+
         gtk::Inhibit(self.renderer.on_button_press(ButtonEvent { pos: coords, button_type, button_press_type }))
     }
 
@@ -159,13 +171,17 @@ impl<T:Component> ComponentRenderer<T> {
         };
         let button_press_type = match evnt.get_event_type() {
             gdk::EventType::ButtonPress => ButtonEventType::Click,
-            gdk::EventType::ButtonPress => ButtonEventType::Release,
+            gdk::EventType::ButtonRelease => ButtonEventType::Release,
             gdk::EventType::DoubleButtonPress => ButtonEventType::DoubleClick,
             gdk::EventType::TripleButtonPress => ButtonEventType::TripleClick,
-            _ => unreachable!()
+            _ => {
+                println!("Event: {:?}", evnt.get_event_type());
+                unreachable!()
+            }
         };
 
 
+        *self.in_drag.borrow_mut() = false;
         gtk::Inhibit(self.renderer.on_button_release(ButtonEvent { pos: coords, button_type, button_press_type }))
     }
 
@@ -192,7 +208,35 @@ impl<T:Component> ComponentRenderer<T> {
         let y = ScreenUnit(y as f64);
         let coords = self.render_window.borrow().screen_to_world_coords(&ScreenCoords(x,y));
 
-        gtk::Inhibit(self.renderer.on_motion_notify(coords))
+        // if we are in a drag
+        if *self.in_drag.borrow() {
+
+            // if we know the last position
+            if let Some(p_xy) = self.last_pos.borrow_mut().take() {
+                let ScreenCoords(px, py) = p_xy;
+
+                let dx  = px - x;
+                let dy  = py - y;
+
+                // the component renderer will handle all screen space stuff.
+                // this includes moving the renderwindow around
+                if *self.handle_drag.borrow() {
+                    self.render_window.borrow_mut().move_window(&dx, &dy);
+                    self.queue_draw();
+                } else {
+                    let dx = self.render_window.borrow().screen_to_world_distance_x(&dx);
+                    let dy = self.render_window.borrow().screen_to_world_distance_y(&dy);
+                    self.renderer.on_drag_motion_notify(coords, dx,dy);
+                }
+            }
+            *self.last_pos.borrow_mut() = Some(ScreenCoords(x,y));
+
+            gtk::Inhibit(true)
+        } else {
+            // if we are not in a drag, reset the last position
+            *self.last_pos.borrow_mut() = None;
+            gtk::Inhibit(self.renderer.on_motion_notify(coords))
+        }
     }
 
     fn on_drag_motion_notify(&self, drawing_area: &gtk::DrawingArea, context: &gdk::DragContext, x : i32, y: i32,  dt: u32) -> gtk::Inhibit {
@@ -208,6 +252,7 @@ impl<T:Component> ComponentRenderer<T> {
             // this includes moving the renderwindow around
             if *self.handle_drag.borrow() {
                 self.render_window.borrow_mut().move_window(&dx, &dy);
+                self.queue_draw();
             } else {
                 let coords = self.render_window.borrow().screen_to_world_coords(&ScreenCoords(x,y));
                 let dx = self.render_window.borrow().screen_to_world_distance_x(&dx);
@@ -231,7 +276,8 @@ impl<T:Component> ComponentRenderer<T> {
 
 pub trait Renderer {
     fn set_handle_drag(&self, handle_drag: bool);
-    fn queue_draw(&self, area: WorldBoundingBox);
+    fn queue_draw(&self);
+    fn queue_draw_area(&self, area: WorldBoundingBox);
     fn move_view_to(&self, coords: WorldCoords);
 }
 
@@ -239,18 +285,23 @@ impl<T:Component + 'static> Renderer for ComponentRenderer<T> {
     fn set_handle_drag(&self, handle_drag: bool) {
         *self.handle_drag.borrow_mut() = handle_drag;
     }
-    fn queue_draw(&self, area: WorldBoundingBox) {
+    fn queue_draw(&self) {
         self.drawing_area.queue_draw();
     }
+    fn queue_draw_area(&self, area: WorldBoundingBox) {
+        let ScreenBoundingBox(ScreenUnit(x), ScreenUnit(y), ScreenUnit(w), ScreenUnit(h))= self.render_window.borrow().world_to_screen_bounding_box(&area);
+        self.drawing_area.queue_draw_area(x as i32, y as i32, w as i32, h as i32);
+    }
+
     fn move_view_to(&self, coords :WorldCoords) {
-        // self.render_window.borrow_mut().world_bounding_box.
+        self.render_window.borrow_mut().center_window_around(coords);
     }
 }
 
 
 
-pub trait Component {
-    fn new() -> Self;
+pub trait Component : Default {
+
     fn register_renderer(&self, self_rc: Rc<Self>, renderer: Rc<Renderer>);
 
     fn on_button_press(&self, evnt: ButtonEvent) -> bool { false }
@@ -263,15 +314,11 @@ pub trait Component {
 
     fn on_motion_notify(&self,  evnt: WorldCoords) -> bool { false }
 
-    fn on_drag_motion_notify(&self, coords: WorldCoords, dx: WorldUnit, dy: WorldUnit) -> bool {
-        false
-    }
+    fn on_drag_motion_notify(&self, coords: WorldCoords, dx: WorldUnit, dy: WorldUnit) -> bool { false }
 
-    fn on_draw(&self, evnt: &Context) -> bool {
-        false
-    }
+    fn on_setup(&self) {}
 
-    fn on_update(&self, current_time: CurrentTime, elapsed_time: DeltaTime) -> bool {
-        true
-    }
+    fn on_draw(&self, evnt: &Context) -> bool {false}
+
+    fn on_update(&self, current_time: CurrentTime, elapsed_time: DeltaTime) -> bool { true }
 }

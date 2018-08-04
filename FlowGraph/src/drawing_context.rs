@@ -221,12 +221,24 @@ impl<'a> Context<'a> {
         *self.added_point.borrow_mut() = true;
     }
 
+    pub fn curve(&self, start_point: WorldCoords, start_control: WorldCoords, end_control: WorldCoords, end_point: WorldCoords) {
+        let ScreenCoords(s_px, s_py) = self.rw.world_to_screen_coords(&start_point);
+        let ScreenCoords(s_cx, s_cy) = self.rw.world_to_screen_coords(&start_control);
+        let ScreenCoords(e_px, e_py) = self.rw.world_to_screen_coords(&end_point);
+        let ScreenCoords(e_cx, e_cy) = self.rw.world_to_screen_coords(&end_control);
+        let in_path = *self.is_in_path.borrow();
+        self.cr.move_to(s_px.0, s_py.0);
+        self.cr.curve_to(s_cx.0, s_cy.0, e_cx.0, e_cy.0, e_px.0, e_py.0);
+        if !in_path {
+            self.cr.close_path();
+        }
+    }
 
 
     /// draws a rectangle
-    pub fn rect(&self, rect: &WorldBoundingBox) {
-        if self.rw.is_bounding_box_onscreen(rect) {
-            let screen_box = self.rw.world_to_screen_bounding_box(rect);
+    pub fn rect(&self, rect: WorldBoundingBox) {
+        if self.rw.is_bounding_box_onscreen(&rect) {
+            let screen_box = self.rw.world_to_screen_bounding_box(&rect);
             self.cr.rectangle(
                 (screen_box.0).0,
                 (screen_box.1).0,

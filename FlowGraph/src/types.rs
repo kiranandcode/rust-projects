@@ -213,13 +213,20 @@ impl WorldBoundingBox {
         WorldBoundingBox(point.0, point.1, width, height)
     }
 
-    pub fn new_centered_at(point: WorldCoords, width: WorldWidth, height: WorldHeight) -> Self {
+    pub fn new_centered_around(point: WorldCoords, width: WorldWidth, height: WorldHeight) -> Self {
         WorldBoundingBox(
             WorldUnit((point.0).0 - width.0 / 2.0),
             WorldUnit((point.1).0 - height.0 / 2.0),
             width,
             height,
         )
+    }
+
+    pub fn center_around(&mut self, point: WorldCoords) {
+        let width = self.2;
+        let height= self.3;
+        self.0 = WorldUnit((point.0).0 - width.0 / 2.0);
+        self.1 = WorldUnit((point.1).0 - height.0 / 2.0);
     }
 
     // Constructs the smallest box bounding two other boxes
