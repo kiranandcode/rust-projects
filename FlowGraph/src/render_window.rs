@@ -185,7 +185,6 @@ impl RenderWindow {
     }
 
     pub fn move_window(&mut self, x: &ScreenUnit, y: &ScreenUnit) {
-
         let dx = self.screen_to_world_distance_x(x);
         let dy = self.screen_to_world_distance_y(y);
         self.world_bounding_box.move_box(dx, dy)

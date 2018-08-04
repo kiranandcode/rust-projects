@@ -1,5 +1,6 @@
 use std::ops::{Add, AddAssign, Mul, Sub, Div};
 use std::cmp::Ordering;
+use std::convert::TryFrom;
 
 // Using type synnonyms here to comprimise between safety and developer velocity.
 
@@ -386,3 +387,72 @@ impl Ord for DrawPriority {
         self_value.cmp(&other_value)
     }
 }
+
+#[derive(Debug, Clone, Copy, PartialEq, PartialOrd)]
+pub enum ButtonType {
+    Left,  Middle, Right
+}
+#[derive(Debug, Clone, Copy, PartialEq, PartialOrd)]
+pub enum ButtonEventType {
+    Click,
+    Release,
+    DoubleClick,
+    TripleClick
+}
+
+#[derive(Debug, Clone, Copy, PartialEq)]
+pub struct ButtonEvent {
+    pub pos: WorldCoords,
+    pub button_type: ButtonType,
+    pub button_press_type: ButtonEventType
+}
+
+#[derive(Debug, Clone, Copy, PartialEq)]
+pub enum Key {
+    Char(char),
+    Up,
+    Down,
+    Left,
+    Right,
+    LShift,
+    RShift,
+    LControl,
+    RControl,
+    LAlt,
+    RAlt,
+}
+pub struct KeyError(String);
+
+impl TryFrom<u32> for Key {
+    type Error = KeyError;
+    fn try_from(value: u32) -> Result<Key, KeyError> {
+        if let Some(value) = gdk::keyval_to_unicode(value) {
+            Ok(Key::Char(value))
+        } else {
+            match value {
+                65361 => Ok(Key::Left),
+                65362 => Ok(Key::Up),
+                65363 => Ok(Key::Right),
+                65364 => Ok(Key::Down),
+
+                65505 => Ok(Key::LShift),
+                65506 => Ok(Key::RShift),
+                65507 => Ok(Key::LControl),
+                65508 => Ok(Key::RControl),
+                65513 => Ok(Key::LAlt),
+                65514 => Ok(Key::RAlt),
+
+                _ => Err(
+                    KeyError(
+                        format!(
+                            "Character conversion for {:?}[{:?}] not implemented",
+                            gdk::keyval_name(value),
+                            value
+                        )
+                    )
+                )
+            }
+        }
+    }
+}
+

@@ -1,5 +1,8 @@
 use types::*;
 use color::*;
+use render_window::RenderWindow;
+use std::rc::Rc;
+use std::cell::RefCell;
 
 /// Wrapper struct that provides a processing like interface to Cairo's drawing api
 pub struct Context<'a>{

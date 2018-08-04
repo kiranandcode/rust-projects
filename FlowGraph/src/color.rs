@@ -1,6 +1,6 @@
 
 #[derive(Debug,Clone,Copy,PartialEq)]
-pub struct Color(f64, f64,f64, Option<f64>);
+pub struct Color(pub f64, pub f64,pub f64, pub Option<f64>);
 
 impl Color {
     pub fn red() -> Self {
