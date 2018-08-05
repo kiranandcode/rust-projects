@@ -311,6 +311,22 @@ impl WorldBoundingBox {
         self.2 = width;
         self.3 = height;
     }
+
+    pub fn lower_left(&self) -> WorldCoords {
+        WorldCoords(self.0         , self.1 + self.3)
+    }
+    pub fn lower_right(&self) -> WorldCoords {
+        WorldCoords(self.0 + self.2, self.1 + self.3)
+    }
+    pub fn upper_left(&self) -> WorldCoords {
+        WorldCoords(self.0         , self.1         )
+    }
+    pub fn upper_right(&self) -> WorldCoords {
+        WorldCoords(self.0 + self.2, self.1         )
+    }
+    pub fn center(&self) -> WorldCoords {
+        WorldCoords(self.0 + self.2 / WorldUnit(2.0), self.1 + self.3 / WorldUnit(2.0))
+    }
 }
 
 /// Represents a scroll direction

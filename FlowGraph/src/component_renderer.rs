@@ -27,8 +27,7 @@ pub struct ComponentRenderer<T: Component> {
 /// - - - - - - - - - - - - - - - - - - - - -
 impl<T:Component + 'static> ComponentRenderer<T> {
 
-    pub fn new_component_renderer() -> Rc<ComponentRenderer<T>>  {
-        let renderer : T = Default::default();
+    pub fn new_component_renderer(renderer: T) -> Rc<ComponentRenderer<T>>  {
         let drawing_area = ComponentRenderer::<T>::generate_drawing_area();
         let renderer = Rc::new(renderer);
         let self_rc = Rc::new(
@@ -156,8 +155,8 @@ impl<T:Component + 'static> ComponentRenderer<T> {
         if button_press_type == ButtonEventType::Click {
             *self.in_drag.borrow_mut() = true;
         }
-
-        gtk::Inhibit(self.renderer.on_button_press(ButtonEvent { pos: coords, button_type, button_press_type }))
+        self.renderer.on_button_press(ButtonEvent { pos: coords, button_type, button_press_type });
+        gtk::Inhibit(true)
     }
 
     fn on_button_release(&self, drawing_area: &gtk::DrawingArea, evnt: &gdk::EventButton) -> gtk::Inhibit {
@@ -182,13 +181,15 @@ impl<T:Component + 'static> ComponentRenderer<T> {
 
 
         *self.in_drag.borrow_mut() = false;
-        gtk::Inhibit(self.renderer.on_button_release(ButtonEvent { pos: coords, button_type, button_press_type }))
+        self.renderer.on_button_release(ButtonEvent { pos: coords, button_type, button_press_type });
+        gtk::Inhibit(true)
     }
 
     fn on_key_press(&self, drawing_area: &gtk::DrawingArea, evnt: &gdk::EventKey) -> gtk::Inhibit {
         //println!("{:?} {:?}, {:?}, {:?}", evnt.get_keyval(), gdk::keyval_to_unicode(evnt.get_keyval()), evnt.get_state(), gdk::keyval_name(evnt.get_keyval()));
         if let Some(value) = TryFrom::try_from(evnt.get_keyval()).ok() {
-            gtk::Inhibit(self.renderer.on_key_press(value))
+            self.renderer.on_key_press(value);
+            gtk::Inhibit(true)
         } else {
             gtk::Inhibit(false)
         }
@@ -196,7 +197,8 @@ impl<T:Component + 'static> ComponentRenderer<T> {
 
     fn on_key_release(&self, drawing_area: &gtk::DrawingArea, evnt: &gdk::EventKey) -> gtk::Inhibit {
         if let Some(value) = TryFrom::try_from(evnt.get_keyval()).ok() {
-            gtk::Inhibit(self.renderer.on_key_press(value))
+            self.renderer.on_key_press(value);
+            gtk::Inhibit(true)
         } else {
             gtk::Inhibit(false)
         }
@@ -235,7 +237,8 @@ impl<T:Component + 'static> ComponentRenderer<T> {
         } else {
             // if we are not in a drag, reset the last position
             *self.last_pos.borrow_mut() = None;
-            gtk::Inhibit(self.renderer.on_motion_notify(coords))
+            self.renderer.on_motion_notify(coords);
+            gtk::Inhibit(true) 
         }
     }
 
@@ -265,11 +268,13 @@ impl<T:Component + 'static> ComponentRenderer<T> {
     }
 
     fn on_draw(&self, drawing_area: &gtk::DrawingArea, evnt: &cairo::Context) -> gtk::Inhibit {
-        gtk::Inhibit(self.renderer.on_draw(&Context::new(evnt, &self.render_window.borrow())))
+        self.renderer.on_draw(&Context::new(evnt, &self.render_window.borrow()));
+        gtk::Inhibit(true)
     }
 
     fn on_update(&self, current_time: CurrentTime, elapsed_time: DeltaTime) -> bool {
-        self.renderer.on_update(current_time, elapsed_time)
+        self.renderer.on_update(current_time, elapsed_time);
+        true
     }
 }
 
@@ -300,25 +305,25 @@ impl<T:Component + 'static> Renderer for ComponentRenderer<T> {
 
 
 
-pub trait Component : Default {
+pub trait Component {
 
     fn register_renderer(&self, self_rc: Rc<Self>, renderer: Rc<Renderer>);
 
-    fn on_button_press(&self, evnt: ButtonEvent) -> bool { false }
+    fn on_button_press(&self, evnt: ButtonEvent) { }
 
-    fn on_button_release(&self,  evnt: ButtonEvent) -> bool { false }
+    fn on_button_release(&self,  evnt: ButtonEvent) { }
 
-    fn on_key_press(&self,  evnt: Key) -> bool { false }
+    fn on_key_press(&self,  evnt: Key) { }
 
-    fn on_key_release(&self, evnt: Key) -> bool { false }
+    fn on_key_release(&self, evnt: Key) { }
 
-    fn on_motion_notify(&self,  evnt: WorldCoords) -> bool { false }
+    fn on_motion_notify(&self,  evnt: WorldCoords) { }
 
-    fn on_drag_motion_notify(&self, coords: WorldCoords, dx: WorldUnit, dy: WorldUnit) -> bool { false }
+    fn on_drag_motion_notify(&self, coords: WorldCoords, dx: WorldUnit, dy: WorldUnit) { }
 
     fn on_setup(&self) {}
 
-    fn on_draw(&self, evnt: &Context) -> bool {false}
+    fn on_draw(&self, evnt: &Context) {}
 
-    fn on_update(&self, current_time: CurrentTime, elapsed_time: DeltaTime) -> bool { true }
+    fn on_update(&self, current_time: CurrentTime, elapsed_time: DeltaTime) { }
 }
