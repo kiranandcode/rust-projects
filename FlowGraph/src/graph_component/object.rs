@@ -2,6 +2,7 @@ use types::*;
 use super::id::*;
 use drawing_context::*;
 use std::any::Any;
+use super::HandlerContext;
 
 /// Represents an arbitrary renderable object in the system
 pub trait Object {
@@ -18,20 +19,20 @@ pub trait Object {
     fn draw(&mut self, context: &Context, root: ID)  {}
 
     // handling mouse over events
-    fn motion(&mut self, coords: WorldCoords) -> bool {false}
+    fn motion(&mut self, coords: WorldCoords, ctx: &mut HandlerContext) -> bool {false}
 
     // handling update events
-    fn update(&mut self, current_time: CurrentTime, elapsed_time: DeltaTime) {}
+    fn update(&mut self, current_time: CurrentTime, elapsed_time: DeltaTime, ctx: &mut HandlerContext) {}
 
     // handling drag events - can be stolen by children
-    fn drag_motion(&mut self, coords: WorldCoords, dx: WorldUnit, dy: WorldUnit) -> bool {false}
+    fn drag_motion(&mut self, coords: WorldCoords, dx: WorldUnit, dy: WorldUnit, ctx: &mut HandlerContext) -> bool {false}
 
     // handling click events - can be stolen by children
-    fn button_press(&mut self, button: ButtonEvent) -> bool {false}
+    fn button_press(&mut self, button: ButtonEvent, ctx: &mut HandlerContext) -> bool {false}
 
     // handling key events - can be stolen by children
-    fn key_press(&mut self, evnt: Key) -> bool { false }
+    fn key_press(&mut self, evnt: Key, ctx: &mut HandlerContext) -> bool { false }
 
     // used to send an arbitrary payload to the widget
-    fn poke(&mut self, payload: &mut Any) -> bool { false }
+    fn poke(&mut self, payload: &mut Any, ctx: &mut HandlerContext) -> bool { false }
 }

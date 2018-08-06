@@ -34,6 +34,10 @@ impl<'a> Context<'a> {
         }
     }
 
+    pub fn bounding_box(&self) -> &WorldBoundingBox {
+        &self.bbox
+    }
+
     /// sets the colour used to draw
     pub fn color(&self, color:Color) {
         let alpha = if let Some(alpha) = color.3 { alpha } else { 1.0 };
