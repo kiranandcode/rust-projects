@@ -23,6 +23,7 @@ use super::graph::*;
 pub fn add_node<O>(id_gen: &mut IDManager, object_graph: &mut ObjectGraph, objects: &mut Vec<(ID,Box<Object>)>, object: O, children: &[ID]) -> ID
 where O: Object + 'static
 {
+
     let raw_id = objects.len();
     let id = id_gen.new(raw_id);
     let root = object_graph.get_root();
@@ -60,8 +61,10 @@ where O: Object + 'static
 }
 
 
-pub fn remove_node(id_gen: &mut IDManager, object_graph: &mut ObjectGraph, objects: &mut Vec<(ID,Box<Object>)>, id: ID, and_children: bool) {
+pub fn remove_node(id_gen: &mut IDManager, object_graph: &mut ObjectGraph, objects: &mut Vec<(ID,Box<Object>)>, id: ID, and_children: bool, ret_ids: &mut Vec<ID>) {
         if id == object_graph.get_root() { return; }
+
+        ret_ids.push(id);
 
         let r_id = id_gen.get(id).expect("Remove Node called on invalid id");
 
@@ -103,7 +106,7 @@ pub fn remove_node(id_gen: &mut IDManager, object_graph: &mut ObjectGraph, objec
             // if remove the children,
             if and_children {
                 if let Some(real_ind) = id_gen.get(child).ok() {
-                    remove_node(id_gen, object_graph, objects, child, and_children);
+                    remove_node(id_gen, object_graph, objects, child, and_children, ret_ids);
                 }
             } else {
                 // otherwise, just update the parents of the node

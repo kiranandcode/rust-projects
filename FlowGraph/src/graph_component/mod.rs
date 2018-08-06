@@ -1,5 +1,5 @@
 //! ECS Based simple FlowGraph renderer - design "inspired" by Xi-Win.
-//!
+//! https://github.com/google/xi-win/blob/master/xi-win-ui
 
 pub mod id;
 pub mod graph;
@@ -18,6 +18,8 @@ use color::*;
 use drawing_context::*;
 use component_renderer::*;
 
+use std::ops::DerefMut;
+use std::mem;
 use std::cmp::{Ord, Ordering};
 use std::iter;
 use std::ops::{IndexMut, Index};
@@ -72,18 +74,28 @@ impl ComponentStateInner {
         }
 
     }
-    pub fn add<O>(&mut self, object: O, children: &[ID]) -> ID
+    fn add_node<O>(&mut self, object: O, children: &[ID]) -> ID
     where O: Object + 'static
     {
         add_node(&mut self.id_gen, &mut self.object_graph, &mut self.objects, object, children)
     }
 
-    pub fn remove_node(&mut self, id: ID, and_children: bool) {
-        remove_node(&mut self.id_gen, &mut self.object_graph, &mut self.objects, id, and_children);
+    /// removes a node from the graph.
+    /// should be called from the componentstate rather than directly,
+    /// as this one doesn't remove the listeners
+    fn remove_node(&mut self, id: ID, and_children: bool) -> Vec<ID> {
+        // allocate a vec to hold the removed ids
+        let mut rem_id = Vec::new();
+
+        // remove the node from the graph - place any id's removed by recursive calls into the rem_id array
+        remove_node(&mut self.id_gen, &mut self.object_graph, &mut self.objects, id, and_children, &mut rem_id);
+
+        // return the removed ids
+        rem_id
     }
 
 
-    pub fn draw(&mut self, context: &Context)  {
+    fn draw(&mut self, context: &Context)  {
         fn draw_rec(accessor: &mut ObjectAccessor, context: &Context, id: ID) {
             // draws the object
             {
@@ -126,22 +138,278 @@ impl ComponentStateInner {
         draw_rec(&mut accessor, context, root);
     }
 
-    pub fn motion(&self, coords: WorldCoords) {
+    pub fn motion(&mut self, coords: WorldCoords) {
+        fn motion_rec(accessor: &mut ObjectAccessor, coords: &WorldCoords, id: ID) -> bool {
+            let mut should_recurse = false;
+            // find out whether the node contains the mouse
+            {
+                let may_obj = accessor.get(id);
+                if let Some(obj) = may_obj {
+                    if let Some(bbox) = obj.mouse_bounding_box() {
+                        should_recurse = bbox.point_within_bounds(coords);
+                    } else {
+                        // if the node doesn't have a bounding box, we have to recurse
+                        // IMPORTANT. this is used by the base view to allow it to always try handling it's children
+                        // do not remove
+                        should_recurse = true;
+                    }
+                }
+            }
+
+            if should_recurse {
+                let mut children : Vec<(ID, DrawPriority)> =
+                {
+                    if let Some(o_child) = accessor.children(id) {
+                        o_child 
+                            .iter()
+                        // note, pre-retrieving all the draw priorities here
+                        // is better than calculating them on the fly during the
+                        // comparison method
+                            .map(|id| (*id, accessor.get(*id).map(|obj| obj.draw_priority()).unwrap_or(DrawPriority::Low)))
+                            .collect::<Vec<(ID, DrawPriority)>>()
+                    } else {Vec::new()}
+                };
+
+                // then sort the children by draw priority
+                children.sort_unstable_by(|(id_a, priority_a), (id_b, priority_b)| {
+                    priority_a.cmp(priority_b)
+                });
+                // we want to handle events in reverse order - i.e if a is drawn on top of b, we want a to handle the event first
+                children.reverse();
+
+
+                let mut handled = false;
+                // and draw them
+                for (child,_) in children {
+                    handled = motion_rec(accessor, coords, child);
+                    if handled { break; }
+                }
+
+                // if the children did not handle the event
+                if !handled {
+                        let may_obj = accessor.get_mut(id);
+                        if let Some(obj) = may_obj {
+                            handled = obj.motion(*coords)
+                        }
+                }
+
+                handled
+
+            } else {
+                // return whether it handled the event
+                false
+            }
+        }
+
+        // and all events start at the root.
+        let root = self.object_graph.get_root();
+        let mut accessor = ObjectAccessor::new(&mut self.objects, &self.object_graph, &self.id_gen);
+        motion_rec(&mut accessor, &coords, root);
+    }
+
+    pub fn update(&mut self, current_time: CurrentTime, elapsed_time: DeltaTime) {
+        fn update_rec(accessor: &mut ObjectAccessor, current_time: CurrentTime, elapsed_time: DeltaTime, id: ID) {
+            // updates the object
+            {
+                let may_obj = accessor.get_mut(id);
+                if let Some(obj) = may_obj {
+                    obj.update(current_time, elapsed_time);
+                }
+            }
+
+            let children = if let Some(children) = accessor.children(id) {
+                children.iter().map(|id| *id).collect::<Vec<ID>>()
+            } else { Vec::new() };
+
+            // and update them
+            for child in children {
+                update_rec(accessor, current_time, elapsed_time, child);
+            }
+        }
+
+        // and all events start at the root.
+        let root = self.object_graph.get_root();
+        let mut accessor = ObjectAccessor::new(&mut self.objects, &self.object_graph, &self.id_gen);
+        update_rec(&mut accessor, current_time, elapsed_time, root);
+    }
+
+    pub fn drag_motion(&mut self, coords: WorldCoords, dx: WorldUnit, dy: WorldUnit) {
+        fn drag_motion_rec(accessor: &mut ObjectAccessor, coords: &WorldCoords, dx: &WorldUnit, dy: &WorldUnit, id: ID) -> bool {
+            let mut should_recurse = false;
+            // find out whether the node contains the mouse
+            {
+                let may_obj = accessor.get(id);
+                if let Some(obj) = may_obj {
+                    if let Some(bbox) = obj.mouse_bounding_box() {
+                        should_recurse = bbox.point_within_bounds(coords);
+                    } else {
+                        // if the node doesn't have a bounding box, we have to recurse
+                        // IMPORTANT. this is used by the base view to allow it to always try handling it's children
+                        // do not remove
+                        should_recurse = true;
+                    }
+                }
+            }
+
+            if should_recurse {
+                let mut children : Vec<(ID, DrawPriority)> =
+                {
+                    if let Some(o_child) = accessor.children(id) {
+                        o_child
+                            .iter()
+                        // note, pre-retrieving all the draw priorities here
+                        // is better than calculating them on the fly during the
+                        // comparison method
+                            .map(|id| (*id, accessor.get(*id).map(|obj| obj.draw_priority()).unwrap_or(DrawPriority::Low)))
+                            .collect::<Vec<(ID, DrawPriority)>>()
+                    } else {Vec::new()}
+                };
+
+                // then sort the children by draw priority
+                children.sort_unstable_by(|(id_a, priority_a), (id_b, priority_b)| {
+                    priority_a.cmp(priority_b)
+                });
+                // we want to handle events in reverse order - i.e if a is drawn on top of b, we want a to handle the event first
+                children.reverse();
+
+
+                let mut handled = false;
+                // and draw them
+                for (child,_) in children {
+                    handled = drag_motion_rec(accessor, coords, dx, dy, child);
+                    if handled { break; }
+                }
+
+                // if the children did not handle the event
+                if !handled {
+                        let may_obj = accessor.get_mut(id);
+                        if let Some(obj) = may_obj {
+                            handled = obj.drag_motion(*coords, *dx, *dy);
+                        }
+                }
+
+                handled
+
+            } else {
+                // return whether it handled the event
+                false
+            }
+        }
+
+        // and all events start at the root.
+        let root = self.object_graph.get_root();
+        let mut accessor = ObjectAccessor::new(&mut self.objects, &self.object_graph, &self.id_gen);
+        drag_motion_rec(&mut accessor, &coords, &dx, &dy, root);
 
     }
 
-    pub fn update(&self, current_time: CurrentTime, elapsed_time: DeltaTime) {
+    pub fn button_press(&mut self, button: ButtonEvent) {
+        fn button_press_rec(accessor: &mut ObjectAccessor, button: &ButtonEvent, id: ID) -> bool {
+            let mut should_recurse = false;
+            // find out whether the node contains the mouse
+            {
+                let may_obj = accessor.get(id);
+                if let Some(obj) = may_obj {
+                    if let Some(bbox) = obj.mouse_bounding_box() {
+                        should_recurse = bbox.point_within_bounds(&button.pos);
+                    } else {
+                        // if the node doesn't have a bounding box, we have to recurse
+                        // IMPORTANT. this is used by the base view to allow it to always try handling it's children
+                        // do not remove
+                        should_recurse = true;
+                    }
+                }
+            }
+
+            if should_recurse {
+                let mut children : Vec<(ID, DrawPriority)> =
+                {
+                    if let Some(o_child) = accessor.children(id) {
+                        o_child
+                            .iter()
+                        // note, pre-retrieving all the draw priorities here
+                        // is better than calculating them on the fly during the
+                        // comparison method
+                            .map(|id| (*id, accessor.get(*id).map(|obj| obj.draw_priority()).unwrap_or(DrawPriority::Low)))
+                            .collect::<Vec<(ID, DrawPriority)>>()
+                    } else {Vec::new()}
+                };
+
+                // then sort the children by draw priority
+                children.sort_unstable_by(|(id_a, priority_a), (id_b, priority_b)| {
+                    priority_a.cmp(priority_b)
+                });
+                // we want to handle events in reverse order - i.e if a is drawn on top of b, we want a to handle the event first
+                children.reverse();
+
+
+                let mut handled = false;
+                // and draw them
+                for (child,_) in children {
+                    handled = button_press_rec(accessor, button, child);
+                    if handled { break; }
+                }
+
+                // if the children did not handle the event
+                if !handled {
+                        let may_obj = accessor.get_mut(id);
+                        if let Some(obj) = may_obj {
+                            handled = obj.button_press(*button);
+                        }
+                }
+
+                handled
+
+            } else {
+                // return whether it handled the event
+                false
+            }
+        }
+
+        // and all events start at the root.
+        let root = self.object_graph.get_root();
+        let mut accessor = ObjectAccessor::new(&mut self.objects, &self.object_graph, &self.id_gen);
+        button_press_rec(&mut accessor, &button, root);
     }
 
-    pub fn drag_motion(&self, coords: WorldCoords, dx: WorldUnit, dy: WorldUnit) {
-    }
+    pub fn key_press(&mut self, evnt: Key) {
+        fn key_press_rec(accessor: &mut ObjectAccessor, key: &Key, id: ID) -> bool {
 
-    pub fn button_press(&self, button: ButtonEvent) {
-    }
+                let mut children : Vec<ID> =
+                {
+                    if let Some(o_child) = accessor.children(id) {
+                        o_child
+                            .iter()
+                            .map(|id| *id)
+                            .collect::<Vec<ID>>()
+                    } else {Vec::new()}
+                };
 
-    pub fn key_press(&self, evnt: Key) {
-    }
 
+                let mut handled = false;
+                // go through the children, and check whether they handle the event
+                for child in children {
+                    handled = key_press_rec(accessor, key, child);
+                    if handled { break; }
+                }
+
+                // if the children did not handle the event
+                if !handled {
+                        let may_obj = accessor.get_mut(id);
+                        if let Some(obj) = may_obj {
+                            handled = obj.key_press(*key);
+                        }
+                }
+
+                handled
+        }
+
+        // and all events start at the root.
+        let root = self.object_graph.get_root();
+        let mut accessor = ObjectAccessor::new(&mut self.objects, &self.object_graph, &self.id_gen);
+        key_press_rec(&mut accessor, &evnt, root);
+
+    }
 
 }
 
@@ -151,7 +419,8 @@ impl ComponentStateInner {
 /// - - - - - - - - - - - - - - - - - - - - -
 pub struct ComponentState {
     inner: ComponentStateInner,
-    listeners: BTreeMap<ID, Vec<Box<FnMut(&mut Any, ListenerContext)>>>
+    listeners: BTreeMap<ID, Vec<Box<FnMut(&mut Any, ListenerContext)>>>,
+    event_q: Vec<(ID, Box<Any>)>
 }
 
 
@@ -165,7 +434,8 @@ impl ComponentState {
         let inner = ComponentStateInner::new();
         ComponentState {
             listeners: Default::default(),
-            inner
+            inner,
+            event_q: Vec::new()
         }
     }
 
@@ -180,6 +450,40 @@ impl ComponentState {
         });
         self.listeners.entry(node).or_default().push(wrapper);
     }
+
+
+    fn add_node<O>(&mut self, object: O, children: &[ID]) -> ID
+    where O: Object + 'static
+    {
+        self.inner.add_node(object, children)
+    }
+
+    fn remove_node(&mut self, id: ID, and_children: bool) {
+        // first, remove the node from the graph
+        let removed = self.inner.remove_node(id, and_children);
+        // then, remove listeners for all the removed nodes
+        for rem_id in removed {
+            self.listeners.remove(&rem_id);
+        }
+        // also remove any events for the node
+        self.event_q.retain(|(oid, _)| *oid != id);
+    }
+
+    fn dispatch_events(&mut self) {
+        let events = mem::replace(&mut self.event_q, Vec::new());
+        for (id, mut event) in events {
+            if let Some(listeners) = self.listeners.get_mut(&id) {
+                for listener in listeners {
+                    let ctx = ListenerContext {
+                        id,
+                        inner: &mut self.inner
+                    };
+                    listener(event.deref_mut(), ctx);
+                }
+            }
+        }
+    }
+
 }
 
 

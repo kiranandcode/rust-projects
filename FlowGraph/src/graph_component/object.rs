@@ -1,6 +1,7 @@
 use types::*;
 use super::id::*;
 use drawing_context::*;
+use std::any::Any;
 
 /// Represents an arbitrary renderable object in the system
 pub trait Object {
@@ -8,10 +9,10 @@ pub trait Object {
     fn draw_priority(&self) -> DrawPriority {DrawPriority::Low}
 
     // used to catch mouse events
-    fn mouse_bounding_box(&mut self) -> Option<&WorldBoundingBox> {None}
+    fn mouse_bounding_box(&self) -> Option<&WorldBoundingBox> {None}
 
     // used to decide whether to be included in a draw call
-    fn render_bounding_box(&mut self) -> Option<WorldBoundingBox> {None}
+    fn render_bounding_box(&self) -> Option<WorldBoundingBox> {None}
 
     // called to be drawn
     fn draw(&mut self, context: &Context, root: ID)  {}
@@ -29,5 +30,8 @@ pub trait Object {
     fn button_press(&mut self, button: ButtonEvent) -> bool {false}
 
     // handling key events - can be stolen by children
-    fn key_press(&mut self, evnt: Key) {}
+    fn key_press(&mut self, evnt: Key) -> bool { false }
+
+    // used to send an arbitrary payload to the widget
+    fn poke(&mut self, payload: &mut Any) -> bool { false }
 }
