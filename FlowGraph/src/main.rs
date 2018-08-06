@@ -4,12 +4,13 @@ extern crate gdk;
 extern crate cairo;
 #[macro_use] extern crate dependent_view;
 
+mod color_scheme;
 mod types;
 mod render_window;
 mod color;
 mod drawing_context;
 mod component_renderer;
-mod graph_component;
+mod component_ui;
 
 use render_window::RenderWindow;
 
@@ -18,7 +19,7 @@ use types::*;
 use color::*;
 use drawing_context::*;
 use component_renderer::*;
-use graph_component::*;
+use component_ui::*;
 
 use gtk::{Window, WindowExt, WidgetExt, ContainerExt};
 use gdk::EventMask;
@@ -36,7 +37,7 @@ fn main() {
         // handler
         gtk::Inhibit(false) 
     });
-    let renderer = ComponentRenderer::<GraphComponent>::new_component_renderer(GraphComponent::default());
+    let renderer = ComponentRenderer::<ComponentUI>::new_component_renderer(ComponentUI::default());
     window.add(&renderer.get_drawing_area());
 
     window.show_all();

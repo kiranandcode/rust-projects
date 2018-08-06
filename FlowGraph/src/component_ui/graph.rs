@@ -1,20 +1,4 @@
 use types::*;
-use color::*;
-use drawing_context::*;
-use component_renderer::*;
-
-use std::ops::{IndexMut, Index};
-use std::fmt::{Display, Formatter};
-use std::error::Error;
-use std::any::Any;
-use std::collections::BTreeMap;
-use std::time::{SystemTime, UNIX_EPOCH};
-use std::rc::{Rc, Weak};
-use std::cell::{RefCell, Ref};
-use std::convert::TryFrom;
-
-use gtk::{Window, WindowExt, WidgetExt, ContainerExt};
-use gdk::EventMask;
 
 use super::id::*;
 use super::Object;
@@ -22,9 +6,9 @@ use super::Object;
 // for variable mutablity purposes we split the definition of the graph into a seperate component
 #[derive(Default)]
 pub struct ObjectGraph {
-    pub (in graph_component) root: ID,
-    pub (in graph_component) children: Vec<Vec<ID>>,
-    pub (in graph_component) parent: Vec<ID>
+    pub (in component_ui) root: ID,
+    pub (in component_ui) children: Vec<Vec<ID>>,
+    pub (in component_ui) parent: Vec<ID>
 }
 
 impl ObjectGraph {
@@ -39,9 +23,9 @@ impl ObjectGraph {
 
 
 pub struct ObjectAccessor<'a> {
-    pub (in graph_component) objects: &'a mut [(ID, Box<Object>)],
-    pub (in graph_component) object_graph: &'a ObjectGraph,
-    pub (in graph_component) idgen: &'a IDManager
+    pub (in component_ui) objects: &'a mut [(ID, Box<Object>)],
+    pub (in component_ui) object_graph: &'a ObjectGraph,
+    pub (in component_ui) idgen: &'a IDManager
 }
 impl<'a> ObjectAccessor<'a> {
     pub fn new(objects: &'a mut [(ID,Box<Object>)], object_graph: &'a ObjectGraph, idgen: &'a IDManager) -> Self {

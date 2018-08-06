@@ -1,6 +1,6 @@
 use types::*;
-use super::id::*;
-use drawing_context::*;
+use super::id::ID;
+use drawing_context::Context;
 use std::any::Any;
 use super::HandlerContext;
 

@@ -1,24 +1,8 @@
 use types::*;
-use color::*;
-use drawing_context::*;
-use component_renderer::*;
 
-use std::ops::{IndexMut, Index};
-use std::fmt::{Display, Formatter};
-use std::error::Error;
-use std::any::Any;
-use std::collections::BTreeMap;
-use std::time::{SystemTime, UNIX_EPOCH};
-use std::rc::{Rc, Weak};
-use std::cell::{RefCell, Ref};
-use std::convert::TryFrom;
-
-use gtk::{Window, WindowExt, WidgetExt, ContainerExt};
-use gdk::EventMask;
-
-use super::id::*;
-use super::object::*;
-use super::graph::*;
+use super::id::{ID, IDManager};
+use super::object::Object;
+use super::graph::ObjectGraph;
 
 pub fn add_node<O>(id_gen: &mut IDManager, object_graph: &mut ObjectGraph, objects: &mut Vec<(ID,Box<Object>)>, object: O, children: &[ID]) -> ID
 where O: Object + 'static

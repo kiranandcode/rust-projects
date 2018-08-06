@@ -4,36 +4,28 @@
 pub mod id;
 pub mod graph;
 pub mod object;
-pub mod color_scheme;
 pub mod utilities;
+pub mod context;
 
-use id::*;
-use graph::*;
-use object::*;
-use color_scheme::*;
-use utilities::*;
+use super::color_scheme::*;
+use context::{HandlerContext, ListenerContext};
+use id::{ID, IDManager};
+use graph::{ObjectGraph, ObjectAccessor};
+use object::Object;
+use utilities::{add_node, remove_node};
 
 use types::*;
 use color::*;
-use drawing_context::*;
-use component_renderer::*;
+use drawing_context::Context;
+use component_renderer::{Renderer, Component};
 
-use std::ops::{DerefMut, Deref};
 use std::mem;
-use std::cmp::{Ord, Ordering};
-use std::iter;
-use std::ops::{IndexMut, Index};
-use std::fmt::{Display, Formatter};
-use std::error::Error;
+use std::ops::DerefMut;
 use std::any::Any;
 use std::collections::BTreeMap;
-use std::time::{SystemTime, UNIX_EPOCH};
 use std::rc::{Rc, Weak};
-use std::cell::{RefCell, Ref};
-use std::convert::TryFrom;
+use std::cell::{RefCell };
 
-use gtk::{Window, WindowExt, WidgetExt, ContainerExt};
-use gdk::EventMask;
 
 
 // empty struct used to represent the base component of the system
@@ -44,11 +36,11 @@ impl Object for ComponentStateBase {}
 
 // As in Xi-window, represents the context handed to viewers
 pub struct ComponentStateInner {
-    pub (in graph_component) objects: Vec<(ID,Box<Object>)>,
+    pub (in component_ui) objects: Vec<(ID,Box<Object>)>,
     /// used to keep track of the graph structure
-    pub (in graph_component) object_graph: ObjectGraph,
+    pub (in component_ui) object_graph: ObjectGraph,
     /// used to manage ids
-    pub (in graph_component) id_gen: IDManager
+    pub (in component_ui) id_gen: IDManager
 }
 
 
@@ -209,7 +201,6 @@ impl ComponentStateInner {
         // and all events start at the root.
         let root = self.object_graph.get_root();
         let mut accessor = ObjectAccessor::new(&mut self.objects, &self.object_graph, &self.id_gen);
-        
         let mut handler = HandlerContext::new(root, root, events, invalidated_region, world_bbox);
         motion_rec(&mut accessor, &coords, &mut handler);
     }
@@ -239,7 +230,6 @@ impl ComponentStateInner {
         // and all events start at the root.
         let root = self.object_graph.get_root();
         let mut accessor = ObjectAccessor::new(&mut self.objects, &self.object_graph, &self.id_gen);
-        
         let mut ctx = HandlerContext::new(root, root, events, invalidated_region, world_bbox);
         update_rec(&mut accessor, current_time, elapsed_time, &mut ctx);
     }
@@ -388,7 +378,6 @@ impl ComponentStateInner {
         // and all events start at the root.
         let root = self.object_graph.get_root();
         let mut accessor = ObjectAccessor::new(&mut self.objects, &self.object_graph, &self.id_gen);
-        
         let mut ctx = HandlerContext::new(root, root, events, invalidated_region, world_bbox);
         button_press_rec(&mut accessor, &button, &mut ctx);
     }
@@ -431,7 +420,6 @@ impl ComponentStateInner {
         // and all events start at the root.
         let root = self.object_graph.get_root();
         let mut accessor = ObjectAccessor::new(&mut self.objects, &self.object_graph, &self.id_gen);
-        
         let mut ctx = HandlerContext::new(root, root, events, invalidated_region, world_bbox);
         key_press_rec(&mut accessor, &evnt, &mut ctx);
 
@@ -468,97 +456,6 @@ pub struct ComponentState {
 }
 
 
-pub struct ListenerContext<'a> {
-    id: ID,
-    inner: &'a mut ComponentStateInner,
-    events: &'a mut Vec<(ID, Box<Any>)>,
-    // holds the currently invalidated region
-    invalidated_region: &'a mut Option<WorldBoundingBox>,
-    // hold the worldbounding box from the last call to draw
-    last_world_bounding_box: &'a Option<WorldBoundingBox>
-}
-
-impl<'a> ListenerContext<'a> {
-    pub fn poke_up<A: Any>(&mut self, payload: &mut A) -> bool {
-        let mut node = self.id;
-        let root = self.inner.object_graph.root;
-        loop {
-            if let Ok(raw_id) = self.inner.id_gen.get(node) {
-                let parent = self.inner.object_graph.parent[raw_id];
-                if parent == node {
-                    return false;
-                }
-                node = parent;
-                if self.inner.poke_internal(root, node, payload, self.events, self.invalidated_region, self.last_world_bounding_box) {
-                    return true;
-                }
-            } else {
-                return false;
-            }
-        }
-    }
-}
-
-impl<'a> Deref for ListenerContext<'a> {
-    type Target = ComponentStateInner;
-
-    fn deref(&self) -> &ComponentStateInner {
-        self.inner
-    }
-}
-
-impl<'a> DerefMut for ListenerContext<'a> {
-
-    fn deref_mut(&mut self) -> &mut ComponentStateInner {
-        self.inner
-    }
-}
-
-pub struct HandlerContext<'a> {
-    // the root id - used to allow nodes to send events directly to the top
-    root: ID,
-    // the id of the object handling the response
-    pub (in graph_component) id: ID,
-    // the the events bus, used to allow nodes to post messages
-    events: &'a mut Vec<(ID, Box<Any>)>,
-    // holds the currently invalidated region
-    invalidated_region: &'a mut Option<WorldBoundingBox>,
-    // hold the worldbounding box from the last call to draw
-    last_world_bounding_box: &'a Option<WorldBoundingBox>
-}
-
-impl<'a> HandlerContext<'a> {
-    pub fn new(root: ID, id: ID, events_ref: &'a mut Vec<(ID, Box<Any>)>, invalidated_region: &'a mut Option<WorldBoundingBox>, world_bbox: &'a Option<WorldBoundingBox>) -> Self {
-        HandlerContext {
-            root,
-            id,
-            events: events_ref,
-            invalidated_region,
-            last_world_bounding_box: world_bbox
-        }
-    }
-    pub fn send_event<A: Any>(&mut self, a : A) {
-        self.events.push((self.id, Box::new(a)));
-    }
-    pub fn send_root_event<A:Any>(&mut self, a: A) {
-        self.events.push((self.root, Box::new(a)));
-    }
-    pub fn invalidate_region(&mut self, region: &WorldBoundingBox) {
-        let should_update = if let Some(bbox) = self.last_world_bounding_box.as_ref() {
-            let bbox : &WorldBoundingBox = bbox;
-            WorldBoundingBox::check_intersect(bbox, region)
-        } else {
-            // if we don't know what the world bounding box looks like, just always accept invalidations
-            true
-        };
-
-        if should_update {
-            self.invalidated_region.as_mut().map(|bbox| {
-                bbox.union(region);
-            });
-        }
-    }
-}
 
 impl ComponentState {
     pub fn new(renderer: Rc<Renderer>) -> Self {
@@ -585,14 +482,26 @@ impl ComponentState {
         self.listeners.entry(node).or_default().push(wrapper);
     }
 
+    pub fn add_root_listener<A,F>(&mut self, mut f: F)
+    where A:Any, F: FnMut(&mut A, ListenerContext) + 'static {
+        let root = self.inner.object_graph.root;
+        let wrapper : Box<FnMut(&mut Any, ListenerContext)> = Box::new(move |a, ctx| {
+            if let Some(arg) = a.downcast_mut() {
+                f(arg,ctx)
+            } else {
+                println!("Type mismatch in listener args");
+            }
+        });
+        self.listeners.entry(root).or_default().push(wrapper);
+    }
 
-    fn add_node<O>(&mut self, object: O, children: &[ID]) -> ID
+    pub fn add_node<O>(&mut self, object: O, children: &[ID]) -> ID
     where O: Object + 'static
     {
         self.inner.add_node(object, children)
     }
 
-    fn remove_node(&mut self, id: ID, and_children: bool) {
+    pub fn remove_node(&mut self, id: ID, and_children: bool) {
         // first, remove the node from the graph
         let removed = self.inner.remove_node(id, and_children);
         // then, remove listeners for all the removed nodes
@@ -623,13 +532,13 @@ impl ComponentState {
         for (id, mut event) in events {
             if let Some(listeners) = self.listeners.get_mut(&id) {
                 for listener in listeners {
-                    let ctx = ListenerContext {
+                    let ctx = ListenerContext::new(
                         id,
-                        inner: &mut self.inner,
-                        events: &mut self.event_q,
-                        invalidated_region: &mut self.invalidated_region,
-                        last_world_bounding_box: &self.last_bounding_box
-                    };
+                        &mut self.inner,
+                        &mut self.event_q,
+                        &mut self.invalidated_region,
+                        &self.last_bounding_box
+                    );
                     listener(event.deref_mut(), ctx);
                 }
             }
@@ -686,25 +595,30 @@ impl ComponentState {
 /// - - - - - - - - - - - - - - - - - - - - -
 ///                Main View
 /// - - - - - - - - - - - - - - - - - - - - -
-pub struct GraphComponent {
+pub struct ComponentUI {
     renderer: RefCell<Option<Rc<Renderer>>>,
     // main inner view of the graph component
     // we wrap it in a option, to allow the componentstate to be accessed only when it has a renderer
     internal: RefCell<Option<ComponentState>>
 }
 
-impl Default for GraphComponent {
+impl Default for ComponentUI {
     fn default() -> Self {
-        GraphComponent{
+        ComponentUI{
             renderer: RefCell::new(None),
             internal: RefCell::new(None)
         }
     }
 }
 
+impl ComponentUI {
+    fn get_state(&self) -> &RefCell<Option<ComponentState>> {
+        &self.internal
+    }
+}
 
 
-impl Component for GraphComponent {
+impl Component for ComponentUI {
     fn on_draw(&self, context: &Context) {
         context.color(COLOR_SCHEME.bg);
         context.paint();
@@ -751,6 +665,10 @@ impl Component for GraphComponent {
     }
 
     fn on_button_press(&self, button: ButtonEvent) {
+        // println!("Got a button press event {:?}", button);
+        if let Some(internal) = self.internal.borrow_mut().as_mut() {
+            internal.button_press(button);
+        }
     }
 
     fn on_button_release(&self, button: ButtonEvent) {

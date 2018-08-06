@@ -1,20 +1,7 @@
 use types::*;
-use color::*;
-use drawing_context::*;
-use component_renderer::*;
 
-use std::ops::{IndexMut, Index};
 use std::fmt::{Display, Formatter};
 use std::error::Error;
-use std::any::Any;
-use std::collections::BTreeMap;
-use std::time::{SystemTime, UNIX_EPOCH};
-use std::rc::{Rc, Weak};
-use std::cell::{RefCell, Ref};
-use std::convert::TryFrom;
-
-use gtk::{Window, WindowExt, WidgetExt, ContainerExt};
-use gdk::EventMask;
 
 
 /// - - - - - - - - - - - - - - - - - - - - -
