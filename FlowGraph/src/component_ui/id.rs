@@ -34,7 +34,7 @@ impl Default for IDManager {
 }
 impl IDManager {
     pub fn get(&self, id: ID) -> Result<RawID, IDError> {
-        if self.map.len() < id.0  {
+        if self.map.len() <= id.0  {
             Err(IDError::IDOutOfRange)
         } else {
             let (timestamp, maybe_id) = self.map[id.0];
@@ -48,7 +48,7 @@ impl IDManager {
 
     // identifies whether an id is valid or not
     pub fn valid(&self, id: ID) -> bool {
-        if self.map.len() < id.0 {
+        if self.map.len() <= id.0 {
             false
         } else {
             let (timestamp, maybe_id) = self.map[id.0];
@@ -92,7 +92,7 @@ impl IDManager {
     /// used when the object to be removed is the last object, so no swaps occur
     /// Note: not intended to be called directly, but by the ContentInner
     pub fn remove(&mut self, id: ID) -> Result<(), IDError> {
-        if self.map.len() < id.0  {
+        if self.map.len() <= id.0  {
             Err(IDError::IDOutOfRange)
         } else {
             // grab the position of the mapping
@@ -222,4 +222,282 @@ impl IDManager {
             }
         }
     }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    #[test]
+    pub fn default_constructor_works() {
+        let mnger = IDManager::default();
+    }
+
+    #[test]
+    pub fn unknown_get_id_returns_err() {
+        let mnger = IDManager::default();
+        assert!(mnger.get(ID(0,0)).is_err());
+        assert!(mnger.get(ID(1,0)).is_err());
+        assert!(mnger.get(ID(0,1)).is_err());
+        assert!(mnger.get(ID(1,1)).is_err());
+    }
+
+    #[test]
+    pub fn new_ids_generated() {
+        let mut mnger = IDManager::default();
+        mnger.new(0);
+        mnger.new(2);
+        mnger.new(3);
+        mnger.new(1);
+        mnger.new(4);
+        mnger.new(5);
+    }
+
+    #[test]
+    pub fn ids_can_be_removed() {
+        let mut mnger = IDManager::default();
+        let id = mnger.new(0);
+
+        assert!(mnger.remove(id).is_ok());
+    }
+
+    #[test]
+    pub fn unknown_remove_id_returns_err() {
+        let mut mnger = IDManager::default();
+
+        assert!(mnger.remove(ID(0,0)).is_err());
+        assert!(mnger.remove(ID(1,0)).is_err());
+        assert!(mnger.remove(ID(0,1)).is_err());
+        assert!(mnger.remove(ID(20,11)).is_err());
+    }
+
+    #[test]
+    pub fn removed_ids_invalid() {
+        let mut mnger = IDManager::default();
+        let id = mnger.new(0);
+
+        mnger.remove(id).is_ok();
+        assert!(!mnger.valid(id));
+    }
+
+
+    #[test]
+    pub fn unknown_ids_invalid() {
+        let mut mnger = IDManager::default();
+
+        assert!(!mnger.valid(ID(0,0)));
+        assert!(!mnger.valid(ID(1,0)));
+        assert!(!mnger.valid(ID(0,1)));
+        assert!(!mnger.valid(ID(20,11)))
+    }
+
+
+    #[test]
+    pub fn new_ids_valid() {
+        let mut mnger = IDManager::default();
+        let id0 = mnger.new(0);
+        let id2 = mnger.new(2);
+        let id3 = mnger.new(3);
+        let id1 = mnger.new(1);
+        let id4 = mnger.new(4);
+        let id5 = mnger.new(5);
+
+        assert!(mnger.valid(id0));
+        assert!(mnger.valid(id2));
+        assert!(mnger.valid(id3));
+        assert!(mnger.valid(id1));
+        assert!(mnger.valid(id4));
+        assert!(mnger.valid(id5));
+    }
+
+    #[test]
+    pub fn remove_doesnt_change_other_bindings() {
+        let mut mnger = IDManager::default();
+        let id0 = mnger.new(0);
+        let id2 = mnger.new(2);
+        let id3 = mnger.new(3);
+        let id1 = mnger.new(1);
+        let id4 = mnger.new(4);
+        let id5 = mnger.new(5);
+
+        mnger.remove(id0);
+        assert_eq!(mnger.get(id2).ok(), Some(2));
+        assert_eq!(mnger.get(id3).ok(), Some(3));
+        assert_eq!(mnger.get(id1).ok(), Some(1));
+        assert_eq!(mnger.get(id4).ok(), Some(4));
+        assert_eq!(mnger.get(id5).ok(), Some(5));
+    }
+
+    #[test]
+    pub fn swap_remove_invalidates_ids() {
+        let mut mnger = IDManager::default();
+        let id0 = mnger.new(0);
+        let id2 = mnger.new(2);
+
+        mnger.swap_remove(id0, id2);
+        assert!(!mnger.valid(id0));
+    }
+
+    #[test]
+    pub fn swap_remove_leaves_replacement_valid() {
+        let mut mnger = IDManager::default();
+        let id0 = mnger.new(0);
+        let id2 = mnger.new(2);
+
+        mnger.swap_remove(id0, id2);
+        assert!(mnger.valid(id2));
+    }
+
+    #[test]
+    pub fn swap_remove_swaps_bindings() {
+        let mut mnger = IDManager::default();
+        let id0 = mnger.new(0);
+        let id2 = mnger.new(2);
+        let id3 = mnger.new(3);
+        let id1 = mnger.new(1);
+        let id4 = mnger.new(4);
+        let id5 = mnger.new(5);
+
+
+        mnger.swap_remove(id0, id2);
+        mnger.swap_remove(id3, id5);
+        assert_eq!(mnger.get(id2).ok(), Some(0));
+        assert_eq!(mnger.get(id5).ok(), Some(3));
+    }
+
+    #[test]
+    pub fn swap_remove_doesnt_change_other_bindings() {
+        let mut mnger = IDManager::default();
+        let id0 = mnger.new(0);
+        let id2 = mnger.new(2);
+        let id3 = mnger.new(3);
+        let id1 = mnger.new(1);
+        let id4 = mnger.new(4);
+        let id5 = mnger.new(5);
+
+        mnger.swap_remove(id0, id2);
+        assert_eq!(mnger.get(id3).ok(), Some(3));
+        assert_eq!(mnger.get(id1).ok(), Some(1));
+        assert_eq!(mnger.get(id4).ok(), Some(4));
+        assert_eq!(mnger.get(id5).ok(), Some(5));
+    }
+
+    #[test]
+    pub fn insert_after_remove_works() {
+        let mut mnger = IDManager::default();
+        let id0 = mnger.new(0);
+        let id2 = mnger.new(2);
+        let id3 = mnger.new(3);
+        let id1 = mnger.new(1);
+        let id4 = mnger.new(4);
+        let id5 = mnger.new(5);
+
+        mnger.remove(id0);
+        let id6 = mnger.new(6);
+    }
+
+
+    #[test]
+    pub fn insert_after_swap_remove_works() {
+        let mut mnger = IDManager::default();
+        let id0 = mnger.new(0);
+        let id2 = mnger.new(2);
+        let id3 = mnger.new(3);
+        let id1 = mnger.new(1);
+        let id4 = mnger.new(4);
+        let id5 = mnger.new(5);
+
+        mnger.swap_remove(id0, id2);
+        let id6 = mnger.new(6);
+    }
+
+    #[test]
+    pub fn inserts_after_remove_works() {
+        let mut mnger = IDManager::default();
+        let id0 = mnger.new(0);
+        let id2 = mnger.new(2);
+        let id3 = mnger.new(3);
+        let id1 = mnger.new(1);
+        let id4 = mnger.new(4);
+        let id5 = mnger.new(5);
+
+        mnger.remove(id0);
+        let id6 = mnger.new(6);
+        let id7 = mnger.new(7);
+    }
+
+    #[test]
+    pub fn can_manage_references_to_mutable_list() {
+        fn insert_to_items(items: &mut Vec<char>, manager: &mut IDManager, character: char) -> (ID, char) {
+            let len = items.len();
+            items.push(character);
+            let id = manager.new(len);
+            (id, character)
+        }
+
+        let mut mnger = IDManager::default();
+        let mut items = Vec::new();
+        let (id0, id0a) = insert_to_items(&mut items, &mut mnger, 'a');
+        let (id1, id1b) = insert_to_items(&mut items, &mut mnger, 'b');
+        let (id2, id2c) = insert_to_items(&mut items, &mut mnger, 'c');
+        let (id3, id3d) = insert_to_items(&mut items, &mut mnger, 'd');
+
+
+        assert_eq!(items[mnger.get(id0).unwrap()], id0a);
+        assert_eq!(items[mnger.get(id1).unwrap()], id1b);
+        assert_eq!(items[mnger.get(id2).unwrap()], id2c);
+        assert_eq!(items[mnger.get(id3).unwrap()], id3d);
+
+        items.remove(3);
+        mnger.remove(id3);
+
+        assert_eq!(items[mnger.get(id0).unwrap()], id0a);
+        assert_eq!(items[mnger.get(id1).unwrap()], id1b);
+        assert_eq!(items[mnger.get(id2).unwrap()], id2c);
+
+
+        let (id3, id3d) = insert_to_items(&mut items, &mut mnger, 'd');
+
+        assert_eq!(items[mnger.get(id0).unwrap()], id0a);
+        assert_eq!(items[mnger.get(id1).unwrap()], id1b);
+        assert_eq!(items[mnger.get(id2).unwrap()], id2c);
+        assert_eq!(items[mnger.get(id3).unwrap()], id3d);
+
+        items.swap_remove(3);
+        mnger.remove(id3);
+
+        assert_eq!(items[mnger.get(id0).unwrap()], id0a);
+        assert_eq!(items[mnger.get(id1).unwrap()], id1b);
+        assert_eq!(items[mnger.get(id2).unwrap()], id2c);
+
+
+        let (id3, id3d) = insert_to_items(&mut items, &mut mnger, 'd');
+
+        assert_eq!(items[mnger.get(id0).unwrap()], id0a);
+        assert_eq!(items[mnger.get(id1).unwrap()], id1b);
+        assert_eq!(items[mnger.get(id2).unwrap()], id2c);
+        assert_eq!(items[mnger.get(id3).unwrap()], id3d);
+
+
+        items.swap_remove(2);
+        mnger.swap_remove(id2, id3);
+
+        assert_eq!(items[mnger.get(id0).unwrap()], id0a);
+        assert_eq!(items[mnger.get(id1).unwrap()], id1b);
+        assert_eq!(items[mnger.get(id3).unwrap()], id3d);
+
+
+        let (id2, id2c) = insert_to_items(&mut items, &mut mnger, 'c');
+
+        assert_eq!(items[mnger.get(id0).unwrap()], id0a);
+        assert_eq!(items[mnger.get(id1).unwrap()], id1b);
+        assert_eq!(items[mnger.get(id2).unwrap()], id2c);
+        assert_eq!(items[mnger.get(id3).unwrap()], id3d);
+
+
+        let (id4, id4d) = insert_to_items(&mut items, &mut mnger, 'd');
+
+        assert_eq!(items[mnger.get(id4).unwrap()], id4d);
+
+    }
+
 }
