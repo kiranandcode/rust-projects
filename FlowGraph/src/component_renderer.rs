@@ -18,7 +18,7 @@ pub struct ComponentRenderer<T: Component> {
     in_drag: RefCell<bool>,
     last_pos: RefCell<Option<ScreenCoords>>,
     drawing_area: gtk::DrawingArea,
-    renderer: Rc<T>
+    renderer: RefCell<Option<Rc<T>>>
 }
 
 
@@ -27,9 +27,10 @@ pub struct ComponentRenderer<T: Component> {
 /// - - - - - - - - - - - - - - - - - - - - -
 impl<T:Component + 'static> ComponentRenderer<T> {
 
-    pub fn new_component_renderer(renderer: T) -> Rc<ComponentRenderer<T>>  {
+
+
+    pub fn new_component_renderer() -> Rc<ComponentRenderer<T>>  {
         let drawing_area = ComponentRenderer::<T>::generate_drawing_area();
-        let renderer = Rc::new(renderer);
         let self_rc = Rc::new(
             ComponentRenderer {
                 render_window: RefCell::new(RenderWindow::new(ScreenUnit(200.0), ScreenUnit(200.0))),
@@ -37,17 +38,23 @@ impl<T:Component + 'static> ComponentRenderer<T> {
                 last_pos: RefCell::new(None),
                 in_drag: RefCell::new(false),
                 drawing_area: drawing_area.clone(),
-                renderer: renderer.clone()
+                renderer: RefCell::new(None)
             }
         );
-
-        self_rc.renderer.register_renderer(renderer, self_rc.clone());
-        self_rc.renderer.on_setup();
-
 
         ComponentRenderer::connect_events(&self_rc, drawing_area);
 
         self_rc
+    }
+
+    pub fn set_component(self_rc: &Rc<Self>, component: Rc<T>) {
+        *self_rc.renderer.borrow_mut() = Some(component);
+
+        // then call the setup method on the renderer to allow it to initialize
+        if let Some(renderer) = self_rc.renderer.borrow().as_ref() {
+            renderer.register_renderer(self_rc.clone());
+            renderer.on_setup();
+        }
     }
 
     pub fn get_drawing_area(&self) -> gtk::DrawingArea {
@@ -155,7 +162,10 @@ impl<T:Component + 'static> ComponentRenderer<T> {
         if button_press_type == ButtonEventType::Click {
             *self.in_drag.borrow_mut() = true;
         }
-        self.renderer.on_button_press(ButtonEvent { pos: coords, button_type, button_press_type });
+
+        if let Some(renderer) = self.renderer.borrow().as_ref() {
+            renderer.on_button_press(ButtonEvent { pos: coords, button_type, button_press_type });
+        }
         gtk::Inhibit(true)
     }
 
@@ -181,14 +191,20 @@ impl<T:Component + 'static> ComponentRenderer<T> {
 
 
         *self.in_drag.borrow_mut() = false;
-        self.renderer.on_button_release(ButtonEvent { pos: coords, button_type, button_press_type });
+
+        if let Some(renderer) = self.renderer.borrow().as_ref() {
+            renderer.on_button_release(ButtonEvent { pos: coords, button_type, button_press_type });
+        }
         gtk::Inhibit(true)
     }
 
     fn on_key_press(&self, drawing_area: &gtk::DrawingArea, evnt: &gdk::EventKey) -> gtk::Inhibit {
         //println!("{:?} {:?}, {:?}, {:?}", evnt.get_keyval(), gdk::keyval_to_unicode(evnt.get_keyval()), evnt.get_state(), gdk::keyval_name(evnt.get_keyval()));
         if let Some(value) = TryFrom::try_from(evnt.get_keyval()).ok() {
-            self.renderer.on_key_press(value);
+
+            if let Some(renderer) = self.renderer.borrow().as_ref() {
+                renderer.on_key_press(value);
+            }
             gtk::Inhibit(true)
         } else {
             gtk::Inhibit(false)
@@ -197,7 +213,10 @@ impl<T:Component + 'static> ComponentRenderer<T> {
 
     fn on_key_release(&self, drawing_area: &gtk::DrawingArea, evnt: &gdk::EventKey) -> gtk::Inhibit {
         if let Some(value) = TryFrom::try_from(evnt.get_keyval()).ok() {
-            self.renderer.on_key_press(value);
+
+            if let Some(renderer) = self.renderer.borrow().as_ref() {
+                renderer.on_key_press(value);
+            }
             gtk::Inhibit(true)
         } else {
             gtk::Inhibit(false)
@@ -228,7 +247,10 @@ impl<T:Component + 'static> ComponentRenderer<T> {
                 } else {
                     let dx = self.render_window.borrow().screen_to_world_distance_x(&dx);
                     let dy = self.render_window.borrow().screen_to_world_distance_y(&dy);
-                    self.renderer.on_drag_motion_notify(coords, dx,dy);
+
+                    if let Some(renderer) = self.renderer.borrow().as_ref() {
+                        renderer.on_drag_motion_notify(coords, dx,dy);
+                    }
                 }
             }
             *self.last_pos.borrow_mut() = Some(ScreenCoords(x,y));
@@ -237,7 +259,10 @@ impl<T:Component + 'static> ComponentRenderer<T> {
         } else {
             // if we are not in a drag, reset the last position
             *self.last_pos.borrow_mut() = None;
-            self.renderer.on_motion_notify(coords);
+
+            if let Some(renderer) = self.renderer.borrow().as_ref() {
+                renderer.on_motion_notify(coords);
+            }
             gtk::Inhibit(true) 
         }
     }
@@ -260,7 +285,10 @@ impl<T:Component + 'static> ComponentRenderer<T> {
                 let coords = self.render_window.borrow().screen_to_world_coords(&ScreenCoords(x,y));
                 let dx = self.render_window.borrow().screen_to_world_distance_x(&dx);
                 let dy = self.render_window.borrow().screen_to_world_distance_y(&dy);
-                self.renderer.on_drag_motion_notify(coords, dx,dy);
+
+                if let Some(renderer) = self.renderer.borrow().as_ref() {
+                    renderer.on_drag_motion_notify(coords, dx,dy);
+                }
             }
         }
         *self.last_pos.borrow_mut() = Some(ScreenCoords(x,y));
@@ -268,12 +296,18 @@ impl<T:Component + 'static> ComponentRenderer<T> {
     }
 
     fn on_draw(&self, drawing_area: &gtk::DrawingArea, evnt: &cairo::Context) -> gtk::Inhibit {
-        self.renderer.on_draw(&Context::new(evnt, &self.render_window.borrow()));
+
+        if let Some(renderer) = self.renderer.borrow().as_ref() {
+            renderer.on_draw(&Context::new(evnt, &self.render_window.borrow()));
+        }
         gtk::Inhibit(true)
     }
 
     fn on_update(&self, current_time: CurrentTime, elapsed_time: DeltaTime) -> bool {
-        self.renderer.on_update(current_time, elapsed_time);
+
+        if let Some(renderer) = self.renderer.borrow().as_ref() {
+            renderer.on_update(current_time, elapsed_time);
+        }
         true
     }
 }
@@ -307,7 +341,7 @@ impl<T:Component + 'static> Renderer for ComponentRenderer<T> {
 
 pub trait Component {
 
-    fn register_renderer(&self, self_rc: Rc<Self>, renderer: Rc<Renderer>);
+    fn register_renderer(&self, renderer: Rc<Renderer>);
 
     fn on_button_press(&self, evnt: ButtonEvent) { }
 

@@ -1,5 +1,5 @@
 use types::*;
-use color_scheme::ColorScheme;
+use color::ColorScheme;
 use super::id::ID;
 use drawing_context::Context;
 use std::any::Any;

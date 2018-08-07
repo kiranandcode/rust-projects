@@ -7,7 +7,6 @@ pub mod object;
 pub mod utilities;
 pub mod context;
 
-use super::color_scheme::*;
 use context::{HandlerContext, ListenerContext};
 use id::{ID, IDManager};
 use graph::{ObjectGraph, ObjectAccessor};
@@ -614,14 +613,14 @@ impl Default for ComponentUI {
 }
 
 impl ComponentUI {
-    fn new(&self, color_scheme: ColorScheme) -> Self {
+    pub fn new(color_scheme: ColorScheme) -> Self {
         ComponentUI{
             renderer: RefCell::new(None),
             internal: RefCell::new(None),
             color_scheme
         }
     }
-    fn get_state(&self) -> &RefCell<Option<ComponentState>> {
+    pub fn get_state(&self) -> &RefCell<Option<ComponentState>> {
         &self.internal
     }
 }
@@ -699,7 +698,7 @@ impl Component for ComponentUI {
         }
     }
 
-    fn register_renderer(&self, self_rc: Rc<Self>, renderer: Rc<Renderer>) {
+    fn register_renderer(&self, renderer: Rc<Renderer>) {
         *self.renderer.borrow_mut() = Some(renderer.clone());
         // and once we have registered the renderer, we can construct our inner state
         *self.internal.borrow_mut() = Some(ComponentState::new(renderer));

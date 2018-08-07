@@ -7,5 +7,6 @@ authors = ["Kiran Gopinathan <zcabkgo@ucl.ac.uk>"]
 gtk = { version = "^0.2", features = ["v3_22"] }
 cairo-rs = { version = "^0.2.0", features = ["png"] }
 gdk = "^0.6.0"
+gio ="^0.2.0"
 dependent_view = "1"
 observable_rs = { git = "https://github.com/Gopiandcode/observable-rs.git", features = ["views"] }
