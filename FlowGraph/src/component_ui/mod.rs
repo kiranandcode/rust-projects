@@ -30,7 +30,8 @@ use std::cell::{RefCell };
 // empty struct used to represent the base component of the system
 // doesn't actually do anything, but rather used as the base
 pub struct ComponentStateBase {}
-impl Object for ComponentStateBase {}
+impl Object for ComponentStateBase {
+}
 
 
 // As in Xi-window, represents the context handed to viewers
@@ -65,21 +66,25 @@ impl ComponentStateInner {
         }
 
     }
-    fn add_node<O>(&mut self, object: O, children: &[ID]) -> ID
+
+    fn add_node<O>(&mut self, object: O, children: &[ID],  events: &mut Vec<(ID, Box<Any>)>,invalidated_region: &mut Option<WorldBoundingBox>, last_world_bounding_box: &Option<WorldBoundingBox>) -> ID
     where O: Object + 'static
     {
-        add_node(&mut self.id_gen, &mut self.object_graph, &mut self.objects, object, children)
+        let mut handler_context = HandlerContext::new(self.object_graph.get_root(), self.object_graph.get_root(), events, invalidated_region, last_world_bounding_box);
+
+        add_node(&mut self.id_gen, &mut self.object_graph, &mut self.objects, object, children, &mut handler_context)
+
     }
 
     /// removes a node from the graph.
     /// should be called from the componentstate rather than directly,
     /// as this one doesn't remove the listeners
-    fn remove_node(&mut self, id: ID, and_children: bool) -> Vec<ID> {
-        // allocate a vec to hold the removed ids
+    fn remove_node(&mut self, id: ID, and_children: bool, events: &mut Vec<(ID, Box<Any>)>,invalidated_region: &mut Option<WorldBoundingBox>, last_world_bounding_box: &Option<WorldBoundingBox>) -> Vec<ID> {
         let mut rem_id = Vec::new();
 
+        let mut handler_context = HandlerContext::new(self.object_graph.get_root(), id, events, invalidated_region, last_world_bounding_box);
         // remove the node from the graph - place any id's removed by recursive calls into the rem_id array
-        remove_node(&mut self.id_gen, &mut self.object_graph, &mut self.objects, id, and_children, &mut rem_id);
+        remove_node(&mut self.id_gen, &mut self.object_graph, &mut self.objects, id, and_children, &mut rem_id, &mut handler_context);
 
         // return the removed ids
         rem_id
@@ -129,7 +134,7 @@ impl ComponentStateInner {
         draw_rec(&mut accessor, context, root, color_scheme);
     }
 
-    pub fn motion(&mut self, coords: WorldCoords, events: &mut Vec<(ID, Box<Any>)>, invalidated_region: &mut Option<WorldBoundingBox>, world_bbox: &Option<WorldBoundingBox>) {
+    fn motion(&mut self, coords: WorldCoords, events: &mut Vec<(ID, Box<Any>)>, invalidated_region: &mut Option<WorldBoundingBox>, world_bbox: &Option<WorldBoundingBox>) {
         fn motion_rec(accessor: &mut ObjectAccessor, coords: &WorldCoords,  mut ctx: &mut HandlerContext) -> bool {
             let id = ctx.id;
             let mut should_recurse = false;
@@ -204,7 +209,7 @@ impl ComponentStateInner {
         motion_rec(&mut accessor, &coords, &mut handler);
     }
 
-    pub fn update(&mut self, current_time: CurrentTime, elapsed_time: DeltaTime,  events: &mut Vec<(ID, Box<Any>)>, invalidated_region: &mut Option<WorldBoundingBox>, world_bbox: &Option<WorldBoundingBox>) {
+    fn update(&mut self, current_time: CurrentTime, elapsed_time: DeltaTime,  events: &mut Vec<(ID, Box<Any>)>, invalidated_region: &mut Option<WorldBoundingBox>, world_bbox: &Option<WorldBoundingBox>) {
         fn update_rec(accessor: &mut ObjectAccessor, current_time: CurrentTime, elapsed_time: DeltaTime, ctx: &mut HandlerContext) {
             let id = ctx.id;
             // updates the object
@@ -233,7 +238,7 @@ impl ComponentStateInner {
         update_rec(&mut accessor, current_time, elapsed_time, &mut ctx);
     }
 
-    pub fn drag_motion(&mut self, coords: WorldCoords, dx: WorldUnit, dy: WorldUnit, events: &mut Vec<(ID, Box<Any>)>, invalidated_region: &mut Option<WorldBoundingBox>, world_bbox: &Option<WorldBoundingBox>) {
+    fn drag_motion(&mut self, coords: WorldCoords, dx: WorldUnit, dy: WorldUnit, events: &mut Vec<(ID, Box<Any>)>, invalidated_region: &mut Option<WorldBoundingBox>, world_bbox: &Option<WorldBoundingBox>) {
         fn drag_motion_rec(accessor: &mut ObjectAccessor, coords: &WorldCoords, dx: &WorldUnit, dy: &WorldUnit, ctx: &mut HandlerContext) -> bool {
             let mut should_recurse = false;
             let id = ctx.id;
@@ -308,7 +313,7 @@ impl ComponentStateInner {
 
     }
 
-    pub fn button_press(&mut self, button: ButtonEvent, events: &mut Vec<(ID, Box<Any>)>, invalidated_region: &mut Option<WorldBoundingBox>, world_bbox: &Option<WorldBoundingBox>) {
+    fn button_press(&mut self, button: ButtonEvent, events: &mut Vec<(ID, Box<Any>)>, invalidated_region: &mut Option<WorldBoundingBox>, world_bbox: &Option<WorldBoundingBox>) {
         fn button_press_rec(accessor: &mut ObjectAccessor, button: &ButtonEvent, ctx: &mut HandlerContext) -> bool {
             let id = ctx.id;
             let mut should_recurse = false;
@@ -381,7 +386,7 @@ impl ComponentStateInner {
         button_press_rec(&mut accessor, &button, &mut ctx);
     }
 
-    pub fn key_press(&mut self, evnt: Key, events: &mut Vec<(ID, Box<Any>)>, invalidated_region: &mut Option<WorldBoundingBox>, world_bbox: &Option<WorldBoundingBox>) {
+    fn key_press(&mut self, evnt: Key, events: &mut Vec<(ID, Box<Any>)>, invalidated_region: &mut Option<WorldBoundingBox>, world_bbox: &Option<WorldBoundingBox>) {
         fn key_press_rec(accessor: &mut ObjectAccessor, key: &Key, ctx: &mut HandlerContext) -> bool {
 
             let id = ctx.id;
@@ -497,16 +502,18 @@ impl ComponentState {
     pub fn add_node<O>(&mut self, object: O, children: &[ID]) -> ID
     where O: Object + 'static
     {
-        self.inner.add_node(object, children)
+        self.inner.add_node(object, children, &mut self.event_q, &mut self.invalidated_region, &self.last_bounding_box)
     }
 
     pub fn remove_node(&mut self, id: ID, and_children: bool) {
         // first, remove the node from the graph
-        let removed = self.inner.remove_node(id, and_children);
+        let removed = self.inner.remove_node(id, and_children, &mut self.event_q, &mut self.invalidated_region, &self.last_bounding_box);
+
         // then, remove listeners for all the removed nodes
         for rem_id in removed {
             self.listeners.remove(&rem_id);
         }
+
         // also remove any events for the node
         self.event_q.retain(|(oid, _)| *oid != id);
     }

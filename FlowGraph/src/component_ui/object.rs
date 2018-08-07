@@ -36,4 +36,10 @@ pub trait Object {
 
     // used to send an arbitrary payload to the widget
     fn poke(&mut self, payload: &mut Any, ctx: &mut HandlerContext) -> bool { false }
+
+    // called when the node is created
+    fn create(&mut self, ctx: &mut HandlerContext) {}
+
+    // called when the node is removed
+    fn delete(&mut self, ctx: &mut HandlerContext) {}
 }

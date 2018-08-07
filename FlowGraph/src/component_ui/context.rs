@@ -1,9 +1,3 @@
-use std::ops::{DerefMut, Deref};
-use std::any::Any;
-
-use types::*;
-use super::ComponentStateInner;
-use super::ID;
 
 //! Module encapsulating all contexts used by the system
 //!
@@ -36,6 +30,24 @@ use super::ID;
 //!     - `poke_up`
 //!           - used to allow listeners to invoke builtins
 //!                  - intended for use by UI developers - as it allows composing components, and propagating child events to the parent (i.e, a button may)
+//!     - `add_node`
+//!           - used to add nodes to the graph
+//!           - note: It would be trivial to allow nodes to add node as children of arbitrary nodes, but for the purposes of sanity, we won't allow that. Only adding nodes as children of the root or not
+//!     - `add_child`
+//!           - used to add nodes as a child of the listener's node
+//!     - `remove_node`
+//!           - used to remove nodes (note: doesn't check if it is a child? should it?)
+
+use std::ops::{DerefMut, Deref};
+use std::any::Any;
+
+use types::*;
+use super::ComponentStateInner;
+use super::ID;
+use super::Object;
+use super::utilities::set_child;
+
+
 
 pub struct ListenerContext<'a> {
     id: ID,
@@ -85,6 +97,23 @@ impl<'a> ListenerContext<'a> {
 
     pub fn send_root_event<A:Any>(&mut self, a: A) {
         self.events.push((self.inner.object_graph.root, Box::new(a)));
+    }
+
+
+    pub fn add_node<O : Object + 'static>(&mut self, object: O, children: &[ID]) -> ID {
+        self.inner.add_node(object, children, self.events, self.invalidated_region, self.last_world_bounding_box)
+    }
+
+    pub fn add_child<O : Object + 'static>(&mut self, object: O, children: &[ID]) -> ID {
+        let id = self.inner.add_node(object, children, self.events, self.invalidated_region, self.last_world_bounding_box);
+
+        set_child(&mut self.inner.id_gen, &mut self.inner.object_graph, self.id, id);
+
+        id
+    }
+
+    pub fn remove_node(&mut self, id: ID, and_children: bool) {
+        self.inner.remove_node(id, and_children, self.events, self.invalidated_region, self.last_world_bounding_box);
     }
 
 }
