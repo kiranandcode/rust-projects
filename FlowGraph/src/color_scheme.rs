@@ -3,6 +3,7 @@ use color::*;
 // - - - - - - - - - - - - - - - - - - - - -
 //              Color Scheme
 // - - - - - - - - - - - - - - - - - - - - -
+#[derive(Debug,Clone,Copy,PartialEq)]
 pub struct ColorScheme {
     pub bg: Color,
     pub node_bg: Color,
@@ -23,3 +24,8 @@ pub const COLOR_SCHEME: ColorScheme = ColorScheme {
     node_bg_highlight: Color(153.0/255.0, 153.0/255.0, 153.0/255.0, Some(0.7)),
 };
 
+impl Default for ColorScheme {
+    fn default() -> Self {
+        COLOR_SCHEME.clone()
+    }
+}

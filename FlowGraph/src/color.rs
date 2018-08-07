@@ -1,5 +1,5 @@
 
-#[derive(Debug,Clone,Copy,PartialEq)]
+#[derive(Default,Debug,Clone,Copy,PartialEq)]
 pub struct Color(pub f64, pub f64,pub f64, pub Option<f64>);
 
 impl Color {

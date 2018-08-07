@@ -87,13 +87,13 @@ impl ComponentStateInner {
     }
 
 
-    fn draw(&mut self, context: &Context)  {
-        fn draw_rec(accessor: &mut ObjectAccessor, context: &Context, id: ID) {
+    fn draw(&mut self, context: &Context, color_scheme: &ColorScheme)  {
+        fn draw_rec(accessor: &mut ObjectAccessor, context: &Context, id: ID, color_scheme: &ColorScheme) {
             // draws the object
             {
                 let may_obj = accessor.get_mut(id);
                 if let Some(obj) = may_obj {
-                    obj.draw(context, id);
+                    obj.draw(context, id, color_scheme);
                 }
             }
 
@@ -119,7 +119,7 @@ impl ComponentStateInner {
 
             // and draw them
             for (child,_) in children {
-                draw_rec(accessor, context, child);
+                draw_rec(accessor, context, child, color_scheme);
             }
         }
 
@@ -127,7 +127,7 @@ impl ComponentStateInner {
         // and all drawing starts at the root.
         let root = self.object_graph.get_root();
         let mut accessor = ObjectAccessor::new(&mut self.objects, &self.object_graph, &self.id_gen);
-        draw_rec(&mut accessor, context, root);
+        draw_rec(&mut accessor, context, root, color_scheme);
     }
 
     pub fn motion(&mut self, coords: WorldCoords, events: &mut Vec<(ID, Box<Any>)>, invalidated_region: &mut Option<WorldBoundingBox>, world_bbox: &Option<WorldBoundingBox>) {
@@ -551,12 +551,12 @@ impl ComponentState {
         }
     }
 
-    fn draw(&mut self, context: &Context) {
+    fn draw(&mut self, context: &Context, color_scheme: &ColorScheme) {
         // update the world_bounding_box
         self.last_bounding_box = Some(context.bounding_box().clone());
 
         // and draw yourself
-        self.inner.draw(context);
+        self.inner.draw(context, color_scheme);
     }
 
     fn motion(&mut self, coords: WorldCoords) {
@@ -599,19 +599,28 @@ pub struct ComponentUI {
     renderer: RefCell<Option<Rc<Renderer>>>,
     // main inner view of the graph component
     // we wrap it in a option, to allow the componentstate to be accessed only when it has a renderer
-    internal: RefCell<Option<ComponentState>>
+    internal: RefCell<Option<ComponentState>>,
+    color_scheme: ColorScheme,
 }
 
 impl Default for ComponentUI {
     fn default() -> Self {
         ComponentUI{
             renderer: RefCell::new(None),
-            internal: RefCell::new(None)
+            internal: RefCell::new(None),
+            color_scheme: Default::default()
         }
     }
 }
 
 impl ComponentUI {
+    fn new(&self, color_scheme: ColorScheme) -> Self {
+        ComponentUI{
+            renderer: RefCell::new(None),
+            internal: RefCell::new(None),
+            color_scheme
+        }
+    }
     fn get_state(&self) -> &RefCell<Option<ComponentState>> {
         &self.internal
     }
@@ -620,16 +629,17 @@ impl ComponentUI {
 
 impl Component for ComponentUI {
     fn on_draw(&self, context: &Context) {
-        context.color(COLOR_SCHEME.bg);
+        context.color(self.color_scheme.bg);
         context.paint();
 
+        // debug drawing
         context.color(Color::BLACK);
         context.rect(WorldBoundingBox(WorldUnit(0.0), WorldUnit(0.0), WorldUnit(20.0), WorldUnit(20.0)));
         context.fill();
+
         if  let Some(internal) = self.internal.borrow_mut().as_mut() {
-            internal.draw(context);
+            internal.draw(context, &self.color_scheme);
         }
-        println!("Got a draw event");
     }
 
 

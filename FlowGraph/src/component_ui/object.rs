@@ -1,4 +1,5 @@
 use types::*;
+use color_scheme::ColorScheme;
 use super::id::ID;
 use drawing_context::Context;
 use std::any::Any;
@@ -16,7 +17,7 @@ pub trait Object {
     fn render_bounding_box(&self) -> Option<WorldBoundingBox> {None}
 
     // called to be drawn
-    fn draw(&mut self, context: &Context, root: ID)  {}
+    fn draw(&mut self, context: &Context, root: ID, color_scheme: &ColorScheme)  {}
 
     // handling mouse over events
     fn motion(&mut self, coords: WorldCoords, ctx: &mut HandlerContext) -> bool {false}
