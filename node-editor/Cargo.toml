@@ -1,0 +1,13 @@
+[package]
+name = "node-editor"
+version = "0.1.0"
+authors = ["Kiran Gopinathan <zcabkgo@ucl.ac.uk>"]
+
+[dependencies]
+imgui = { path = "imgui-rs" }
+imgui-glium-renderer = { path = "imgui-rs/imgui-glium-renderer" }
+glium = { version = "0.22", default-features = true }
+imgui-sys = { path = "imgui-rs/imgui-sys", features = ["glium"] }
+imgui-glutin-support = { path = "imgui-rs/imgui-glutin-support" }
+glutin = ">= 0.17, <= 0.18"
+
