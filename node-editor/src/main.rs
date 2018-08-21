@@ -2,8 +2,6 @@ extern crate glium;
 #[macro_use]
 extern crate imgui;
 extern crate imgui_glium_renderer;
-use std::ffi::CString;
-use std::ops::Add;
 
 use imgui::*;
 
@@ -23,11 +21,17 @@ struct Node {
 }
 impl Node {
     fn get_input_slot_pos(&self, slot_no: usize) -> ImVec2 {
-        ImVec2::new(self.pos.x, self.pos.y * ((slot_no + 1) as f32)/((self.inputs_count + 1) as f32))
+        ImVec2::new(
+            self.pos.x,
+            self.pos.y + self.size.y * ((slot_no + 1) as f32)/((self.inputs_count + 1) as f32)
+
+        )
     }
 
     fn get_output_slot_pos(&self, slot_no: usize) -> ImVec2 {
-        ImVec2::new(self.pos.x, self.pos.y * ((slot_no + 1) as f32)/((self.outputs_count + 1) as f32))
+        ImVec2::new(
+            self.pos.x + self.size.x,
+            self.pos.y +  self.size.y * ((slot_no + 1) as f32)/((self.outputs_count + 1) as f32))
     }
 }
 struct NodeLink {
@@ -48,13 +52,37 @@ impl NodeLink {
     }
 }
 
-const CLEAR_COLOR: [f32; 4] = [1.0, 1.0, 1.0, 1.0];
+const CLEAR_COLOR: [f32; 4] = [0.2, 0.3, 0.5, 1.0];
 const GRID_SZ: f32 = 64.0;
 const NODE_SLOT_RADIUS: f32 = 4.0;
 
 fn fmodf(value: f32, other: f32) -> f32 {
     value - (value / other).floor() * other
 }
+#[cfg(test)]
+mod test {
+    use super::*;
+    #[test]
+    fn fmodf_works_1() {
+        assert_eq!(fmodf(10.0, 5.0), 0.0);
+    }
+    #[test]
+    fn fmodf_works_2() {
+        assert_eq!(fmodf(12.0, 5.0), 2.0);
+    }
+    #[test]
+    fn fmodf_works_3() {
+        assert!((fmodf(12.3, 5.0) -  2.3).abs() < 0.0001);
+    }
+
+    #[test]
+    fn fmodf_works_4() {
+        assert_eq!(fmodf(5.3, 10.0), 5.3);
+    }
+
+
+}
+
 fn add(a: ImVec2, b: ImVec2) -> ImVec2 {
     ImVec2::new(
         a.x + b.x,
@@ -65,7 +93,7 @@ fn add(a: ImVec2, b: ImVec2) -> ImVec2 {
 
 
 fn main() {
-    let GRID_COLOR: ImColor = ImColor::from((200.0, 200.0, 200.0, 40.0));
+    let GRID_COLOR: ImColor = ImColor::from((200.0/255.0, 200.0/255.0, 200.0/255.0, 40.0/255.0));
     let NODE_WINDOW_PADDING: ImVec2 = ImVec2::new(8.0, 8.0);
 
     let mut nodes : Vec<Node> = Vec::new();
@@ -83,29 +111,29 @@ fn main() {
                 pos: ImVec2::new(40.0, 50.0),
                 size: ImVec2::new(0.0, 0.0),
                 value: 0.5,
-                color: [255.0, 100.0, 100.0],
+                color: [255.0/255.0, 100.0/255.0, 100.0/255.0],
                 inputs_count: 1,
                 outputs_count: 1
             });
 
             nodes.push(Node{
-                id: 0,
+                id: 1,
                 name: unsafe {ImString::from_utf8_unchecked(b"BumpMap".to_vec())},
                 pos: ImVec2::new(40.0, 150.0),
                 size: ImVec2::new(0.0, 0.0),
-                value: 0.5,
-                color: [200.0, 100.0, 100.0],
+                value: 0.42,
+                color: [200.0/255.0, 100.0/255.0, 100.0/255.0],
                 inputs_count: 1,
                 outputs_count: 1
             });
 
             nodes.push(Node{
-                id: 0,
+                id: 2,
                 name: unsafe { ImString::from_utf8_unchecked(b"Combine".to_vec()) },
                 pos: ImVec2::new(270.0, 80.0),
                 size: ImVec2::new(0.0, 0.0),
-                value: 0.5,
-                color: [0.0, 200.0, 100.0],
+                value: 0.42,
+                color: [0.0, 200.0/255.0, 100.0/255.0],
                 inputs_count: 2,
                 outputs_count: 2
             });
@@ -115,31 +143,36 @@ fn main() {
         }
 
 
-        let mut open_context_menu = false;
-        let mut node_hovered_in_list = None;
-        let mut node_hovered_in_scene = None;
-        ui.window(im_str!("Node Editor"))
-            .title_bar(true)
-            .position((0.0, 0.0), ImGuiCond::Appearing)
+        // draw a list of nodes on the left side
+        ui.window(im_str!("Node Editor")) .title_bar(true) .position((0.0, 0.0), ImGuiCond::Appearing)
             .build(|| {
+
+                let mut open_context_menu = false;
+                let mut node_hovered_in_list = None;
+                let mut node_hovered_in_scene = None;
+                let mut any_hovered = false;
+                let mut any_active = false;
+
                 ui.child_frame(im_str!("node_list"), ImVec2::new(100.0, 0.0))
                     .build(|| {
                         ui.text(im_str!("Nodes"));
                         ui.separator();
-                        for (id, node) in nodes.iter().enumerate() {
-                            ui.push_id(ImId::from(id as i32));
-                            let node_is_selected = if let Some(id) = selected_node {
-                                id == node.id
-                            } else { false };
+                        for node in nodes.iter() {
+                            ui.with_id(ImId::from(node.id as i32), || {
+                                let node_is_selected = if let Some(id) = selected_node {id == node.id} else { false };
 
-                            if ui.selectable(&node.name, node_is_selected, ImGuiSelectableFlags::all(), node.size.clone()) {
-                                selected_node = Some(node.id);
-                            }
-                            if ui.is_item_hovered() {
-                                node_hovered_in_list = Some(node.id);
-                                open_context_menu |= ui.imgui().is_mouse_clicked(ImMouseButton::Left);
-                            }
-                            ui.pop_id();
+                                if ui.selectable(&node.name, node_is_selected, ImGuiSelectableFlags::empty(), node.size.clone()) {
+                                    selected_node = Some(node.id);
+                                }
+
+                                if ui.is_item_hovered() {
+                                    node_hovered_in_list = Some(node.id);
+                                    open_context_menu |= ui.imgui().is_mouse_clicked(ImMouseButton::Right);
+                                }
+
+                                any_active = any_active || ui.is_item_active();
+                                any_hovered = any_hovered || ui.is_item_hovered();
+                            });
                         }
                     });
                 ui.same_line(0.0);
@@ -150,7 +183,6 @@ fn main() {
                         format!("Hold the middle mouse button to scroll ({:.2}, {:.2})", scrolling.x, scrolling.y)
                     );
 
-                    ui.same_line(ui.get_window_size().0 - 100.0);
                     ui.checkbox(im_str!("Show grid"), &mut show_grid);
                     ui.with_style_vars(
                         &[
@@ -159,7 +191,7 @@ fn main() {
                         ], || {
                             ui.with_color_var(
                                 ImGuiCol::ChildBg,
-                                ImVec4::new(60.0, 60.0, 70.0, 200.0),
+                                ImVec4::new(60.0/255.0, 60.0/255.0, 70.0/255.0, 200.0/255.0),
                                 || {
                                     ui.child_frame(im_str!("scrolling_region"), ImVec2::new(0.0, 0.0))
                                         .show_borders(true)
@@ -167,139 +199,257 @@ fn main() {
                                         .movable(false)
                                         .build(|| {
                                             ui.push_item_width(120.0);
+
                                             let mut offset = ui.get_cursor_screen_pos();
                                             offset.0 += scrolling.x;
                                             offset.1 += scrolling.y;
                                             let draw_list = ui.get_window_draw_list();
 
                                             if show_grid {
+
                                                 let win_pos = ui.get_cursor_screen_pos();
                                                 let canvas_sz = ui.get_window_size();
-                                                let x = fmodf(scrolling.x, GRID_SZ);
+                                                let mut x = fmodf(scrolling.x, GRID_SZ);
                                                 while x < canvas_sz.0 {
                                                     draw_list.add_line(
-                                                        ImVec2::new(x + win_pos.0, 0.0 + win_pos.1),
-                                                        ImVec2::new(x + win_pos.0, canvas_sz.1 + win_pos.1),
+                                                        ImVec2::new(
+                                                            x + win_pos.0,
+                                                            0.0 + win_pos.1
+                                                        ),
+
+                                                        ImVec2::new(
+                                                            x + win_pos.0,
+                                                            canvas_sz.1 + win_pos.1
+                                                        ),
                                                         GRID_COLOR
-                                                    );
+                                                    ).build();
+                                                    x += GRID_SZ;
+
                                                 }
 
-                                                let y = fmodf(scrolling.y, GRID_SZ);
+                                                let mut y = fmodf(scrolling.y, GRID_SZ);
                                                 while y < canvas_sz.1 {
                                                     draw_list.add_line(
-                                                        ImVec2::new(0.0 + win_pos.0, y + win_pos.1),
-                                                        ImVec2::new(canvas_sz.0 + win_pos.0, y + win_pos.1),
-                                                        GRID_COLOR
-                                                   );
-                                                }
+                                                        ImVec2::new(
+                                                            0.0 + win_pos.0,
+                                                            y + win_pos.1
+                                                        ),
 
+                                                        ImVec2::new(
+                                                            canvas_sz.0 + win_pos.0,
+                                                            y + win_pos.1
+                                                        ),
+                                                        GRID_COLOR
+                                                    ).build();
+                                                    y += GRID_SZ;
+                                                }
                                             }
+
 
 
                                             let offset = ImVec2::new(offset.0, offset.1);
                                             draw_list.channels_split(2, |channels| {
+
                                                 channels.set_current(0);
+
                                                 for link in links.iter() {
                                                     let link: &NodeLink = link;
                                                     let node_inp : &Node = &nodes[link.input_id];
                                                     let node_out : &Node = &nodes[link.output_id];
+
                                                     let p1 = add(offset, node_inp.get_output_slot_pos(link.input_slot));
-                                                    let p2 = add(offset, node_inp.get_input_slot_pos(link.output_slot));
+                                                    let p2 = add(offset, node_out.get_input_slot_pos(link.output_slot));
+
                                                     draw_list.add_bezier_curve(
                                                         p1,
                                                         add(p1, ImVec2::new(50.0, 0.0)),
                                                         add(p2, ImVec2::new(-50.0, 0.0)),
                                                         p2,
-                                                        ImColor::from((200.0, 200.0, 100.0, 255.0)),
-                                                    );
+                                                        ImColor::from((200.0/255.0, 200.0/255.0, 100.0/255.0, 255.0/255.0)),
+                                                    ).build();
                                                 }
 
 
 
-                                                for node in nodes.iter_mut() {
-                                                    let node: &mut Node = node;
-                                                    ui.push_id(ImId::from(node.id as i32));
-                                                    let node_rect_min = add(offset, node.pos);
-                                                    channels.set_current(1);
-                                                    let mut old_any_active = ui.is_item_active();
 
-                                                    ui.group(|| {
-                                                        ui.text(format!("{:?}", node.name));
-                                                        ui.slider_float(im_str!("##value"),&mut node.value, 0.0, 1.0).display_format(im_str!("Alpha %.2f"));
-                                                        ui.color_edit(im_str!("##color"), EditableColor::Float3(&mut node.color));
+                                                for (i_n, node) in nodes.iter_mut().enumerate() {
+                                                    let node: &mut Node = node;
+                                                    ui.with_id(ImId::from(node.id as i32), || {
+                                                        let node_rect_min = add(offset, node.pos);
+
+                                                        // display node contents first
+                                                        channels.set_current(1); // foreground
+
+                                                        ui.set_cursor_screen_pos(add(node_rect_min, NODE_WINDOW_PADDING));
+                                                        ui.group(|| {
+                                                            ui.text(format!("{:?}", node.name));
+                                                            ui .slider_float(im_str!("##value"),&mut node.value, 0.0, 1.0)
+                                                                .display_format(im_str!("Alpha %.2f"))
+                                                                .build();
+                                                            ui.color_edit(im_str!("##color"), EditableColor::Float3(&mut node.color))
+                                                                .build();
+                                                        });
+
+                                                        let node_widgets_active = !any_active && ui.is_item_active();
+
+
+                                                        any_active = any_active || ui.is_item_active();
+                                                        any_hovered = any_hovered || ui.is_item_hovered();
+                                                        let size : ImVec2 = {
+                                                            let size = ui.get_item_rect_size();
+                                                            add(add(ImVec2::new(size.0, size.1), NODE_WINDOW_PADDING), NODE_WINDOW_PADDING)
+                                                        };
+                                                        node.size = size;
+                                                        let node_rect_max = add(node_rect_min, node.size);
+
+                                                        // display node box
+                                                        channels.set_current(0); // background
+                                                        ui.set_cursor_screen_pos(node_rect_min);
+                                                        ui.invisible_button(im_str!("node"), node.size);
+                                                        any_active = any_active || ui.is_item_active();
+                                                        any_hovered = any_hovered || ui.is_item_hovered();
+
+                                                        if ui.is_item_hovered() {
+                                                            node_hovered_in_scene = Some(node.id);
+                                                            open_context_menu |= ui.imgui().is_mouse_clicked(ImMouseButton::Right);
+                                                        }
+
+                                                        let node_moving_active = ui.is_item_active();
+                                                        if  node_widgets_active || node_moving_active {
+                                                            selected_node = Some(node.id);
+                                                        }
+                                                        if node_moving_active && ui.imgui().is_mouse_dragging(ImMouseButton::Left) {
+                                                            let delta = ui.imgui().mouse_delta();
+                                                            let delta = ImVec2::new(delta.0, delta.1);
+                                                            node.pos = add(node.pos, delta);
+                                                        }
+
+                                                        let node_bg_color =
+                                                            (node_hovered_in_list == Some(node.id)) ||
+                                                            (node_hovered_in_scene == Some(node.id) ||
+                                                             (node_hovered_in_list == None && selected_node == Some(node.id)));
+
+                                                        let node_bg_color = if node_bg_color {
+                                                            ImColor::from((75.0/255.0, 75.0/255.0, 75.0/255.0))
+                                                        } else {
+                                                            ImColor::from((60.0/255.0, 60.0/255.0, 60.0/255.0))
+                                                        };
+
+                                                        draw_list.add_rect_filled_multicolor(
+                                                            node_rect_max,
+                                                            node_rect_min,
+                                                            node_bg_color,
+                                                            node_bg_color,
+                                                            node_bg_color,
+                                                            node_bg_color
+                                                        );
+                                                        any_active = any_active || ui.is_item_active();
+                                                        any_hovered = any_hovered || ui.is_item_hovered();
+
+                                                        draw_list.add_rect(
+                                                            node_rect_min,
+                                                            node_rect_max,
+                                                            ImColor::from((100.0, 100.0, 100.0, 255.0))
+                                                        ).build();
+
+                                                        any_active = any_active || ui.is_item_active();
+                                                        any_hovered = any_hovered || ui.is_item_hovered();
+
+                                                        for i in 0..node.inputs_count {
+                                                            draw_list.add_circle(
+                                                                add(offset, node.get_input_slot_pos(i)),
+                                                                NODE_SLOT_RADIUS,
+                                                                ImColor::from((150.0/255.0, 150.0/255.0, 150.0/255.0, 150.0/255.0))
+                                                            ).build();
+
+                                                            any_active = any_active || ui.is_item_active();
+                                                            any_hovered = any_hovered || ui.is_item_hovered();
+                                                        }
+
+                                                        for i in 0..node.outputs_count {
+                                                            draw_list.add_circle(
+                                                                add(offset, node.get_output_slot_pos(i)),
+                                                                NODE_SLOT_RADIUS,
+                                                                ImColor::from((150.0/255.0, 150.0/255.0, 150.0/255.0, 150.0/255.0))
+                                                            ).build();
+
+                                                            any_active = any_active || ui.is_item_active();
+                                                            any_hovered = any_hovered || ui.is_item_hovered();
+                                                        }
                                                     });
 
-                                                    let node_widgets_active = (!old_any_active && ui.is_item_active());
-                                                    let size = ui.get_item_rect_size();
-                                                    let mut size : ImVec2 = ImVec2::new(size.0, size.1);
-                                                    size = add(size, NODE_WINDOW_PADDING);
-                                                    size = add(size, NODE_WINDOW_PADDING);
-                                                    node.size = size;
-                                                    let node_rect_max = add(node_rect_min, node.size);
-                                                    channels.set_current(0);
-                                                    ui.set_cursor_screen_pos(node_rect_min);
-                                                    ui.invisible_button(
-                                                        im_str!("node"),
-                                                        node.size
-                                                    );
-                                                    if ui.is_item_hovered() {
-                                                        node_hovered_in_scene = Some(node.id);
-                                                        open_context_menu |= ui.imgui().is_mouse_clicked(ImMouseButton::Left);
-                                                    }
-                                                    let node_moving_active = ui.is_item_active();
-                                                    if node_moving_active || node_widgets_active {
-                                                        selected_node = Some(node.id);
-                                                    }
-                                                    if node_moving_active && ui.imgui().is_mouse_dragging(ImMouseButton::Left) {
-                                                        let delta = ui.imgui().mouse_delta();
-                                                        let delta = ImVec2::new(delta.0, delta.1);
-                                                        node.pos = add(node.pos, delta);
-                                                    }
 
-                                                    let node_bg_color =
-                                                        (node_hovered_in_list == Some(node.id)) ||
-                                                        (node_hovered_in_scene == Some(node.id) ||
-                                                         (node_hovered_in_list == None &&
-                                                          selected_node == Some(node.id)));
-                                                    let node_bg_color = if node_bg_color {
-                                                        ImColor::from((75.0, 75.0, 75.0, 255.0))
-                                                    } else {
-                                                        ImColor::from((60.0, 60.0, 60.0, 255.0))
-                                                    };
-
-                                                    draw_list.add_rect_filled_multicolor(
-                                                        node_rect_min,
-                                                        node_rect_max,
-                                                        node_bg_color,
-                                                        node_bg_color,
-                                                        node_bg_color,
-                                                        node_bg_color
-                                                    );
-
-                                                    draw_list.add_rect(
-                                                        node_rect_min,
-                                                        node_rect_max,
-                                                        ImColor::from((100.0, 100.0, 100.0, 255.0))
-                                                    );
-
-
-                                                    for i in &[0..node.inputs_count] {
-                                                        
-                                                    }
-                                                    for i in &[0..node.outputs_count] {
-                                                        
-                                                    }
-
-
-                                                    ui.pop_id();
                                                 }
+
+                                            });
+                                            // channels have been merged
+                                            if
+                                                !any_hovered &&
+                                                ui.is_window_hovered() &&
+                                                ui.imgui().is_mouse_clicked(ImMouseButton::Right) {
+                                                    selected_node = None;
+                                                    node_hovered_in_list = None;
+                                                    node_hovered_in_list = None;
+                                                    open_context_menu = true;
+                                                }
+                                            if open_context_menu {
+                                                ui.open_popup(im_str!("context_menu"));
+                                                if node_hovered_in_list.is_some() {
+                                                    selected_node = node_hovered_in_list;
+                                                }
+                                                if node_hovered_in_scene.is_some() {
+                                                    selected_node = node_hovered_in_scene;
+                                                }
+                                            }
+
+                                            ui.with_style_var(StyleVar::WindowPadding(ImVec2::new(8.0, 8.0)), || {
+                                                ui.popup(im_str!("context_menu"), || {
+                                                    if let Some(ind) = selected_node {
+                                                        let node = &nodes[ind];
+                                                        ui.text(format!("Node {:?}",node.name));
+                                                        ui.separator();
+                                                        ui.menu_item(im_str!("Rename..")).build();
+                                                        ui.menu_item(im_str!("Delete")).build();
+                                                        ui.menu_item(im_str!("Copy")).build();
+
+                                                    } else {
+                                                        if ui.menu_item(im_str!("Add")).build() {
+                                                            let mouse_pos = ui.imgui().mouse_pos();
+                                                            let mouse_pos = ImVec2::new(mouse_pos.0, mouse_pos.1);
+                                                            let next_id = nodes.len();
+                                                            nodes.push(
+                                                                Node {
+                                                                    id: next_id,
+                                                                    size: ImVec2::new(0.0, 0.0),
+                                                                    value: 0.0,
+                                                                    name: unsafe { ImString::from_utf8_unchecked(b"New Node".to_vec()) },
+                                                                    pos: mouse_pos,
+                                                                    color: [100.0/255.0, 100.0/255.0, 200.0/255.0],
+                                                                    inputs_count: 2,
+                                                                    outputs_count: 2
+                                                                }
+                                                            )
+                                                        }
+                                                    }
+                                                });
                                             });
 
+
                                         });
+                                    if ui.is_item_hovered() &&
+                                        !any_active &&
+                                        ui.imgui().is_mouse_dragging(ImMouseButton::Middle)
+                                    {
+                                        let delta = ui.imgui().mouse_delta();
+                                        let delta = ImVec2::new(delta.0, delta.1);
+                                        scrolling = add(scrolling, delta);
+                                    }
+
                                 }
                             );
 
                         });
+
                 });
             });
 
