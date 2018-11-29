@@ -2,7 +2,7 @@ use matrix::Matrix;
 use graphviz::GraphVizDiGraph;
 
 use regex::Regex;
-
+use std::cmp;
 use std::fs::File;
 use std::path::Path;
 use std::io::{BufReader, BufRead};

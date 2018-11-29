@@ -1,0 +1,4 @@
+[[package]]
+name = "hamiltonian_paths"
+version = "0.1.0"
+
