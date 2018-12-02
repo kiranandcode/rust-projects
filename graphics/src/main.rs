@@ -39,7 +39,21 @@ impl App {
     fn update(&mut self, args: &UpdateArgs) {
         self.rotation += 2.0 * args.dt;
     }
+
+    fn handle_input(&mut self, args: &Button) {
+        println!("{:?}", args);
+    }
+
+    fn handle_mouse_press(&mut self, args: &MouseButton) {
+        println!("{:?}", args);
+    }
+
+    fn handle_mouse(&mut self, args: &[f64;2]) {
+        println!("{:?}", args);
+    }
+
 }
+
 
 fn main() {
     let opengl = OpenGL::V3_2;
@@ -65,6 +79,17 @@ fn main() {
         if let Some(u) = e.update_args() {
             app.update(&u);
         }
+
+
+        if let Some(u) = e.press_args() {
+            match u {
+                Button::Mouse(mb) => app.handle_mouse_press(&mb),
+                _ => app.handle_input(&u)
+            }
+        }
+
+        if let Some(m) = e.mouse_cursor_args() {
+            app.handle_mouse(&m);
+        }
     }
-    println!("Hello, world!");
 }
