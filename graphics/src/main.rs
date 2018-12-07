@@ -9,17 +9,22 @@ use piston::input::*;
 use glutin_window::GlutinWindow as Window;
 use opengl_graphics::{ GlGraphics, OpenGL };
 
+const SCREEN_WIDTH: u32 = 1280;
+const SCREEN_HEIGHT: u32 = 720;
+
+const GREEN: [f32; 4] = [0.0, 1.0, 0.0, 1.0];
+const RED:   [f32; 4] = [1.0, 0.0, 0.0, 1.0];
+
 pub struct App {
     gl: GlGraphics,
     rotation: f64
 }
 
+
+// TODO: Extract to trait
 impl App {
     fn render(&mut self, args: &RenderArgs) {
         use graphics::*;
-
-        const GREEN: [f32; 4] = [0.0, 1.0, 0.0, 1.0];
-        const RED:   [f32; 4] = [1.0, 0.0, 0.0, 1.0];
 
         let square = rectangle::square(0.0, 0.0, 50.0);
         let rotation = self.rotation;
@@ -29,10 +34,16 @@ impl App {
         self.gl.draw(args.viewport(), |c, gl| {
             clear(GREEN, gl);
 
+            rectangle::Rectangle::new(RED).draw(
+                [0.0,0.0, SCREEN_WIDTH as f64, 10.0],
+                &c.draw_state, c.transform.trans(0.0,0.0), gl);
+
+
             let transform = c.transform.trans(x,y)
                 .rot_rad(rotation)
                 .trans(-25.0, -25.0);
             rectangle(RED, square, transform, gl);
+
         })
     }
 
@@ -55,13 +66,16 @@ impl App {
 }
 
 
+// TODO: Extract to function
 fn main() {
     let opengl = OpenGL::V3_2;
 
-    let mut window : Window = WindowSettings::new("spinning-square", [200,200])
+    let mut window_settings = WindowSettings::new("Gop-Game", [SCREEN_WIDTH,SCREEN_HEIGHT])
         .opengl(opengl)
-        .exit_on_esc(true)
-        .build()
+        .exit_on_esc(true);
+    window_settings.set_resizable(false);
+
+    let mut window : Window = window_settings.build()
         .unwrap();
 
     let mut app = App {
